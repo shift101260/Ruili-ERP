@@ -140,7 +140,7 @@
         </div>
     </aside>
 
-    <!-- 2. 主畫面內容（第一張圖質感色彩與版型） -->
+    <!-- 2. 主畫面內容 -->
     <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-[#F5F4F0] p-6">
         <!-- 頂部卡片容器 -->
         <header class="card-frame p-5 mb-5 flex justify-between items-center">
@@ -180,7 +180,7 @@
             </div>
         </header>
 
-        <!-- 5 大狀態分區卡片 (第一圖風格) -->
+        <!-- 5 大狀態分區卡片 -->
         <div class="space-y-4">
             <!-- 區塊 1：案件評估 -->
             <div class="card-frame overflow-hidden">
@@ -468,7 +468,7 @@
                 <button type="button" onclick="closeModal('editCaseModal')" class="px-3 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
                     取消
                 </button>
-                <button type="button" onclick="closeModal('editCaseModal')" class="px-3 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                <button type="button" onclick="saveNewCase()" class="px-3 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
                     <i class="fa-solid fa-check"></i><span>儲存</span>
                 </button>
             </div>
@@ -496,7 +496,66 @@
 
         function openAddCaseModal() {
             const modal = document.getElementById('editCaseModal');
-            if (modal) modal.classList.remove('hidden');
+            if (modal) {
+                document.getElementById('edit-case-name').value = '';
+                document.getElementById('edit-case-service-detail').value = '';
+                document.getElementById('quote-price-amount').value = '';
+                document.getElementById('contract-amount').value = '';
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function saveNewCase() {
+            const name = document.getElementById('edit-case-name').value.trim();
+            const serviceDetail = document.getElementById('edit-case-service-detail').value.trim();
+            const quotePrice = document.getElementById('quote-price-amount').value;
+            const contractPrice = document.getElementById('contract-amount').value;
+
+            if (!name) {
+                alert('請輸入案件名稱！');
+                return;
+            }
+
+            const container = document.getElementById('container-EVALUATION');
+            const countBadge = document.getElementById('count-EVALUATION');
+
+            if (container.innerHTML.includes('目前無案件評估紀錄')) {
+                container.innerHTML = `
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-[11px] text-stone-400 border-b border-stone-100">
+                                <th class="py-2 w-8 px-3"><input type="checkbox"></th>
+                                <th class="py-2">案件名稱</th>
+                                <th class="py-2">工作進度</th>
+                                <th class="py-2">報價金額</th>
+                                <th class="py-2">簽約金額</th>
+                                <th class="py-2 text-right pr-3">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eval-tbody" class="text-xs text-stone-700"></tbody>
+                    </table>
+                `;
+            }
+
+            const tbody = document.getElementById('eval-tbody');
+            const newRow = document.createElement('tr');
+            newRow.className = 'border-b border-stone-50 hover:bg-stone-50/60';
+            newRow.innerHTML = `
+                <td class="py-2.5 px-3"><input type="checkbox"></td>
+                <td class="py-2.5 font-semibold text-stone-800">${name}</td>
+                <td class="py-2.5"><span class="bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded text-[10px]">${serviceDetail || '一般專案'}</span></td>
+                <td class="py-2.5 font-mono">NT$ ${Number(quotePrice || 0).toLocaleString()}</td>
+                <td class="py-2.5 font-mono text-rose-600 font-semibold">NT$ ${Number(contractPrice || 0).toLocaleString()}</td>
+                <td class="py-2.5 text-right pr-3">
+                    <button onclick="openAddCaseModal()" class="text-xs text-[#C59B63] hover:underline font-medium">編輯評估</button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+
+            const currentCount = tbody.children.length;
+            countBadge.innerText = `${currentCount} 件`;
+
+            closeModal('editCaseModal');
         }
 
         function switchModule(moduleName, btnElement, year) {
@@ -512,105 +571,6 @@
                 document.getElementById('current-year-sub').innerText = year;
             }
         }
-        <script>
-    function toggleYearList() {
-        const container = document.getElementById('year-list-container');
-        const chevron = document.getElementById('year-chevron');
-        if (container.classList.contains('hidden')) {
-            container.classList.remove('hidden');
-            chevron.classList.remove('-rotate-90');
-        } else {
-            container.classList.add('hidden');
-            chevron.classList.add('-rotate-90');
-        }
-    }
-
-    function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) modal.classList.add('hidden');
-    }
-
-    function openAddCaseModal() {
-        const modal = document.getElementById('editCaseModal');
-        if (modal) {
-            document.getElementById('edit-case-name').value = '';
-            document.getElementById('edit-case-service-detail').value = '';
-            document.getElementById('quote-price-amount').value = '';
-            document.getElementById('contract-amount').value = '';
-            modal.classList.remove('hidden');
-        }
-    }
-
-    // 儲存新案件並即時更新「案件評估」表格
-    function saveNewCase() {
-        const name = document.getElementById('edit-case-name').value.trim();
-        const serviceDetail = document.getElementById('edit-case-service-detail').value.trim();
-        const quotePrice = document.getElementById('quote-price-amount').value;
-        const contractPrice = document.getElementById('contract-amount').value;
-
-        if (!name) {
-            alert('請輸入案件名稱！');
-            return;
-        }
-
-        const container = document.getElementById('container-EVALUATION');
-        const countBadge = document.getElementById('count-EVALUATION');
-
-        // 如果目前是空狀態文字，先建立表格結構
-        if (container.innerHTML.includes('目前無案件評估紀錄')) {
-            container.innerHTML = `
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="text-[11px] text-stone-400 border-b border-stone-100">
-                            <th class="py-2 w-8"><input type="checkbox"></th>
-                            <th class="py-2">案件名稱</th>
-                            <th class="py-2">工作進度</th>
-                            <th class="py-2">報價金額</th>
-                            <th class="py-2">簽約金額</th>
-                            <th class="py-2 text-right">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody id="eval-tbody" class="text-xs text-stone-700"></tbody>
-                </table>
-            `;
-        }
-
-        const tbody = document.getElementById('eval-tbody');
-        const newRow = document.createElement('tr');
-        newRow.className = 'border-b border-stone-50 hover:bg-stone-50/60';
-        newRow.innerHTML = `
-            <td class="py-2.5"><input type="checkbox"></td>
-            <td class="py-2.5 font-semibold text-stone-800">${name}</td>
-            <td class="py-2.5"><span class="bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded text-[10px]">${serviceDetail || '一般專案'}</span></td>
-            <td class="py-2.5 font-mono">NT$ ${Number(quotePrice || 0).toLocaleString()}</td>
-            <td class="py-2.5 font-mono text-rose-600 font-semibold">NT$ ${Number(contractPrice || 0).toLocaleString()}</td>
-            <td class="py-2.5 text-right">
-                <button onclick="openAddCaseModal()" class="text-xs text-[#C59B63] hover:underline font-medium">編輯評估</button>
-            </td>
-        `;
-        tbody.appendChild(newRow);
-
-        // 更新計數
-        const currentCount = tbody.children.length;
-        countBadge.innerText = `${currentCount} 件`;
-
-        closeModal('editCaseModal');
-    }
-
-    function switchModule(moduleName, btnElement, year) {
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.classList.remove('btn-gold', 'text-white', 'font-medium');
-            btn.classList.add('hover:bg-stone-800/80', 'text-stone-300');
-        });
-        if(btnElement) {
-            btnElement.classList.add('btn-gold', 'text-white', 'font-medium');
-        }
-        if(year) {
-            document.getElementById('current-year-display').innerText = year;
-            document.getElementById('current-year-sub').innerText = year;
-        }
-    }
-</script>
     </script>
     <script src="./js/api/data-sync.js"></script>
     <script src="./js/api/mock-data.js"></script>
