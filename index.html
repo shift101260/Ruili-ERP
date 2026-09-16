@@ -46,26 +46,76 @@
 </head> 
 <body class="bg-ruili-bg text-ruili-dark flex h-screen overflow-hidden font-sans text-sm"> 
 
-    <!-- 側邊欄（精緻調降尺寸） -->
-    <aside class="ruili-sidebar bg-ruili-sidebar text-white w-56 flex flex-col justify-between p-4 border-r border-ruili-dark/50">
-        <div>
-            <div class="flex items-center gap-2.5 mb-6 px-1">
-                <div class="w-8 h-8 bg-ruili-brand rounded-md flex items-center justify-center font-semibold text-base shadow-sm">睿</div>
-                <div>
-                    <h1 class="font-medium text-sm tracking-wide leading-tight">睿立集團</h1>
-                    <p class="text-[10px] text-gray-400 tracking-wider">RUILI Group ERP</p>
+    <!-- 1. 左側功能導覽列（正確位置：放最前面，替代舊的 aside） --> 
+    <aside class="ruili-sidebar text-stone-300 flex flex-col justify-between border-r border-ruili-dark h-full w-56 bg-ruili-sidebar shrink-0"> 
+        <!-- 上半部：Logo + 可滾動選單區域 -->
+        <div class="flex-1 flex flex-col min-h-0"> 
+            <!-- 品牌 Logo 與名稱 --> 
+            <div class="p-4 border-b border-ruili-dark/60 flex items-center space-x-3 shrink-0 bg-ruili-sidebar"> 
+                <div class="bg-ruili-brand text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-xs">睿</div> 
+                <div> 
+                    <h1 class="text-white font-semibold tracking-wider text-xs">睿立集團</h1> 
+                    <p class="text-[9px] text-stone-400 tracking-wider">RUILI Group ERP</p> 
+                </div> 
+            </div> 
+             
+            <!-- 功能選單 --> 
+            <nav id="nav-menu" class="p-3 space-y-1 text-xs overflow-y-auto flex-1 custom-scrollbar"> 
+                <button onclick="switchModule('dashboard', this)" class="nav-btn active w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-ruili-brand text-white transition shadow-xs font-medium"> 
+                    <i class="fa-solid fa-chart-line w-4"></i><span>戰情室總覽</span> 
+                </button> 
+                 
+                <button onclick="switchModule('kanban', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition"> 
+                    <i class="fa-solid fa-list-check w-4 text-amber-400"></i><span>工作看板</span> 
+                </button> 
+
+                <!-- 全集團案件總覽 -->
+                <button onclick="switchModule('all-cases', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition">
+                    <i class="fa-solid fa-layer-group w-4 text-amber-500"></i><span>全集團案件總覽</span>
+                </button>
+
+                <!-- 年度案件快速切換 -->
+                <div class="pt-2 pb-1">
+                    <button onclick="toggleYearList()" class="w-full flex items-center justify-between text-[10px] font-semibold tracking-wider text-stone-500 px-3 py-1 hover:text-stone-300 transition group">
+                        <span>年度案件分類</span>
+                        <i id="year-chevron" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200"></i>
+                    </button>
+                    
+                    <!-- 年份按鈕清單容器 -->
+                    <div id="year-list-container" class="space-y-0.5 mt-1 pl-2 border-l border-stone-700/50 ml-3">
+                        <button onclick="switchModule('all-cases', this, 2026)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-300 transition text-xs">
+                            <i class="fa-solid fa-folder w-3.5 text-stone-400"></i><span>2026 案件 (大宗)</span>
+                        </button>
+                        <button onclick="switchModule('all-cases', this, 2025)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                            <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>2025 案件</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <nav class="space-y-1">
-                <a href="#" class="block px-3 py-2 rounded-lg bg-ruili-brand/20 text-white text-xs font-medium tracking-wide"><i class="fa-solid fa-house mr-2 text-xs"></i>主控台</a>
-            </nav>
+
+                <div class="border-t border-stone-800 my-2"></div>
+
+                <button onclick="switchModule('tools-module', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition"> 
+                    <i class="fa-solid fa-toolbox w-4 text-sky-400"></i><span>工具專區</span> 
+                </button> 
+
+                <button onclick="switchModule('closing', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition"> 
+                    <i class="fa-solid fa-flag-checkered w-4 text-emerald-400"></i><span>結案中心</span> 
+                </button> 
+
+                <button onclick="switchModule('quotation', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition"> 
+                    <i class="fa-solid fa-barcode w-4 text-purple-400"></i><span>案件編號</span> 
+                </button>
+            </nav> 
         </div>
-        <div class="text-[11px] text-gray-400 border-t border-gray-700/60 pt-3 px-1">
-            身分：<strong class="text-gray-200 font-normal">最高管理者</strong>
-        </div>
+
+        <!-- 下半部：使用者資訊列 -->
+        <div class="p-3 border-t border-ruili-dark text-[11px] text-stone-400 flex items-center justify-between bg-ruili-sidebar shrink-0"> 
+            <span>身分：<strong class="text-stone-200 font-normal">最高管理者</strong></span> 
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="系統連線中"></span> 
+        </div> 
     </aside>
 
-    <!-- 主畫面內容（精緻化標題與卡片） -->
+    <!-- 2. 主畫面內容 -->
     <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-ruili-bg p-5">
         <header class="mb-5 flex justify-between items-center">
             <h2 class="text-lg font-semibold text-ruili-dark flex items-center gap-2 tracking-wide">
@@ -80,7 +130,7 @@
         </section>
     </main>
 
-    <!-- 引入資料同步與獨立測試模組 --> 
+    <!-- 3. JS 腳本放置在 </body> 的最上方 --> 
     <script src="./js/api/data-sync.js"></script>
     <script src="./js/api/mock-data.js"></script>
 </body> 
