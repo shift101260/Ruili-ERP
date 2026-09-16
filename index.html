@@ -1,39 +1,39 @@
-<!DOCTYPE html> 
-<html lang="zh-Hant"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>睿立集團｜ERP</title> 
-    <script src="https://cdn.tailwindcss.com"></script> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
-     
-    <link rel="stylesheet" href="./css/variables.css"> 
-    <link rel="stylesheet" href="./css/layout.css"> 
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>睿立集團｜ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="./css/variables.css">
+    <link rel="stylesheet" href="./css/layout.css">
 
-    <script> 
-        tailwind.config = { 
-            theme: { 
-                extend: { 
-                    colors: { 
-                        ruili: { 
-                            bg: 'var(--ruili-bg)', 
-                            brand: 'var(--ruili-brand)', 
-                            sidebar: 'var(--ruili-sidebar)', 
-                            matcha: 'var(--ruili-matcha)', 
-                            pink: 'var(--ruili-pink)', 
-                            dark: 'var(--ruili-dark)', 
-                            border: 'var(--ruili-border)' 
-                        } 
-                    } 
-                } 
-            } 
-        } 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ruili: {
+                            bg: 'var(--ruili-bg)',
+                            brand: 'var(--ruili-brand)',
+                            sidebar: 'var(--ruili-sidebar)',
+                            matcha: 'var(--ruili-matcha)',
+                            pink: 'var(--ruili-pink)',
+                            dark: 'var(--ruili-dark)',
+                            border: 'var(--ruili-border)'
+                        }
+                    }
+                }
+            }
+        }
     </script>
     <style>
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
         input[type=number] {
             -moz-appearance: textfield;
@@ -43,28 +43,28 @@
             -webkit-overflow-scrolling: touch;
         }
     </style>
-</head> 
-<body class="bg-ruili-bg text-ruili-dark flex h-screen overflow-hidden font-sans text-sm"> 
+</head>
+<body class="bg-ruili-bg text-ruili-dark flex h-screen overflow-hidden font-sans text-sm">
 
-    <!-- 1. 左側功能導覽列 --> 
-    <aside class="ruili-sidebar text-stone-300 flex flex-col justify-between border-r border-ruili-dark h-full w-56 bg-ruili-sidebar shrink-0"> 
-        <div class="flex-1 flex flex-col min-h-0"> 
-            <div class="p-4 border-b border-ruili-dark/60 flex items-center space-x-3 shrink-0 bg-ruili-sidebar"> 
-                <div class="bg-ruili-brand text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-xs">睿</div> 
-                <div> 
-                    <h1 class="text-white font-semibold tracking-wider text-xs">睿立集團</h1> 
-                    <p class="text-[9px] text-stone-400 tracking-wider">RUILI Group ERP</p> 
-                </div> 
-            </div> 
-             
-            <nav id="nav-menu" class="p-3 space-y-1 text-xs overflow-y-auto flex-1 custom-scrollbar"> 
-                <button onclick="switchModule('dashboard', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition"> 
-                    <i class="fa-solid fa-chart-line w-4"></i><span>戰情室總覽</span> 
-                </button> 
-                 
-                <button onclick="switchModule('kanban', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition"> 
-                    <i class="fa-solid fa-list-check w-4 text-amber-400"></i><span>工作看板</span> 
-                </button> 
+    <!-- 1. 左側功能導覽列 -->
+    <aside class="ruili-sidebar text-stone-300 flex flex-col justify-between border-r border-ruili-dark h-full w-56 bg-ruili-sidebar shrink-0">
+        <div class="flex-1 flex flex-col min-h-0">
+            <div class="p-4 border-b border-ruili-dark/60 flex items-center space-x-3 shrink-0 bg-ruili-sidebar">
+                <div class="bg-ruili-brand text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-xs">睿</div>
+                <div>
+                    <h1 class="text-white font-semibold tracking-wider text-xs">睿立集團</h1>
+                    <p class="text-[9px] text-stone-400 tracking-wider">RUILI Group ERP</p>
+                </div>
+            </div>
+            
+            <nav id="nav-menu" class="p-3 space-y-1 text-xs overflow-y-auto flex-1 custom-scrollbar">
+                <button onclick="switchModule('dashboard', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition">
+                    <i class="fa-solid fa-chart-line w-4"></i><span>戰情室總覽</span>
+                </button>
+                
+                <button onclick="switchModule('kanban', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition">
+                    <i class="fa-solid fa-list-check w-4 text-amber-400"></i><span>工作看板</span>
+                </button>
 
                 <button onclick="switchModule('all-cases', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition">
                     <i class="fa-solid fa-layer-group w-4 text-amber-500"></i><span>全集團案件總覽</span>
@@ -104,27 +104,27 @@
 
                 <div class="border-t border-stone-800 my-2"></div>
 
-                <button onclick="switchModule('tools-module', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition"> 
-                    <i class="fa-solid fa-toolbox w-4 text-sky-400"></i><span>工具專區</span> 
-                </button> 
-
-                <button onclick="switchModule('closing', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition"> 
-                    <i class="fa-solid fa-flag-checkered w-4 text-emerald-400"></i><span>結案中心</span> 
-                </button> 
-
-                <button onclick="switchModule('quotation', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition"> 
-                    <i class="fa-solid fa-barcode w-4 text-purple-400"></i><span>案件編號</span> 
+                <button onclick="switchModule('tools-module', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition">
+                    <i class="fa-solid fa-toolbox w-4 text-sky-400"></i><span>工具專區</span>
                 </button>
-            </nav> 
+
+                <button onclick="switchModule('closing', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition">
+                    <i class="fa-solid fa-flag-checkered w-4 text-emerald-400"></i><span>結案中心</span>
+                </button>
+
+                <button onclick="switchModule('quotation', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition">
+                    <i class="fa-solid fa-barcode w-4 text-purple-400"></i><span>案件編號</span>
+                </button>
+            </nav>
         </div>
 
-        <div class="p-3 border-t border-ruili-dark text-[11px] text-stone-400 flex items-center justify-between bg-ruili-sidebar shrink-0"> 
-            <span>身分：<strong class="text-stone-200 font-normal">最高管理者</strong></span> 
-            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="系統連線中"></span> 
-        </div> 
+        <div class="p-3 border-t border-ruili-dark text-[11px] text-stone-400 flex items-center justify-between bg-ruili-sidebar shrink-0">
+            <span>身分：<strong class="text-stone-200 font-normal">最高管理者</strong></span>
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="系統連線中"></span>
+        </div>
     </aside>
 
-    <!-- 2. 主畫面內容：純淨零資料狀態 -->
+    <!-- 2. 主畫面內容 -->
     <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-ruili-bg p-5">
         <header class="mb-4 flex justify-between items-center">
             <div>
@@ -162,7 +162,7 @@
             </div>
         </section>
 
-        <!-- 5 大狀態分區卡片 (純淨版) -->
+        <!-- 5 大狀態分區卡片 -->
         <div class="space-y-4">
             <!-- 區塊 1：案件評估 -->
             <div class="bg-white rounded-lg shadow-xs border border-ruili-border overflow-hidden">
@@ -499,5 +499,5 @@
     <script src="./js/api/mock-data.js"></script>
     <script src="./js/modules/case-edit.js"></script>
     <script src="./js/modules/payment-calc.js"></script>
-</body> 
+</body>
 </html>
