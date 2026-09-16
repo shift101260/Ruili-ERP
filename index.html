@@ -509,10 +509,6 @@
     </div> <!-- 關閉外層白色卡片 -->
 </div> <!-- 關閉 editCaseModal 背景遮罩 -->
 
-    <!-- 3. JS 腳本放置區域 --> 
-    <script src="./js/api/data-sync.js"></script>
-    <script src="./js/api/mock-data.js"></script>
-
     <!-- 年度選單展開/收合控制邏輯 -->
     <script>
         function toggleYearList() {
@@ -528,5 +524,9 @@
             }
         }
     </script>
-</body> 
+<!-- 引入資料同步與案件編輯模組 --> 
+    <script src="./js/api/data-sync.js"></script>
+    <script src="./js/api/mock-data.js"></script>
+    <script src="./js/modules/case-edit.js"></script>
+</body>
 </html>
