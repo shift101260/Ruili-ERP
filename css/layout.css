@@ -1,1 +1,79 @@
+/**
+ * 睿立集團系統｜全域排版與 RWD 響應式架構 (layout.css)
+ * 專為桌機與手機直式操作設計之骨架規範
+ */
 
+/* 1. 基礎畫面配置：禁止全頁面亂滾，強制上下分層 */
+body {
+    background-color: var(--ruili-bg);
+    color: var(--ruili-dark);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* 2. 側邊欄預設樣式 (桌機端) */
+.ruili-sidebar {
+    width: 16rem; /* w-64 */
+    background-color: var(--ruili-sidebar);
+    color: #d1d5db;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid var(--ruili-dark);
+    flex-shrink: 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* 3. 主畫面內容區域 */
+.ruili-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    background-color: var(--ruili-bg);
+}
+
+.ruili-container {
+    padding: 2rem;
+    max-width: 96%;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
+}
+
+/* 4. 手機直式響應式設定 (RWD - 螢幕小於 768px 時觸發) */
+@media (max-width: 768px) {
+    .ruili-sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 16rem; /* 強制手機版側邊欄展開時的固定寬度 */
+        z-index: 50;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out; /* 確保手機側滑動畫流暢 */
+    }
+
+    .ruili-sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+    .mobile-header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        background-color: var(--ruili-sidebar);
+        color: white;
+        border-bottom: 1px solid var(--ruili-dark);
+    }
+
+    .ruili-container {
+        padding: 1rem;
+        max-width: 100%;
+    }
+}
