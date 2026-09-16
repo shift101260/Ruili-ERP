@@ -1,33 +1,89 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>睿立集團 ERP 系統</title>
-    <!-- 引入你的 CSS 樣式表 -->
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/layout.css">
-</head>
-<body>
+<!DOCTYPE html> 
+<html lang="zh-Hant"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>睿立集團｜ERO</title> 
+    <script src="https://cdn.tailwindcss.com"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
+     
+    <!-- 引入獨立的全域色號變數樣式檔 --> 
+    <link rel="stylesheet" href="./css/variables.css"> 
+    <link rel="stylesheet" href="./css/layout.css"> 
 
-    <!-- 側邊欄區域 -->
-    <aside class="ruili-sidebar">
+    <!-- 讓 Tailwind 能夠抓取我們的 CSS 變數 --> 
+    <script> 
+        tailwind.config = { 
+            theme: { 
+                extend: { 
+                    colors: { 
+                        ruili: { 
+                            bg: 'var(--ruili-bg)', 
+                            brand: 'var(--ruili-brand)', 
+                            sidebar: 'var(--ruili-sidebar)', 
+                            matcha: 'var(--ruili-matcha)', 
+                            pink: 'var(--ruili-pink)', 
+                            dark: 'var(--ruili-dark)', 
+                            border: 'var(--ruili-border)' 
+                        } 
+                    } 
+                } 
+            } 
+        } 
+    </script>
+    <style>
+        /* 移除數字輸入框的上下箭頭 (Spinner) */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* 📱 手機版左右滑動橫向捲軸優化共用樣式 */
+        .table-scroll-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head> 
+<body class="bg-ruili-bg text-ruili-dark flex h-screen overflow-hidden font-sans"> 
+
+    <!-- 側邊欄 -->
+    <aside class="ruili-sidebar bg-ruili-sidebar text-white w-64 flex flex-col justify-between p-4 border-r border-ruili-dark">
         <div>
-            <h2>睿立集團</h2>
-            <p>RUILI Group ERP</p>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-ruili-brand rounded-lg flex items-center justify-center font-bold text-xl">睿</div>
+                <div>
+                    <h1 class="font-bold text-lg">睿立集團</h1>
+                    <p class="text-xs text-gray-400">RUILI Group ERP</p>
+                </div>
+            </div>
+            <nav class="space-y-2">
+                <a href="#" class="block px-4 py-2 rounded bg-ruili-brand/20 text-white font-medium"><i class="fa-solid fa-house mr-2"></i>主控台</a>
+            </nav>
         </div>
-        <div>
-            <span>身分：<strong>最高管理者</strong></span>
+        <div class="text-xs text-gray-400 border-t border-gray-700 pt-4">
+            身分：<strong class="text-white">最高管理者</strong>
         </div>
     </aside>
 
-    <!-- 主內容區域 -->
-    <main class="ruili-main">
-        <div class="ruili-container">
-            <h1>系統主控台</h1>
-            <p>重新架構中...</p>
-        </div>
+    <!-- 主畫面內容 -->
+    <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-ruili-bg p-6">
+        <header class="mb-6 flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-ruili-dark"><i class="fa-solid fa-chart-line mr-2"></i>睿立集團營運主控台</h2>
+            <span class="text-sm bg-ruili-matcha/20 text-ruili-dark px-3 py-1 rounded-full font-medium">系統運行中</span>
+        </header>
+
+        <section class="bg-white rounded-xl p-6 shadow-sm border border-ruili-border mb-6">
+            <h3 class="text-lg font-bold mb-4">歡迎使用全新架構 ERP</h3>
+            <p class="text-gray-600">系統骨架與 Tailwind CSS 變數設定完成。</p>
+        </section>
     </main>
 
-</body>
+    <!-- 引入資料同步與持久化模組 --> 
+    <!-- <script src="./js/api/data-sync.js"></script> -->
+</body> 
 </html>
