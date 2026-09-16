@@ -16,13 +16,13 @@
                 extend: {
                     colors: {
                         ruili: {
-                            bg: 'var(--ruili-bg)',
-                            brand: 'var(--ruili-brand)',
-                            sidebar: 'var(--ruili-sidebar)',
-                            matcha: 'var(--ruili-matcha)',
-                            pink: 'var(--ruili-pink)',
-                            dark: 'var(--ruili-dark)',
-                            border: 'var(--ruili-border)'
+                            bg: '#F5F4F0',
+                            cardBg: '#FAF9F6',
+                            brand: '#C59B63',
+                            brandHover: '#B38952',
+                            sidebar: '#242321',
+                            dark: '#2C2A29',
+                            border: '#E8E5DF'
                         }
                     }
                 }
@@ -30,6 +30,9 @@
         }
     </script>
     <style>
+        body {
+            background-color: #F5F4F0;
+        }
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -42,15 +45,28 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
+        .btn-gold {
+            background-color: #C59B63;
+            color: #FFFFFF;
+        }
+        .btn-gold:hover {
+            background-color: #B38952;
+        }
+        .card-frame {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E2DC;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
     </style>
 </head>
-<body class="bg-ruili-bg text-ruili-dark flex h-screen overflow-hidden font-sans text-sm">
+<body class="text-stone-800 flex h-screen overflow-hidden font-sans text-sm">
 
     <!-- 1. 左側功能導覽列 -->
-    <aside class="ruili-sidebar text-stone-300 flex flex-col justify-between border-r border-ruili-dark h-full w-56 bg-ruili-sidebar shrink-0">
+    <aside class="ruili-sidebar text-stone-300 flex flex-col justify-between border-r border-stone-800 h-full w-56 bg-[#242321] shrink-0">
         <div class="flex-1 flex flex-col min-h-0">
-            <div class="p-4 border-b border-ruili-dark/60 flex items-center space-x-3 shrink-0 bg-ruili-sidebar">
-                <div class="bg-ruili-brand text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-xs">睿</div>
+            <div class="p-4 border-b border-stone-800 flex items-center space-x-3 shrink-0">
+                <div class="btn-gold w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-xs">睿</div>
                 <div>
                     <h1 class="text-white font-semibold tracking-wider text-xs">睿立集團</h1>
                     <p class="text-[9px] text-stone-400 tracking-wider">RUILI Group ERP</p>
@@ -72,7 +88,7 @@
 
                 <!-- 年度案件分類 -->
                 <div class="pt-2 pb-1">
-                    <button onclick="toggleYearList()" class="w-full flex items-center justify-between text-[10px] font-semibold tracking-wider text-stone-500 px-3 py-1 hover:text-stone-300 transition group">
+                    <button onclick="toggleYearList()" class="w-full flex items-center justify-between text-[10px] font-semibold tracking-wider text-stone-400 px-3 py-1 hover:text-stone-200 transition group">
                         <span>年度案件分類</span>
                         <i id="year-chevron" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200"></i>
                     </button>
@@ -81,7 +97,7 @@
                         <button onclick="switchModule('year-2027', this, 2027)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-300 transition text-xs">
                             <i class="fa-solid fa-folder w-3.5 text-stone-400"></i><span>2027 案件管理</span>
                         </button>
-                        <button onclick="switchModule('year-2026', this, 2026)" class="nav-btn active w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md bg-ruili-brand text-white transition text-xs font-medium">
+                        <button onclick="switchModule('year-2026', this, 2026)" class="nav-btn active w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md btn-gold font-medium transition text-xs">
                             <i class="fa-solid fa-folder w-3.5 text-white"></i><span>2026 案件 (大宗)</span>
                         </button>
                         <button onclick="switchModule('year-2025', this, 2025)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
@@ -118,34 +134,32 @@
             </nav>
         </div>
 
-        <div class="p-3 border-t border-ruili-dark text-[11px] text-stone-400 flex items-center justify-between bg-ruili-sidebar shrink-0">
+        <div class="p-3 border-t border-stone-800 text-[11px] text-stone-400 flex items-center justify-between bg-[#242321] shrink-0">
             <span>身分：<strong class="text-stone-200 font-normal">最高管理者</strong></span>
             <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" title="系統連線中"></span>
         </div>
     </aside>
 
-    <!-- 2. 主畫面內容 -->
-    <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-ruili-bg p-5">
-        <header class="mb-4 flex justify-between items-center">
+    <!-- 2. 主畫面內容（第一張圖質感色彩與版型） -->
+    <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-[#F5F4F0] p-6">
+        <!-- 頂部卡片容器 -->
+        <header class="card-frame p-5 mb-5 flex justify-between items-center">
             <div>
-                <h2 id="page-title" class="text-base font-semibold text-ruili-dark flex items-center gap-2">
-                    <i class="fa-solid fa-folder-open text-amber-500"></i><span id="current-year-display">2026</span> 年度案件管理中心
+                <h2 id="page-title" class="text-lg font-bold text-stone-800 flex items-center gap-2 tracking-wide">
+                    <span id="current-year-display">2026</span> 年度案件管理中心
                 </h2>
-                <p class="text-[11px] text-gray-500 mt-0.5">
+                <p class="text-xs text-stone-500 mt-1">
                     管理 <span id="current-year-sub" class="font-medium">2026</span> 年度案件，支援關鍵字搜尋、勾選、刪除、恢復與狀態跨區塊拋轉。
                 </p>
             </div>
-            <span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2.5 py-0.5 rounded-full font-normal">系統運行中</span>
-        </header>
-
-        <!-- 工具操作列 -->
-        <section class="bg-white rounded-lg p-3 shadow-xs border border-ruili-border mb-4 flex flex-wrap items-center justify-between gap-3">
-            <div class="flex items-center gap-2 flex-1 min-w-[240px]">
-                <div class="relative flex-1 max-w-xs">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                    <input type="text" id="case-search-input" placeholder="搜尋案件..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:border-ruili-brand transition">
+            
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <input type="text" id="case-search-input" placeholder="搜尋案件..." class="pl-3 pr-8 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] transition w-48">
+                    <i class="fa-solid fa-magnifying-glass absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
                 </div>
-                <select id="batch-action-select" class="px-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:border-ruili-brand text-gray-700">
+                
+                <select id="batch-action-select" class="px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] text-stone-700">
                     <option value="">------ 拋轉至 ------</option>
                     <option value="EVALUATION">案件評估</option>
                     <option value="CONTRACTING">簽約案件</option>
@@ -153,75 +167,79 @@
                     <option value="JUNK">廢件專區</option>
                     <option value="FAILED">案件失敗</option>
                 </select>
-            </div>
 
-            <div class="flex items-center gap-2">
-                <button onclick="openAddCaseModal()" class="px-3.5 py-1.5 rounded-md bg-amber-700 hover:bg-amber-800 text-white text-xs font-medium transition shadow-xs flex items-center gap-1">
-                    <i class="fa-solid fa-plus"></i>新增案件
+                <button class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-xs font-medium border border-stone-300 transition flex items-center gap-1">
+                    <i class="fa-solid fa-trash-can text-stone-500"></i>刪除
+                </button>
+                <button class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-xs font-medium border border-stone-300 transition flex items-center gap-1">
+                    <i class="fa-solid fa-rotate-left text-stone-500"></i>恢復
+                </button>
+                <button onclick="openAddCaseModal()" class="px-4 py-1.5 btn-gold rounded-md text-xs font-medium shadow-2xs transition flex items-center gap-1">
+                    <i class="fa-solid fa-plus"></i>新增
                 </button>
             </div>
-        </section>
+        </header>
 
-        <!-- 5 大狀態分區卡片 -->
+        <!-- 5 大狀態分區卡片 (第一圖風格) -->
         <div class="space-y-4">
             <!-- 區塊 1：案件評估 -->
-            <div class="bg-white rounded-lg shadow-xs border border-ruili-border overflow-hidden">
-                <div class="bg-amber-50/60 px-4 py-2.5 border-b border-amber-100 flex items-center justify-between">
+            <div class="card-frame overflow-hidden">
+                <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                        <h3 class="text-xs font-semibold text-gray-800">案件評估</h3>
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                        <h3 class="text-xs font-bold text-stone-800">案件評估</h3>
                     </div>
-                    <span id="count-EVALUATION" class="text-[11px] font-semibold bg-amber-100/80 text-amber-800 px-2 py-0.5 rounded-full">0 件</span>
+                    <span id="count-EVALUATION" class="text-xs font-semibold bg-amber-50 text-amber-700 px-2.5 py-0.5 rounded-full border border-amber-200/60">0 件</span>
                 </div>
-                <div id="container-EVALUATION" class="p-3 text-xs text-gray-400 text-center py-4">目前無案件評估紀錄</div>
+                <div id="container-EVALUATION" class="p-4 text-xs text-stone-400 text-center py-6">目前無案件評估紀錄</div>
             </div>
 
             <!-- 區塊 2：簽約案件 -->
-            <div class="bg-white rounded-lg shadow-xs border border-ruili-border overflow-hidden">
-                <div class="bg-blue-50/60 px-4 py-2.5 border-b border-blue-100 flex items-center justify-between">
+            <div class="card-frame overflow-hidden">
+                <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                        <h3 class="text-xs font-semibold text-gray-800">簽約案件</h3>
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                        <h3 class="text-xs font-bold text-stone-800">簽約案件</h3>
                     </div>
-                    <span id="count-CONTRACTING" class="text-[11px] font-semibold bg-blue-100/80 text-blue-800 px-2 py-0.5 rounded-full">0 件</span>
+                    <span id="count-CONTRACTING" class="text-xs font-semibold bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200/60">0 件</span>
                 </div>
-                <div id="container-CONTRACTING" class="p-3 text-xs text-gray-400 text-center py-4">目前無簽約案件記錄</div>
+                <div id="container-CONTRACTING" class="p-4 text-xs text-stone-400 text-center py-6">目前無簽約案件記錄</div>
             </div>
 
             <!-- 區塊 3：結案中心 -->
-            <div class="bg-white rounded-lg shadow-xs border border-ruili-border overflow-hidden">
-                <div class="bg-emerald-50/60 px-4 py-2.5 border-b border-emerald-100 flex items-center justify-between">
+            <div class="card-frame overflow-hidden">
+                <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        <h3 class="text-xs font-semibold text-gray-800">結案中心</h3>
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h3 class="text-xs font-bold text-stone-800">結案中心</h3>
                     </div>
-                    <span id="count-CLOSED" class="text-[11px] font-semibold bg-emerald-100/80 text-emerald-800 px-2 py-0.5 rounded-full">0 件</span>
+                    <span id="count-CLOSED" class="text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">0 件</span>
                 </div>
-                <div id="container-CLOSED" class="p-3 text-xs text-gray-400 text-center py-4">目前無結案紀錄</div>
+                <div id="container-CLOSED" class="p-4 text-xs text-stone-400 text-center py-6">目前無結案紀錄</div>
             </div>
 
             <!-- 區塊 4：廢件專區 -->
-            <div class="bg-white rounded-lg shadow-xs border border-ruili-border overflow-hidden">
-                <div class="bg-gray-50 px-4 py-2.5 border-b border-gray-200 flex items-center justify-between">
+            <div class="card-frame overflow-hidden">
+                <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-gray-400"></span>
-                        <h3 class="text-xs font-semibold text-gray-700">廢件專區</h3>
+                        <span class="w-2.5 h-2.5 rounded-full bg-stone-400"></span>
+                        <h3 class="text-xs font-bold text-stone-800">廢件專區</h3>
                     </div>
-                    <span id="count-JUNK" class="text-[11px] font-semibold bg-gray-200/80 text-gray-700 px-2 py-0.5 rounded-full">0 件</span>
+                    <span id="count-JUNK" class="text-xs font-semibold bg-stone-100 text-stone-600 px-2.5 py-0.5 rounded-full border border-stone-200">0 件</span>
                 </div>
-                <div id="container-JUNK" class="p-3 text-xs text-gray-400 text-center py-4">目前無相關廢件紀錄</div>
+                <div id="container-JUNK" class="p-4 text-xs text-stone-400 text-center py-6">目前無相關廢件紀錄</div>
             </div>
 
             <!-- 區塊 5：案件失敗 -->
-            <div class="bg-white rounded-lg shadow-xs border border-ruili-border overflow-hidden">
-                <div class="bg-rose-50/60 px-4 py-2.5 border-b border-rose-100 flex items-center justify-between">
+            <div class="card-frame overflow-hidden">
+                <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                        <h3 class="text-xs font-semibold text-gray-800">案件失敗</h3>
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                        <h3 class="text-xs font-bold text-stone-800">案件失敗</h3>
                     </div>
-                    <span id="count-FAILED" class="text-[11px] font-semibold bg-rose-100/80 text-rose-800 px-2 py-0.5 rounded-full">0 件</span>
+                    <span id="count-FAILED" class="text-xs font-semibold bg-rose-50 text-rose-700 px-2.5 py-0.5 rounded-full border border-rose-200/60">0 件</span>
                 </div>
-                <div id="container-FAILED" class="p-3 text-xs text-gray-400 text-center py-4">目前無相關失敗紀錄</div>
+                <div id="container-FAILED" class="p-4 text-xs text-stone-400 text-center py-6">目前無相關失敗紀錄</div>
             </div>
         </div>
     </main>
@@ -231,7 +249,7 @@
         <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 my-6 text-stone-800">
             <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center shrink-0 z-20">
                 <h3 class="font-bold text-sm flex items-center tracking-wide">
-                    <i class="fa-solid fa-circle-plus text-amber-400 mr-2 text-base"></i> 集團案件完整建檔與評估中心
+                    <i class="fa-solid fa-circle-plus text-[#C59B63] mr-2 text-base"></i> 集團案件完整建檔與評估中心
                 </h3>
                 <button type="button" onclick="closeModal('editCaseModal')" class="text-stone-400 hover:text-white cursor-pointer transition">
                     <i class="fa-solid fa-xmark text-lg"></i>
@@ -246,7 +264,7 @@
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
                     <div class="flex justify-between items-center border-b border-stone-100 pb-2">
                         <h4 class="font-bold text-stone-900 flex items-center text-xs">
-                            <i class="fa-solid fa-info-circle text-ruili-brand mr-1.5"></i> 一、基本資訊區域
+                            <i class="fa-solid fa-info-circle text-[#C59B63] mr-1.5"></i> 一、基本資訊區域
                         </h4>
                         <div class="text-[11px] text-stone-500 bg-stone-100 px-2.5 py-1 rounded-lg border border-stone-200">
                             📅 建檔時間與日期：<strong id="edit-case-time-display" class="text-stone-800 font-mono">-</strong>
@@ -256,18 +274,18 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="font-bold block mb-1 text-stone-900">案件名稱 <span class="text-rose-500">*</span></label>
-                            <input type="text" id="edit-case-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-bold shadow-2xs" placeholder="例：農地變更專案">
+                            <input type="text" id="edit-case-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold shadow-2xs" placeholder="例：農地變更專案">
                         </div>
                         <div>
                             <label class="font-bold block mb-1 text-stone-900">服務細項 <span class="text-rose-500">*</span></label>
-                            <input type="text" id="edit-case-service-detail" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-medium shadow-2xs" placeholder="例：特定工廠用地變更細項">
+                            <input type="text" id="edit-case-service-detail" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：特定工廠用地變更細項">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="font-bold block mb-1 text-stone-900">工作進度狀態</label>
-                            <select id="edit-case-progress-status" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-bold text-stone-900 shadow-2xs cursor-pointer">
+                            <select id="edit-case-progress-status" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer">
                                 <option value="潛在">潛在</option>
                                 <option value="現勘">現勘</option>
                                 <option value="報價">報價</option>
@@ -277,7 +295,7 @@
                         </div>
                         <div>
                             <label class="font-bold block mb-1 text-stone-900">服務項目 <span class="text-rose-500">*</span></label>
-                            <select id="edit-case-service" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-bold text-stone-900 shadow-2xs cursor-pointer">
+                            <select id="edit-case-service" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer">
                                 <option value="地政士">地政士</option>
                                 <option value="改善計畫">改善計畫</option>
                                 <option value="特定工廠登記">特定工廠登記</option>
@@ -298,8 +316,8 @@
                     <div>
                         <label class="font-bold block mb-1 text-stone-900">案件地址</label>
                         <div class="flex items-center space-x-2">
-                            <input type="text" id="edit-case-address" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-medium shadow-2xs" placeholder="例：高雄市仁武區...">
-                            <button type="button" onclick="openGoogleMapDrawer()" class="px-3 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-700 border border-stone-300 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap flex items-center space-x-1 cursor-pointer">
+                            <input type="text" id="edit-case-address" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：高雄市仁武區...">
+                            <button type="button" onclick="openGoogleMapDrawer()" class="px-3 py-2 bg-stone-100 hover:bg-[#C59B63] hover:text-white text-stone-700 border border-stone-300 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap flex items-center space-x-1 cursor-pointer">
                                 <i class="fa-solid fa-map-location-dot"></i><span>Google地圖</span>
                             </button>
                         </div>
@@ -308,8 +326,8 @@
                     <div>
                         <label class="font-bold block mb-1 text-stone-900">地段地號</label>
                         <div class="flex items-center space-x-2">
-                            <input type="text" id="edit-case-land-number" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-medium shadow-2xs" placeholder="例：仁武段 123-4地號">
-                            <a href="https://maps.nlsc.gov.tw" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-700 border border-stone-300 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap flex items-center space-x-1">
+                            <input type="text" id="edit-case-land-number" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：仁武段 123-4地號">
+                            <a href="https://maps.nlsc.gov.tw" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-stone-100 hover:bg-[#C59B63] hover:text-white text-stone-700 border border-stone-300 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap flex items-center space-x-1">
                                 <i class="fa-solid fa-map-location-dot"></i><span>地籍圖</span>
                             </a>
                         </div>
@@ -318,11 +336,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="font-bold block mb-1 text-stone-900">案件說明</label>
-                            <textarea id="edit-case-desc" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-16 text-xs focus:outline-none focus:border-ruili-brand font-medium shadow-2xs" placeholder="拋轉至簽約案件時將顯示於秘書待簽核案件..."></textarea>
+                            <textarea id="edit-case-desc" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-16 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="拋轉至簽約案件時將顯示於秘書待簽核案件..."></textarea>
                         </div>
                         <div>
                             <label class="font-bold block mb-1 text-stone-900">案件即時說明</label>
-                            <textarea id="edit-case-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-16 text-xs focus:outline-none focus:border-ruili-brand font-medium shadow-2xs" placeholder="內部即時備註與進度說明..."></textarea>
+                            <textarea id="edit-case-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-16 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="內部即時備註與進度說明..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -330,16 +348,16 @@
                 <!-- 區塊二：案件評估工具 -->
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-3">
                     <h4 class="font-bold text-stone-900 border-b border-stone-100 pb-2 flex items-center text-xs">
-                        <i class="fa-solid fa-calculator text-ruili-brand mr-1.5"></i> 二、案件評估工具
+                        <i class="fa-solid fa-calculator text-[#C59B63] mr-1.5"></i> 二、案件評估工具
                     </h4>
                     <div class="flex flex-wrap gap-2.5 py-1">
-                        <button type="button" class="px-4 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
+                        <button type="button" class="px-4 py-2 bg-stone-100 hover:bg-[#C59B63] hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
                             <i class="fa-solid fa-map text-amber-600"></i><span>土地基本資料</span>
                         </button>
-                        <button type="button" class="px-4 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
+                        <button type="button" class="px-4 py-2 bg-stone-100 hover:bg-[#C59B63] hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
                             <i class="fa-solid fa-building text-sky-600"></i><span>保存登記建物</span>
                         </button>
-                        <button type="button" class="px-4 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
+                        <button type="button" class="px-4 py-2 bg-stone-100 hover:bg-[#C59B63] hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
                             <i class="fa-solid fa-house-chimney text-emerald-600"></i><span>未保存登記建物</span>
                         </button>
                     </div>
@@ -348,21 +366,21 @@
                 <!-- 區塊四：財務會計 -->
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
                     <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-calculator text-ruili-brand mr-1.5"></i> 四、財務會計（報價、佣金與合約）
+                        <i class="fa-solid fa-calculator text-[#C59B63] mr-1.5"></i> 四、財務會計（報價、佣金與合約）
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div class="space-y-1.5">
                             <span class="text-[11px] text-stone-600 font-bold block">依照案件結案條件填寫</span>
                             <div class="grid grid-cols-2 gap-2">
-                                <input type="number" id="quote-price-amount" placeholder="報價金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-stone-800 focus:outline-none focus:border-ruili-brand bg-white">
-                                <input type="number" id="quote-price-percent" placeholder="報價趴數 (%)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 text-center font-mono font-bold text-stone-800 focus:outline-none focus:border-ruili-brand bg-white">
+                                <input type="number" id="quote-price-amount" placeholder="報價金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] bg-white">
+                                <input type="number" id="quote-price-percent" placeholder="報價趴數 (%)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 text-center font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] bg-white">
                             </div>
                         </div>
                         <div class="space-y-1.5">
                             <span class="text-[11px] text-stone-600 font-bold block">依照案件結案條件填寫 (期程參考基準)</span>
                             <div class="grid grid-cols-2 gap-2">
-                                <input type="number" id="contract-amount" oninput="calculateQuoteTotals()" placeholder="簽約金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-rose-600 focus:outline-none focus:border-ruili-brand bg-white">
-                                <input type="number" id="contract-percent" placeholder="簽約％數 (%)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 text-center font-mono font-bold text-rose-600 focus:outline-none focus:border-ruili-brand bg-white">
+                                <input type="number" id="contract-amount" oninput="calculateQuoteTotals()" placeholder="簽約金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-rose-600 focus:outline-none focus:border-[#C59B63] bg-white">
+                                <input type="number" id="contract-percent" placeholder="簽約％數 (%)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 text-center font-mono font-bold text-rose-600 focus:outline-none focus:border-[#C59B63] bg-white">
                             </div>
                         </div>
                     </div>
@@ -371,14 +389,14 @@
                 <!-- 區塊五：收款期程配置 -->
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
                     <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-calendar-days text-ruili-brand mr-1.5"></i> 五、收款期程配置
+                        <i class="fa-solid fa-calendar-days text-[#C59B63] mr-1.5"></i> 五、收款期程配置
                     </h4>
                     <span class="text-[11px] text-stone-500 block">依上方簽約金額按各期 % 自動換算</span>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] text-stone-700 font-bold">第一期款 (%)</span>
-                                <input type="number" id="quote-inst-1-pct" value="20" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-ruili-brand bg-white">
+                                <input type="number" id="quote-inst-1-pct" value="20" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
                             </div>
                             <div class="flex items-center justify-between pt-1 border-t border-stone-200">
                                 <span class="text-[10px] text-stone-500">應收金額：</span>
@@ -388,7 +406,7 @@
                         <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] text-stone-700 font-bold">第二期款 (%)</span>
-                                <input type="number" id="quote-inst-2-pct" value="20" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-ruili-brand bg-white">
+                                <input type="number" id="quote-inst-2-pct" value="20" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
                             </div>
                             <div class="flex items-center justify-between pt-1 border-t border-stone-200">
                                 <span class="text-[10px] text-stone-500">應收金額：</span>
@@ -398,7 +416,7 @@
                         <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] text-stone-700 font-bold">第三期款 (%)</span>
-                                <input type="number" id="quote-inst-3-pct" value="50" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-ruili-brand bg-white">
+                                <input type="number" id="quote-inst-3-pct" value="50" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
                             </div>
                             <div class="flex items-center justify-between pt-1 border-t border-stone-200">
                                 <span class="text-[10px] text-stone-500">應收金額：</span>
@@ -408,7 +426,7 @@
                         <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] text-stone-700 font-bold">第四期款 (%)</span>
-                                <input type="number" id="quote-inst-4-pct" value="10" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-ruili-brand bg-white">
+                                <input type="number" id="quote-inst-4-pct" value="10" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
                             </div>
                             <div class="flex items-center justify-between pt-1 border-t border-stone-200">
                                 <span class="text-[10px] text-stone-500">應收金額：</span>
@@ -422,7 +440,7 @@
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
                     <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
                         <h4 class="font-bold text-stone-900 flex items-center text-xs">
-                            <i class="fa-solid fa-file-invoice-dollar text-ruili-brand mr-1.5"></i> 六、供應商報價利潤工具
+                            <i class="fa-solid fa-file-invoice-dollar text-[#C59B63] mr-1.5"></i> 六、供應商報價利潤工具
                         </h4>
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
@@ -450,7 +468,7 @@
                 <button type="button" onclick="closeModal('editCaseModal')" class="px-3 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
                     取消
                 </button>
-                <button type="button" onclick="closeModal('editCaseModal')" class="px-3 py-1.5 bg-ruili-brand hover:opacity-90 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                <button type="button" onclick="closeModal('editCaseModal')" class="px-3 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
                     <i class="fa-solid fa-check"></i><span>儲存</span>
                 </button>
             </div>
@@ -483,11 +501,11 @@
 
         function switchModule(moduleName, btnElement, year) {
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-ruili-brand', 'text-white', 'font-medium');
+                btn.classList.remove('btn-gold', 'text-white', 'font-medium');
                 btn.classList.add('hover:bg-stone-800/80', 'text-stone-300');
             });
             if(btnElement) {
-                btnElement.classList.add('bg-ruili-brand', 'text-white', 'font-medium');
+                btnElement.classList.add('btn-gold', 'text-white', 'font-medium');
             }
             if(year) {
                 document.getElementById('current-year-display').innerText = year;
