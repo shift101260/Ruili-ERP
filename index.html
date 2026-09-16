@@ -7,11 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
      
-    <!-- 引入獨立的全域色號變數樣式檔 --> 
     <link rel="stylesheet" href="./css/variables.css"> 
     <link rel="stylesheet" href="./css/layout.css"> 
 
-    <!-- 讓 Tailwind 能夠抓取我們的 CSS 變數 --> 
     <script> 
         tailwind.config = { 
             theme: { 
@@ -32,7 +30,6 @@
         } 
     </script>
     <style>
-        /* 移除數字輸入框的上下箭頭 (Spinner) */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
@@ -41,89 +38,50 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
-
-        /* 📱 手機版左右滑動橫向捲軸優化共用樣式 */
         .table-scroll-container {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
     </style>
 </head> 
-<body class="bg-ruili-bg text-ruili-dark flex h-screen overflow-hidden font-sans"> 
+<body class="bg-ruili-bg text-ruili-dark flex h-screen overflow-hidden font-sans text-sm"> 
 
-    <!-- 側邊欄 -->
-    <aside class="ruili-sidebar bg-ruili-sidebar text-white w-64 flex flex-col justify-between p-4 border-r border-ruili-dark">
+    <!-- 側邊欄（精緻調降尺寸） -->
+    <aside class="ruili-sidebar bg-ruili-sidebar text-white w-56 flex flex-col justify-between p-4 border-r border-ruili-dark/50">
         <div>
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-ruili-brand rounded-lg flex items-center justify-center font-bold text-xl">睿</div>
+            <div class="flex items-center gap-2.5 mb-6 px-1">
+                <div class="w-8 h-8 bg-ruili-brand rounded-md flex items-center justify-center font-semibold text-base shadow-sm">睿</div>
                 <div>
-                    <h1 class="font-bold text-lg">睿立集團</h1>
-                    <p class="text-xs text-gray-400">RUILI Group ERP</p>
+                    <h1 class="font-medium text-sm tracking-wide leading-tight">睿立集團</h1>
+                    <p class="text-[10px] text-gray-400 tracking-wider">RUILI Group ERP</p>
                 </div>
             </div>
-            <nav class="space-y-2">
-                <a href="#" class="block px-4 py-2 rounded bg-ruili-brand/20 text-white font-medium"><i class="fa-solid fa-house mr-2"></i>主控台</a>
+            <nav class="space-y-1">
+                <a href="#" class="block px-3 py-2 rounded-lg bg-ruili-brand/20 text-white text-xs font-medium tracking-wide"><i class="fa-solid fa-house mr-2 text-xs"></i>主控台</a>
             </nav>
         </div>
-        <div class="space-y-2 border-t border-gray-700 pt-4">
-            <!-- 示範資料快捷按鈕 -->
-            <button onclick="injectMockData()" class="w-full text-left text-xs text-gray-300 hover:text-white bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded transition">
-                <i class="fa-solid fa-flask text-amber-400 mr-2"></i>載入示範資料
-            </button>
-            <button onclick="clearSystemData()" class="w-full text-left text-xs text-gray-300 hover:text-rose-300 bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded transition">
-                <i class="fa-solid fa-trash-can text-rose-400 mr-2"></i>還原空白系統
-            </button>
-            <div class="text-xs text-gray-400 pt-2">
-                身分：<strong class="text-white">最高管理者</strong>
-            </div>
+        <div class="text-[11px] text-gray-400 border-t border-gray-700/60 pt-3 px-1">
+            身分：<strong class="text-gray-200 font-normal">最高管理者</strong>
         </div>
     </aside>
 
-    <!-- 主畫面內容 -->
-    <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-ruili-bg p-6">
-        <header class="mb-6 flex justify-between items-center">
-            <h2 class="text-2xl font-bold text-ruili-dark"><i class="fa-solid fa-chart-line mr-2"></i>睿立集團營運主控台</h2>
-            <span class="text-sm bg-ruili-matcha/20 text-ruili-dark px-3 py-1 rounded-full font-medium">系統運行中</span>
+    <!-- 主畫面內容（精緻化標題與卡片） -->
+    <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-ruili-bg p-5">
+        <header class="mb-5 flex justify-between items-center">
+            <h2 class="text-lg font-semibold text-ruili-dark flex items-center gap-2 tracking-wide">
+                <i class="fa-solid fa-chart-line text-base text-gray-600"></i>睿立集團營運主控台
+            </h2>
+            <span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2.5 py-0.5 rounded-full font-normal">系統運行中</span>
         </header>
 
-        <section class="bg-white rounded-xl p-6 shadow-sm border border-ruili-border mb-6">
-            <h3 class="text-lg font-bold mb-4">歡迎使用全新架構 ERP</h3>
-            <p class="text-gray-600 mb-4">系統骨架、Tailwind CSS 與獨立 API 資料流均已連線成功。</p>
-            <div id="connection-status" class="p-4 rounded-lg bg-gray-50 border border-gray-200 text-sm font-mono text-gray-700">
-                正在測試與 RuiliDataStore 連線...
-            </div>
+        <section class="bg-white rounded-lg p-5 shadow-sm border border-ruili-border mb-5">
+            <h3 class="text-sm font-semibold text-gray-800 mb-1.5">歡迎使用全新架構 ERP</h3>
+            <p class="text-xs text-gray-500 leading-relaxed">系統骨架與 API 連線完成。</p>
         </section>
     </main>
 
-    <!-- 1. 核心資料同步與持久化模組 --> 
+    <!-- 引入資料同步與獨立測試模組 --> 
     <script src="./js/api/data-sync.js"></script>
-    <!-- 2. 獨立測試/示範資料模組 --> 
     <script src="./js/api/mock-data.js"></script>
-
-    <!-- 3. 初始化連線狀態測試 -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const statusBox = document.getElementById('connection-status');
-            
-            if (typeof RuiliDataStore !== 'undefined') {
-                const cases = RuiliDataStore.getCases();
-                statusBox.className = "p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-sm text-emerald-800 font-medium";
-                statusBox.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
-                        <span>API 連線成功！目前系統資料庫內共有 <strong>${cases.length}</strong> 筆案件。</span>
-                    </div>
-                `;
-            } else {
-                statusBox.className = "p-4 rounded-lg bg-rose-50 border border-rose-200 text-sm text-rose-800 font-medium";
-                statusBox.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i>
-                        <span>連線失敗：未檢測到 <code>js/api/data-sync.js</code> 模組，請確認檔案路徑。</span>
-                    </div>
-                `;
-            }
-        });
-    </script>
 </body> 
 </html>
