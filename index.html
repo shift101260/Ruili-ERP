@@ -124,7 +124,7 @@
         </div> 
     </aside>
 
-    <!-- 2. 主畫面內容：包含正確的 5 大分區介面 -->
+    <!-- 2. 主畫面內容：純淨零資料狀態 -->
     <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-ruili-bg p-5">
         <header class="mb-4 flex justify-between items-center">
             <div>
@@ -162,7 +162,7 @@
             </div>
         </section>
 
-        <!-- 5 大狀態分區卡片 -->
+        <!-- 5 大狀態分區卡片 (純淨版) -->
         <div class="space-y-4">
             <!-- 區塊 1：案件評估 -->
             <div class="bg-white rounded-lg shadow-xs border border-ruili-border overflow-hidden">
@@ -171,34 +171,9 @@
                         <span class="w-2 h-2 rounded-full bg-amber-500"></span>
                         <h3 class="text-xs font-semibold text-gray-800">案件評估</h3>
                     </div>
-                    <span id="count-EVALUATION" class="text-[11px] font-semibold bg-amber-100/80 text-amber-800 px-2 py-0.5 rounded-full">1 件</span>
+                    <span id="count-EVALUATION" class="text-[11px] font-semibold bg-amber-100/80 text-amber-800 px-2 py-0.5 rounded-full">0 件</span>
                 </div>
-                <div id="container-EVALUATION" class="p-3 table-scroll-container">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="text-[11px] text-gray-400 border-b border-gray-100">
-                                <th class="py-2 w-8"><input type="checkbox"></th>
-                                <th class="py-2">案件名稱</th>
-                                <th class="py-2">工作進度</th>
-                                <th class="py-2">報價金額</th>
-                                <th class="py-2">簽約金額</th>
-                                <th class="py-2 text-right">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-xs text-gray-700">
-                            <tr class="border-b border-gray-50 hover:bg-gray-50/60">
-                                <td class="py-2.5"><input type="checkbox"></td>
-                                <td class="py-2.5 font-semibold text-gray-800">黃董事長專案</td>
-                                <td class="py-2.5"><span class="bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded text-[10px]">特定工廠</span></td>
-                                <td class="py-2.5 font-mono">NT$ 2,000,000</td>
-                                <td class="py-2.5 font-mono text-rose-600 font-semibold">NT$ 2,070,000</td>
-                                <td class="py-2.5 text-right">
-                                    <button onclick="openAddCaseModal()" class="text-xs text-ruili-brand hover:underline font-medium">編輯評估</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <div id="container-EVALUATION" class="p-3 text-xs text-gray-400 text-center py-4">目前無案件評估紀錄</div>
             </div>
 
             <!-- 區塊 2：簽約案件 -->
@@ -499,6 +474,11 @@
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) modal.classList.add('hidden');
+        }
+
+        function openAddCaseModal() {
+            const modal = document.getElementById('editCaseModal');
+            if (modal) modal.classList.remove('hidden');
         }
 
         function switchModule(moduleName, btnElement, year) {
