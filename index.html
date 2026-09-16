@@ -144,6 +144,370 @@
             <p class="text-xs text-gray-500 leading-relaxed">系統骨架與 API 連線完成。</p>
         </section>
     </main>
+    <!-- ========================================================== -->
+<!-- 互動彈窗區：集團案件完整建檔與評估中心 (Modal) -->
+<!-- ========================================================== -->
+<div id="editCaseModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
+    <!-- 外層白色卡片 -->
+    <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 my-6 text-stone-800">
+        
+        <!-- 彈窗頂部標題 -->
+        <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center shrink-0 z-20">
+            <h3 class="font-bold text-sm flex items-center tracking-wide">
+                <i class="fa-solid fa-circle-plus text-amber-400 mr-2 text-base"></i> 集團案件完整建檔與評估中心
+            </h3>
+            <button type="button" onclick="closeModal('editCaseModal')" class="text-stone-400 hover:text-white cursor-pointer transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- 彈窗內容主體 -->
+        <div class="p-6 space-y-6 text-xs text-stone-700 flex-1 overflow-y-auto bg-stone-50/50">
+            <input type="hidden" id="edit-case-year" value="2026">
+            <input type="hidden" id="edit-case-id" value="">
+
+            <!-- 區塊一：基本資訊區域 -->
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                <div class="flex justify-between items-center border-b border-stone-100 pb-2">
+                    <h4 class="font-bold text-stone-900 flex items-center text-xs">
+                        <i class="fa-solid fa-info-circle text-ruili-brand mr-1.5"></i> 一、基本資訊區域
+                    </h4>
+                    <div class="text-[11px] text-stone-500 bg-stone-100 px-2.5 py-1 rounded-lg border border-stone-200">
+                        📅 建檔時間與日期：<strong id="edit-case-time-display" class="text-stone-800 font-mono">-</strong>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-900">案件名稱 <span class="text-rose-500">*</span></label>
+                        <input type="text" id="edit-case-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-bold shadow-2xs" placeholder="例：農地變更專案">
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-900">服務細項 <span class="text-rose-500">*</span></label>
+                        <input type="text" id="edit-case-service-detail" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-medium shadow-2xs" placeholder="例：特定工廠用地變更細項">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-900">工作進度狀態</label>
+                        <select id="edit-case-progress-status" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-bold text-stone-900 shadow-2xs cursor-pointer">
+                            <option value="潛在">潛在</option>
+                            <option value="現勘">現勘</option>
+                            <option value="報價">報價</option>
+                            <option value="準備簽約">準備簽約</option>
+                            <option value="案件簽約">案件簽約</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-900">服務項目 <span class="text-rose-500">*</span></label>
+                        <select id="edit-case-service" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-bold text-stone-900 shadow-2xs cursor-pointer">
+                            <option value="地政士">地政士</option>
+                            <option value="改善計畫">改善計畫</option>
+                            <option value="特定工廠登記">特定工廠登記</option>
+                            <option value="一般工廠登記/變更">一般工廠登記/變更</option>
+                            <option value="土地變更">土地變更</option>
+                            <option value="補照">補照</option>
+                            <option value="容許">容許</option>
+                            <option value="不動產買賣">不動產買賣</option>
+                            <option value="不動產租賃">不動產租賃</option>
+                            <option value="ESG轉型">ESG轉型</option>
+                            <option value="債務糾紛">債務糾紛</option>
+                            <option value="太陽能">太陽能</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="font-bold block mb-1 text-stone-900">案件地址</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="edit-case-address" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-medium shadow-2xs" placeholder="例：高雄市仁武區...">
+                        <button type="button" onclick="openGoogleMapDrawer()" class="px-3 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-700 border border-stone-300 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap flex items-center space-x-1 cursor-pointer" title="Google地圖 街景與導航">
+                            <i class="fa-solid fa-map-location-dot"></i><span>Google地圖</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="font-bold block mb-1 text-stone-900">地段地號</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" id="edit-case-land-number" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-medium shadow-2xs" placeholder="例：仁武段 123-4地號">
+                        <a href="https://maps.nlsc.gov.tw" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-700 border border-stone-300 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap flex items-center space-x-1" title="國土測繪圖資服務雲">
+                            <i class="fa-solid fa-map-location-dot"></i><span>地籍圖</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-900">案件說明</label>
+                        <textarea id="edit-case-desc" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-16 text-xs focus:outline-none focus:border-ruili-brand font-medium shadow-2xs" placeholder="拋轉至簽約案件時將顯示於秘書待簽核案件..."></textarea>
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-900">案件即時說明</label>
+                        <textarea id="edit-case-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-16 text-xs focus:outline-none focus:border-ruili-brand font-medium shadow-2xs" placeholder="內部即時備註與進度說明..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊二：案件評估工具 -->
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-3">
+                <h4 class="font-bold text-stone-900 border-b border-stone-100 pb-2 flex items-center text-xs">
+                    <i class="fa-solid fa-calculator text-ruili-brand mr-1.5"></i> 二、案件評估工具
+                </h4>
+                <div class="flex flex-wrap gap-2.5 py-1">
+                    <button type="button" onclick="openLandModal()" class="px-4 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-map text-amber-600"></i><span>土地基本資料</span>
+                    </button>
+                    <button type="button" onclick="openRegisteredBuildingModal()" class="px-4 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-building text-sky-600"></i><span>保存登記建物</span>
+                    </button>
+                    <button type="button" onclick="openUnregisteredBuildingModal()" class="px-4 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-house-chimney text-emerald-600"></i><span>未保存登記建物</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 區塊三：服務項目試算 -->
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-3">
+                <h4 class="font-bold text-stone-900 border-b border-stone-100 pb-2 flex items-center text-xs">
+                    <i class="fa-solid fa-chart-line text-ruili-brand mr-1.5"></i> 三、服務項目試算
+                </h4>
+                <div class="flex flex-wrap gap-2.5 py-1">
+                    <button type="button" onclick="openLandChangeModal()" class="px-4 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-earth-asia text-sky-600"></i><span>土地變更評估</span>
+                    </button>
+                    <button type="button" onclick="openSolarModal()" class="px-4 py-2 bg-stone-100 hover:bg-ruili-brand hover:text-white text-stone-800 rounded-xl text-xs font-bold border border-stone-200 transition shadow-2xs flex items-center space-x-2 cursor-pointer">
+                        <i class="fa-solid fa-solar-panel text-amber-600"></i><span>太陽能試算</span>
+                    </button>
+                </div>
+                <div id="calc-module-viewport" class="mt-2 p-3 bg-stone-50 rounded-xl border border-stone-200 text-stone-500 text-xs hidden"></div>
+            </div>
+
+            <!-- 區塊四：財務會計（報價、佣金與合約） -->
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
+                    <i class="fa-solid fa-calculator text-ruili-brand mr-1.5"></i> 四、財務會計（報價、佣金與合約）
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="space-y-1.5">
+                        <span class="text-[11px] text-stone-600 font-bold block">依照案件結案條件填寫</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="quote-price-amount" placeholder="報價金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-stone-800 focus:outline-none focus:border-ruili-brand bg-white">
+                            <input type="number" id="quote-price-percent" placeholder="報價趴數 (%)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 text-center font-mono font-bold text-stone-800 focus:outline-none focus:border-ruili-brand bg-white">
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <span class="text-[11px] text-stone-600 font-bold block">依照案件結案條件填寫 (期程參考基準)</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="contract-amount" oninput="calculateQuoteTotals()" placeholder="簽約金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-rose-600 focus:outline-none focus:border-ruili-brand bg-white">
+                            <input type="number" id="contract-percent" placeholder="簽約％數 (%)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 text-center font-mono font-bold text-rose-600 focus:outline-none focus:border-ruili-brand bg-white">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊五：收款期程配置 (補齊 ID) -->
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
+                    <i class="fa-solid fa-calendar-days text-ruili-brand mr-1.5"></i> 五、收款期程配置
+                </h4>
+                <span class="text-[11px] text-stone-500 block">依上方簽約金額按各期 % 自動換算</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- 第一期款 -->
+                    <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-stone-700 font-bold">第一期款 (%)</span>
+                            <input type="number" id="quote-inst-1-pct" value="20" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-ruili-brand bg-white">
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-stone-200">
+                            <span class="text-[10px] text-stone-500">應收金額：</span>
+                            <span id="quote-inst-1-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
+                        </div>
+                        <div>
+                            <input type="date" id="quote-inst-1-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-ruili-brand bg-white">
+                        </div>
+                        <div>
+                            <input type="text" id="quote-inst-1-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-ruili-brand bg-white" placeholder="期程備註...">
+                        </div>
+                    </div>
+                    <!-- 第二期款 -->
+                    <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-stone-700 font-bold">第二期款 (%)</span>
+                            <input type="number" id="quote-inst-2-pct" value="20" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-ruili-brand bg-white">
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-stone-200">
+                            <span class="text-[10px] text-stone-500">應收金額：</span>
+                            <span id="quote-inst-2-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
+                        </div>
+                        <div>
+                            <input type="date" id="quote-inst-2-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-ruili-brand bg-white">
+                        </div>
+                        <div>
+                            <input type="text" id="quote-inst-2-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-ruili-brand bg-white" placeholder="期程備註...">
+                        </div>
+                    </div>
+                    <!-- 第三期款 -->
+                    <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-stone-700 font-bold">第三期款 (%)</span>
+                            <input type="number" id="quote-inst-3-pct" value="50" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-ruili-brand bg-white">
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-stone-200">
+                            <span class="text-[10px] text-stone-500">應收金額：</span>
+                            <span id="quote-inst-3-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
+                        </div>
+                        <div>
+                            <input type="date" id="quote-inst-3-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-ruili-brand bg-white">
+                        </div>
+                        <div>
+                            <input type="text" id="quote-inst-3-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-ruili-brand bg-white" placeholder="期程備註...">
+                        </div>
+                    </div>
+                    <!-- 第四期款 -->
+                    <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] text-stone-700 font-bold">第四期款 (%)</span>
+                            <input type="number" id="quote-inst-4-pct" value="10" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-ruili-brand bg-white">
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-stone-200">
+                            <span class="text-[10px] text-stone-500">應收金額：</span>
+                            <span id="quote-inst-4-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
+                        </div>
+                        <div>
+                            <input type="date" id="quote-inst-4-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-ruili-brand bg-white">
+                        </div>
+                        <div>
+                            <input type="text" id="quote-inst-4-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-ruili-brand bg-white" placeholder="期程備註...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊六：供應商報價利潤工具 -->
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
+                    <h4 class="font-bold text-stone-900 flex items-center text-xs">
+                        <i class="fa-solid fa-file-invoice-dollar text-ruili-brand mr-1.5"></i> 六、供應商報價利潤工具
+                    </h4>
+                    <button type="button" onclick="addQuoteSupplierRow()" class="px-3 py-1.5 bg-ruili-brand hover:opacity-90 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                        <i class="fa-solid fa-plus text-[10px]"></i><span>新增供應商</span>
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto w-full pb-2">
+                    <div id="suppliers-rows-container" class="space-y-3 min-w-[700px]">
+                        <!-- 預設第一列 (已補齊刪除按鈕) -->
+                        <div id="supplier-row-default" class="grid grid-cols-6 gap-3 items-center bg-stone-50 p-3 rounded-xl border border-stone-200">
+                            <div><input type="text" placeholder="供應商名稱" class="supplier-name w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-ruili-brand"></div>
+                            <div><input type="text" placeholder="施作項目" class="supplier-item w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-ruili-brand"></div>
+                            <div><input type="number" placeholder="未稅價格" oninput="calculateQuoteTotals()" class="supplier-untaxed w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-ruili-brand font-mono"></div>
+                            <div><input type="number" placeholder="報價金額" oninput="calculateQuoteTotals()" class="supplier-amount w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-ruili-brand font-mono"></div>
+                            <div><input type="number" placeholder="簽約金額" oninput="calculateQuoteTotals()" class="supplier-contract w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-ruili-brand font-mono text-rose-600 font-bold"></div>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" value="5" oninput="calculateQuoteTotals()" class="supplier-tax w-14 bg-white border border-stone-300 rounded-xl px-2 py-1.5 text-xs text-center font-mono">
+                                <button type="button" onclick="document.getElementById('supplier-row-default').remove(); calculateQuoteTotals();" class="px-2.5 py-1.5 bg-rose-100 text-rose-600 hover:bg-rose-200 rounded-xl text-xs font-bold transition">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 四個自動總計欄位 -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-700 text-[11px]">總報價金額 (自動)</label>
+                        <input type="text" id="calc-total-quote" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-700 text-[11px]">稅後總金額 (自動)</label>
+                        <input type="text" id="calc-tax-after" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-700 text-[11px]">簽約總金額 (自動)</label>
+                        <input type="text" id="calc-total-contract" class="w-full bg-rose-50 border border-rose-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-rose-700" readonly value="NT$ 0">
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-700 text-[11px]">案件總利潤 (自動)</label>
+                        <input type="text" id="calc-total-profit" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-emerald-700" readonly value="NT$ 0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊七：案件介紹人與佣金機制 -->
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
+                    <i class="fa-solid fa-user-tie text-ruili-brand mr-1.5"></i> 七、案件介紹人與佣金機制
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-700 text-[11px]">介紹人姓名</label>
+                        <input type="text" id="referral-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand" placeholder="例：陳總監">
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-700 text-[11px]">佣金金額</label>
+                        <input type="number" id="referral-commission" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand font-mono" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-1 text-stone-700 text-[11px]">退佣機制說明</label>
+                        <input type="text" id="referral-mechanism" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-ruili-brand" placeholder="例：陳經理 / 10% / 匯款退佣">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊八：簽約程序與合約備註 -->
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
+                    <i class="fa-solid fa-file-contract text-ruili-brand mr-1.5"></i> 八、簽約程序與合約備註
+                </h4>
+                <div class="flex items-center space-x-4 py-1">
+                    <span class="font-bold text-stone-700 text-xs">簽約金額是否含稅選項：</span>
+                    <label class="flex items-center space-x-1.5 cursor-pointer text-xs">
+                        <input type="radio" name="tax-option" value="none" class="text-ruili-brand focus:ring-ruili-brand">
+                        <span class="font-bold text-stone-600">不含稅</span>
+                    </label>
+                    <label class="flex items-center space-x-1.5 cursor-pointer text-xs">
+                        <input type="radio" name="tax-option" value="included" checked class="text-ruili-brand focus:ring-ruili-brand">
+                        <span class="font-bold text-stone-600">含稅</span>
+                    </label>
+                </div>
+                <div>
+                    <label class="font-bold block mb-1 text-stone-700 text-[11px]">業務合約備註</label>
+                    <textarea id="contract-business-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-20 text-xs focus:outline-none focus:border-ruili-brand font-medium" placeholder="請輸入合約相關的特殊條件、付款期程或業務備註..."></textarea>
+                </div>
+                <div class="pt-2 flex justify-end">
+                    <!-- 匯出PDF 按鈕 -->
+                    <button type="button" onclick="openQuotationGeneratorModal()" class="px-3 py-1.5 bg-ruili-brand hover:opacity-90 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                        <i class="fa-solid fa-file-invoice"></i><span>匯出PDF</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 彈窗內容主體結束 -->
+
+        <!-- 彈窗底部固定按鈕列 -->
+        <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex justify-end items-center space-x-3 shrink-0">
+            <!-- 案件簽核 按鈕 -->
+            <button type="button" onclick="handleCaseSignOff()" class="px-3 py-1.5 bg-ruili-brand hover:opacity-90 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                <i class="fa-solid fa-file-signature"></i>
+                <span>案件簽核</span>
+            </button>
+
+            <!-- 取消 按鈕 -->
+            <button type="button" onclick="closeModal('editCaseModal')" class="px-3 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
+                取消
+            </button>
+            
+            <!-- 儲存 按鈕 -->
+            <button type="button" onclick="saveCaseData()" class="px-3 py-1.5 bg-ruili-brand hover:opacity-90 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                <i class="fa-solid fa-check"></i><span>儲存</span>
+            </button>
+        </div>
+    </div> <!-- 關閉外層白色卡片 -->
+</div> <!-- 關閉 editCaseModal 背景遮罩 -->
 
     <!-- 3. JS 腳本放置區域 --> 
     <script src="./js/api/data-sync.js"></script>
