@@ -46,7 +46,7 @@
 </head> 
 <body class="bg-ruili-bg text-ruili-dark flex h-screen overflow-hidden font-sans text-sm"> 
 
-    <!-- 1. 左側功能導覽列（正確位置：放最前面，替代舊的 aside） --> 
+    <!-- 1. 左側功能導覽列 --> 
     <aside class="ruili-sidebar text-stone-300 flex flex-col justify-between border-r border-ruili-dark h-full w-56 bg-ruili-sidebar shrink-0"> 
         <!-- 上半部：Logo + 可滾動選單區域 -->
         <div class="flex-1 flex flex-col min-h-0"> 
@@ -74,20 +74,35 @@
                     <i class="fa-solid fa-layer-group w-4 text-amber-500"></i><span>全集團案件總覽</span>
                 </button>
 
-                <!-- 年度案件快速切換 -->
+                <!-- 年度案件快速切換 (可收合選單) -->
                 <div class="pt-2 pb-1">
                     <button onclick="toggleYearList()" class="w-full flex items-center justify-between text-[10px] font-semibold tracking-wider text-stone-500 px-3 py-1 hover:text-stone-300 transition group">
                         <span>年度案件分類</span>
                         <i id="year-chevron" class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200"></i>
                     </button>
                     
-                    <!-- 年份按鈕清單容器 -->
-                    <div id="year-list-container" class="space-y-0.5 mt-1 pl-2 border-l border-stone-700/50 ml-3">
-                        <button onclick="switchModule('all-cases', this, 2026)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-300 transition text-xs">
+                    <!-- 年份按鈕清單容器 (完整包含 2021 ~ 2027) -->
+                    <div id="year-list-container" class="space-y-0.5 mt-1 pl-2 border-l border-stone-700/50 ml-3 overflow-hidden transition-all duration-300">
+                        <button onclick="switchModule('year-2027', this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-300 transition text-xs">
+                            <i class="fa-solid fa-folder w-3.5 text-stone-400"></i><span>2027 案件管理</span>
+                        </button>
+                        <button onclick="switchModule('year-2026', this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-300 transition text-xs">
                             <i class="fa-solid fa-folder w-3.5 text-stone-400"></i><span>2026 案件 (大宗)</span>
                         </button>
-                        <button onclick="switchModule('all-cases', this, 2025)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
-                            <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>2025 案件</span>
+                        <button onclick="switchModule('year-2025', this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                            <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>2025 案件管理</span>
+                        </button>
+                        <button onclick="switchModule('year-2024', this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                            <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>2024 案件管理</span>
+                        </button>
+                        <button onclick="switchModule('year-2023', this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                            <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>2023 案件管理</span>
+                        </button>
+                        <button onclick="switchModule('year-2022', this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                            <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>2022 案件管理</span>
+                        </button>
+                        <button onclick="switchModule('year-2021', this)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                            <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>2021 案件管理</span>
                         </button>
                     </div>
                 </div>
@@ -130,8 +145,24 @@
         </section>
     </main>
 
-    <!-- 3. JS 腳本放置在 </body> 的最上方 --> 
+    <!-- 3. JS 腳本放置區域 --> 
     <script src="./js/api/data-sync.js"></script>
     <script src="./js/api/mock-data.js"></script>
+
+    <!-- 年度選單展開/收合控制邏輯 -->
+    <script>
+        function toggleYearList() {
+            const container = document.getElementById('year-list-container');
+            const chevron = document.getElementById('year-chevron');
+            
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                chevron.classList.remove('-rotate-90');
+            } else {
+                container.classList.add('hidden');
+                chevron.classList.add('-rotate-90');
+            }
+        }
+    </script>
 </body> 
 </html>
