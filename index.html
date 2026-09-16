@@ -3,7 +3,7 @@
 <head> 
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>睿立集團｜ERO</title> 
+    <title>睿立集團｜ERP</title> 
     <script src="https://cdn.tailwindcss.com"></script> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> 
      
@@ -65,8 +65,17 @@
                 <a href="#" class="block px-4 py-2 rounded bg-ruili-brand/20 text-white font-medium"><i class="fa-solid fa-house mr-2"></i>主控台</a>
             </nav>
         </div>
-        <div class="text-xs text-gray-400 border-t border-gray-700 pt-4">
-            身分：<strong class="text-white">最高管理者</strong>
+        <div class="space-y-2 border-t border-gray-700 pt-4">
+            <!-- 示範資料快捷按鈕 -->
+            <button onclick="injectMockData()" class="w-full text-left text-xs text-gray-300 hover:text-white bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded transition">
+                <i class="fa-solid fa-flask text-amber-400 mr-2"></i>載入示範資料
+            </button>
+            <button onclick="clearSystemData()" class="w-full text-left text-xs text-gray-300 hover:text-rose-300 bg-gray-800 hover:bg-gray-700 px-3 py-2 rounded transition">
+                <i class="fa-solid fa-trash-can text-rose-400 mr-2"></i>還原空白系統
+            </button>
+            <div class="text-xs text-gray-400 pt-2">
+                身分：<strong class="text-white">最高管理者</strong>
+            </div>
         </div>
     </aside>
 
@@ -79,11 +88,42 @@
 
         <section class="bg-white rounded-xl p-6 shadow-sm border border-ruili-border mb-6">
             <h3 class="text-lg font-bold mb-4">歡迎使用全新架構 ERP</h3>
-            <p class="text-gray-600">系統骨架與 Tailwind CSS 變數設定完成。</p>
+            <p class="text-gray-600 mb-4">系統骨架、Tailwind CSS 與獨立 API 資料流均已連線成功。</p>
+            <div id="connection-status" class="p-4 rounded-lg bg-gray-50 border border-gray-200 text-sm font-mono text-gray-700">
+                正在測試與 RuiliDataStore 連線...
+            </div>
         </section>
     </main>
 
-    <!-- 引入資料同步與持久化模組 --> 
-    <!-- <script src="./js/api/data-sync.js"></script> -->
+    <!-- 1. 核心資料同步與持久化模組 --> 
+    <script src="./js/api/data-sync.js"></script>
+    <!-- 2. 獨立測試/示範資料模組 --> 
+    <script src="./js/api/mock-data.js"></script>
+
+    <!-- 3. 初始化連線狀態測試 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusBox = document.getElementById('connection-status');
+            
+            if (typeof RuiliDataStore !== 'undefined') {
+                const cases = RuiliDataStore.getCases();
+                statusBox.className = "p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-sm text-emerald-800 font-medium";
+                statusBox.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
+                        <span>API 連線成功！目前系統資料庫內共有 <strong>${cases.length}</strong> 筆案件。</span>
+                    </div>
+                `;
+            } else {
+                statusBox.className = "p-4 rounded-lg bg-rose-50 border border-rose-200 text-sm text-rose-800 font-medium";
+                statusBox.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i>
+                        <span>連線失敗：未檢測到 <code>js/api/data-sync.js</code> 模組，請確認檔案路徑。</span>
+                    </div>
+                `;
+            }
+        });
+    </script>
 </body> 
 </html>
