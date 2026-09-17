@@ -1,9 +1,9 @@
 // js/modules/land-basic.js
-export let landRowCount = 0;
+window.landRowCount = 0;
 
-export function addLandRow(data = {}) {
-    landRowCount++;
-    const rowId = `land-row-${landRowCount}`;
+window.addLandRow = function(data = {}) {
+    window.landRowCount++;
+    const rowId = `land-row-${window.landRowCount}`;
     const html = `
         <div id="${rowId}" class="grid grid-cols-[1fr_1fr_1.2fr_0.9fr_0.9fr_1.2fr_0.9fr_0.9fr_1fr_32px] gap-2 bg-white p-2 rounded-lg border border-slate-200 shadow-sm items-center text-xs">
             <input type="text" value="${data.number || ''}" placeholder="例：0899-0000" class="land-number w-full px-2 py-1 border border-slate-300 rounded-lg">
@@ -30,7 +30,7 @@ export function addLandRow(data = {}) {
         container.insertAdjacentHTML('beforeend', html);
         window.calculateLandTotals();
     }
-}
+};
 
 window.calculateLandTotals = function() {
     let totalArea = 0, totalSqm = 0;
@@ -59,8 +59,6 @@ window.calculateLandTotals = function() {
     if (sumSqm) sumSqm.textContent = `${totalSqm.toFixed(2)} ㎡`;
     if (sumPing) sumPing.textContent = `${(totalSqm * 0.3025).toFixed(2)} 坪`;
 };
-
-window.addLandRow = addLandRow;
 
 // 彈窗開關控制
 window.openLandModal = () => {
