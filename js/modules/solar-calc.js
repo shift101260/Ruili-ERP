@@ -1,10 +1,12 @@
 // js/modules/solar-calc.js
 
+// 太陽能主 Modal 開關控制
 window.openSolarModal = function() {
     const modal = document.getElementById('solar-modal');
     if (modal) {
         modal.classList.remove('hidden');
-        modal.style.display = 'flex';
+        modal.classList.add('flex');
+        modal.style.setProperty('display', 'flex', 'important');
     }
     if (typeof window.calculateSolarAll === 'function') {
         window.calculateSolarAll();
@@ -15,10 +17,30 @@ window.closeSolarModal = function() {
     const modal = document.getElementById('solar-modal');
     if (modal) {
         modal.classList.add('hidden');
-        modal.style.display = 'none';
+        modal.classList.remove('flex');
+        modal.style.setProperty('display', 'none', 'important');
     }
 };
 
+// 🏭 製造業每日用電參考表格 Modal 開關控制（補齊此關鍵函式）
+window.toggleSolarRefModal = function(show) {
+    const refModal = document.getElementById('solar-ref-modal');
+    if (refModal) {
+        if (show) {
+            refModal.classList.remove('hidden');
+            refModal.classList.add('flex');
+            refModal.style.setProperty('display', 'flex', 'important');
+        } else {
+            refModal.classList.add('hidden');
+            refModal.classList.remove('flex');
+            refModal.style.setProperty('display', 'none', 'important');
+        }
+    } else {
+        console.error("找不到 ID 為 'solar-ref-modal' 的元素，請確認 HTML 已貼入該 Modal！");
+    }
+};
+
+// 太陽能核心計算邏輯
 window.calculateSolarAll = function() {
     // 🛡️ 護城河保護網：確保任何一處計算崩潰或 DOM 抓錯，絕不會影響其他按鈕與系統！
     try {
@@ -108,4 +130,4 @@ function setSolarText(elementId, text) {
     if (el) el.textContent = text;
 }
 
-console.log('太陽能試算模組 (solar-calc.js) - 具備防呆與回收年限之強化版本載入成功！');
+console.log('太陽能試算模組 (solar-calc.js) - 包含製造業用電對照表支援完整版載入成功！');
