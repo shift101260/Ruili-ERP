@@ -593,22 +593,27 @@
                 </div>
             </div>
 
-            <!-- 底端按鈕列 -->
-            <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex flex-wrap justify-end items-center gap-2.5 sticky bottom-0 z-10 shrink-0">
-                <button type="button" onclick="handleCaseSignOff(document.getElementById('edit-case-id').value)" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
-                    <i class="fa-solid fa-file-signature"></i>
-                    <span>案件簽核</span>
-                </button>
+            <!-- 底端按鈕列：將案件簽核靠左置放，避免與儲存/取消按鈕誤觸 -->
+            <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex flex-wrap justify-between items-center gap-2.5 sticky bottom-0 z-10 shrink-0">
+                <!-- 左側獨立區塊：案件簽核 -->
+                <div>
+                    <button type="button" onclick="handleCaseSignOff(document.getElementById('edit-case-id').value)" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                        <i class="fa-solid fa-file-signature"></i>
+                        <span>案件簽核</span>
+                    </button>
+                </div>
 
-                <button type="button" onclick="closeModal('editCaseModal')" class="px-3.5 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
-                    取消
-                </button>
-                
-                <button type="button" onclick="saveNewCase()" class="px-4 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
-                    <i class="fa-solid fa-check"></i><span>儲存</span>
-                </button>
+                <!-- 右側操作區塊：取消與儲存 -->
+                <div class="flex items-center space-x-2.5">
+                    <button type="button" onclick="closeModal('editCaseModal')" class="px-3.5 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
+                        取消
+                    </button>
+                    
+                    <button type="button" onclick="saveNewCase()" class="px-4 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                        <i class="fa-solid fa-check"></i><span>儲存</span>
+                    </button>
+                </div>
             </div>
-        </div>
     </div>
 
     <!-- 4. 模組 JS 引薦 -->
