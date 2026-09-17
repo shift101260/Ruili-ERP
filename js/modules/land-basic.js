@@ -63,12 +63,21 @@ window.calculateLandTotals = function() {
 
 window.addLandRow = addLandRow;
 
-// 彈窗開關控制
+// 彈窗開關控制 (防呆與高權重開關)
 window.openLandModal = function() {
     const modal = document.getElementById('land-modal');
     if (modal) { 
         modal.classList.remove('hidden'); 
-        modal.style.display = 'flex'; 
+        modal.classList.add('flex');
+        modal.style.setProperty('display', 'flex', 'important');
+
+        // 防呆：若開啟時裡面完全沒有列，自動新增第一筆
+        const container = document.getElementById('land-rows-container');
+        if (container && container.children.length === 0) {
+            window.addLandRow();
+        }
+    } else {
+        console.error("找不到 ID 為 'land-modal' 的元素，請檢查 HTML！");
     }
 };
 
@@ -76,7 +85,8 @@ window.closeLandModal = function() {
     const modal = document.getElementById('land-modal');
     if (modal) { 
         modal.classList.add('hidden'); 
-        modal.style.display = 'none'; 
+        modal.classList.remove('flex');
+        modal.style.setProperty('display', 'none', 'important');
     }
 };
 
