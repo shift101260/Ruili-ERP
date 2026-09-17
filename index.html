@@ -614,22 +614,153 @@
                     </button>
                 </div>
             </div>
+        </div>
     </div>
 
-    <!-- 核心邏輯與模組引用 -->
-<script src="./js/api/data-sync.js"></script>
-<script src="./js/api/mock-data.js"></script>
-<script src="./js/modules/case-management.js"></script>
-<script src="./js/modules/case-edit.js"></script>
-<script src="./js/modules/payment-calc.js"></script>
+    <!-- 4. 輔助工具隱藏彈窗區 (Modals) -->
 
-<!-- 案件評估工具模組 -->
-<script src="./js/modules/land-basic.js"></script>
-<script src="./js/modules/registered-building.js"></script>
-<script src="./js/modules/unregistered-building.js"></script>
+    <!-- Modal 1: 土地基本資料 -->
+    <div id="land-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
+        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800">
+            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="font-bold text-sm flex items-center"><i class="fa-solid fa-map text-[#C59B63] mr-2"></i> 土地基本資料</h3>
+                <button type="button" onclick="closeLandModal()" class="text-stone-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4 text-xs">
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-stone-700">土地筆數列表</span>
+                    <button type="button" onclick="addLandRow()" class="px-3 py-1.5 btn-gold rounded-lg font-bold text-xs shadow-2xs flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-plus"></i> 新增土地</button>
+                </div>
+                <div id="land-rows-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 flex justify-around font-mono text-xs font-bold text-stone-700">
+                    <div>總面積: <span id="sum-area" class="text-amber-700">0 ㎡</span></div>
+                    <div>持分總面積: <span id="sum-sqm" class="text-amber-700">0 ㎡</span></div>
+                    <div>持分總坪數: <span id="sum-ping" class="text-amber-700">0 坪</span></div>
+                </div>
+            </div>
+            <div class="px-6 py-3 bg-stone-100 border-t flex justify-end">
+                <button type="button" onclick="closeLandModal()" class="px-4 py-1.5 bg-white border rounded-xl font-bold cursor-pointer">關閉</button>
+            </div>
+        </div>
+    </div>
 
-<!-- 服務項目試算模組 -->
-<script src="./js/modules/solar-calc.js"></script>
-<script src="./js/modules/land-change-calc.js"></script>
+    <!-- Modal 2: 保存登記建物 -->
+    <div id="registered-building-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
+        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800">
+            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="font-bold text-sm flex items-center"><i class="fa-solid fa-building text-sky-400 mr-2"></i> 保存登記建物</h3>
+                <button type="button" onclick="closeRegisteredBuildingModal()" class="text-stone-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4 text-xs">
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-stone-700">建物資料列表</span>
+                    <button type="button" onclick="addRegBuildingRow()" class="px-3 py-1.5 btn-gold rounded-lg font-bold text-xs shadow-2xs flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-plus"></i> 新增建物</button>
+                </div>
+                <div id="reg-building-rows-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 flex justify-around font-mono text-xs font-bold text-stone-700">
+                    <div>總面積: <span id="sum-reg-area" class="text-sky-700">0 ㎡</span></div>
+                    <div>持分總面積: <span id="sum-reg-sqm" class="text-sky-700">0 ㎡</span></div>
+                    <div>持分總坪數: <span id="sum-reg-ping" class="text-sky-700">0 坪</span></div>
+                </div>
+            </div>
+            <div class="px-6 py-3 bg-stone-100 border-t flex justify-end">
+                <button type="button" onclick="closeRegisteredBuildingModal()" class="px-4 py-1.5 bg-white border rounded-xl font-bold cursor-pointer">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: 未保存登記建物 -->
+    <div id="unregistered-building-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800">
+            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="font-bold text-sm flex items-center"><i class="fa-solid fa-house-chimney text-emerald-400 mr-2"></i> 未保存登記建物</h3>
+                <button type="button" onclick="closeUnregisteredBuildingModal()" class="text-stone-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4 text-xs">
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-stone-700">增建/未保存建物列表</span>
+                    <button type="button" onclick="addUnregBuildingRow()" class="px-3 py-1.5 btn-gold rounded-lg font-bold text-xs shadow-2xs flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-plus"></i> 新增項目</button>
+                </div>
+                <div id="unreg-building-rows-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 flex justify-around font-mono text-xs font-bold text-stone-700">
+                    <div>總面積: <span id="sum-unreg-sqm" class="text-emerald-700">0 ㎡</span></div>
+                    <div>總坪數: <span id="sum-unreg-ping" class="text-emerald-700">0 坪</span></div>
+                </div>
+            </div>
+            <div class="px-6 py-3 bg-stone-100 border-t flex justify-end">
+                <button type="button" onclick="closeUnregisteredBuildingModal()" class="px-4 py-1.5 bg-white border rounded-xl font-bold cursor-pointer">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: 土地變更評估 -->
+    <div id="land-change-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800">
+            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="font-bold text-sm flex items-center"><i class="fa-solid fa-earth-asia text-sky-400 mr-2"></i> 土地變更評估與回饋金試算</h3>
+                <button type="button" onclick="closeLandChangeModal()" class="text-stone-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4 text-xs">
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-stone-700">回饋金試算列</span>
+                    <button type="button" onclick="addFeedbackRow()" class="px-3 py-1.5 btn-gold rounded-lg font-bold text-xs shadow-2xs flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-plus"></i> 新增列</button>
+                </div>
+                <div id="feedback-rows-container" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 flex justify-between items-center font-mono text-xs font-bold">
+                    <span>回饋金預估總計：</span>
+                    <span id="feedback-grand-total" class="text-emerald-700 text-sm">NT$ 0</span>
+                </div>
+            </div>
+            <div class="px-6 py-3 bg-stone-100 border-t flex justify-end">
+                <button type="button" onclick="closeLandChangeModal()" class="px-4 py-1.5 bg-white border rounded-xl font-bold cursor-pointer">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 5: 太陽能試算 -->
+    <div id="solar-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800">
+            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center">
+                <h3 class="font-bold text-sm flex items-center"><i class="fa-solid fa-solar-panel text-amber-400 mr-2"></i> 太陽能效益試算</h3>
+                <button type="button" onclick="closeSolarModal()" class="text-stone-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 space-y-4 text-xs">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold block mb-1">屋頂可用坪數</label>
+                        <input type="number" id="solar-roof-ping" oninput="calculateSolarAll()" placeholder="坪數" class="w-full border rounded-xl px-3 py-2 font-mono">
+                    </div>
+                    <div>
+                        <label class="font-bold block mb-1">台電躉售費率 (元/度)</label>
+                        <input type="number" id="solar-taipower-price" value="4.5" step="0.1" oninput="calculateSolarAll()" class="w-full border rounded-xl px-3 py-2 font-mono">
+                    </div>
+                </div>
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 space-y-2 font-mono">
+                    <div class="flex justify-between"><span>預估日發電量：</span><strong id="res-solar-daily-gen">0 度</strong></div>
+                    <div class="flex justify-between"><span>預估月發電量：</span><strong id="res-solar-monthly-gen">0 度</strong></div>
+                    <div class="flex justify-between text-amber-900 font-bold border-t border-amber-200 pt-2"><span>預估年售電收益：</span><strong id="res-solar-annual-rev">NT$ 0</strong></div>
+                </div>
+            </div>
+            <div class="px-6 py-3 bg-stone-100 border-t flex justify-end">
+                <button type="button" onclick="closeSolarModal()" class="px-4 py-1.5 bg-white border rounded-xl font-bold cursor-pointer">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. 核心邏輯與模組引用 -->
+    <script src="./js/api/data-sync.js"></script>
+    <script src="./js/api/mock-data.js"></script>
+    <script src="./js/modules/case-management.js"></script>
+    <script src="./js/modules/case-edit.js"></script>
+    <script src="./js/modules/payment-calc.js"></script>
+
+    <!-- 案件評估工具模組 -->
+    <script src="./js/modules/land-basic.js"></script>
+    <script src="./js/modules/registered-building.js"></script>
+    <script src="./js/modules/unregistered-building.js"></script>
+
+    <!-- 服務項目試算模組 -->
+    <script src="./js/modules/solar-calc.js"></script>
+    <script src="./js/modules/land-change-calc.js"></script>
 </body>
 </html>
