@@ -619,7 +619,7 @@
 
     <!-- Modal 1: 太陽能發電效益試算與精算工具 -->
     <div id="solar-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-[9999] p-3 overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] sm:max-h-[95vh] flex flex-col overflow-hidden relative border border-stone-200">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] sm:max-h-[95vh] flex flex-col overflow-hidden relative border border-stone-200 my-4">
             <div class="p-4 md:p-5 border-b border-stone-800 flex justify-between items-center bg-[#2C2A29] text-white shrink-0">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-sun text-[#C59B63] text-lg"></i>
@@ -676,6 +676,11 @@
                         <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
                             <span class="block text-stone-500 mb-1">每年發電度數</span>
                             <span id="res-solar-annual-gen" class="text-base font-bold text-stone-800 font-mono">0 度</span>
+                        </div>
+                        <!-- 💡 補齊每月發電收益 ID: res-solar-monthly-rev -->
+                        <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
+                            <span class="block text-stone-500 mb-1">每月發電收益</span>
+                            <span id="res-solar-monthly-rev" class="text-base font-bold text-emerald-700 font-mono">NT$ 0</span>
                         </div>
                         <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
                             <span class="block text-stone-500 mb-1">每年發電收益</span>
@@ -848,7 +853,7 @@
 
     <!-- Modal 2: 土地變更專屬評估與回饋金試算 Modal -->
     <div id="land-change-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-[9999] p-3 overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] sm:max-h-[95vh] flex flex-col overflow-hidden border border-stone-200 relative">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] sm:max-h-[95vh] flex flex-col overflow-hidden border border-stone-200 relative my-4">
             <div class="p-4 md:p-5 border-b border-stone-800 flex justify-between items-center bg-[#2C2A29] text-white shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-[#C59B63]/20 border border-[#C59B63]/40 flex items-center justify-center text-[#C59B63] text-base shrink-0">
