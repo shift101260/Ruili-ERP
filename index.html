@@ -593,9 +593,8 @@
                 </div>
             </div>
 
-            <!-- 底端按鈕列：將案件簽核靠左置放，避免與儲存/取消按鈕誤觸 -->
+            <!-- 底端按鈕列 -->
             <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex flex-wrap justify-between items-center gap-2.5 sticky bottom-0 z-10 shrink-0">
-                <!-- 左側獨立區塊：案件簽核 -->
                 <div>
                     <button type="button" onclick="handleCaseSignOff(document.getElementById('edit-case-id').value)" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
                         <i class="fa-solid fa-file-signature"></i>
@@ -603,7 +602,6 @@
                     </button>
                 </div>
 
-                <!-- 右側操作區塊：取消與儲存 -->
                 <div class="flex items-center space-x-2.5">
                     <button type="button" onclick="closeModal('editCaseModal')" class="px-3.5 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
                         取消
@@ -619,130 +617,606 @@
 
     <!-- 4. 輔助工具隱藏彈窗區 (Modals) -->
 
-    <!-- Modal 1: 土地基本資料 -->
-    <div id="land-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
-        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800">
-            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-sm flex items-center"><i class="fa-solid fa-map text-[#C59B63] mr-2"></i> 土地基本資料</h3>
-                <button type="button" onclick="closeLandModal()" class="text-stone-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="p-6 space-y-4 text-xs">
-                <div class="flex justify-between items-center">
-                    <span class="font-bold text-stone-700">土地筆數列表</span>
-                    <button type="button" onclick="addLandRow()" class="px-3 py-1.5 btn-gold rounded-lg font-bold text-xs shadow-2xs flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-plus"></i> 新增土地</button>
+    <!-- Modal 1: 太陽能發電效益試算與精算工具 -->
+    <div id="solar-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-[9999] p-3 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] sm:max-h-[95vh] flex flex-col overflow-hidden relative border border-stone-200">
+            <div class="p-4 md:p-5 border-b border-stone-800 flex justify-between items-center bg-[#2C2A29] text-white shrink-0">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-sun text-[#C59B63] text-lg"></i>
+                    <h3 class="font-bold text-sm tracking-wide">太陽能發電效益試算與精算工具</h3>
                 </div>
-                <div id="land-rows-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
-                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 flex justify-around font-mono text-xs font-bold text-stone-700">
-                    <div>總面積: <span id="sum-area" class="text-amber-700">0 ㎡</span></div>
-                    <div>持分總面積: <span id="sum-sqm" class="text-amber-700">0 ㎡</span></div>
-                    <div>持分總坪數: <span id="sum-ping" class="text-amber-700">0 坪</span></div>
-                </div>
+                <button type="button" onclick="closeSolarModal()" class="text-stone-400 hover:text-white p-1 transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
-            <div class="px-6 py-3 bg-stone-100 border-t flex justify-end">
-                <button type="button" onclick="closeLandModal()" class="px-4 py-1.5 bg-white border rounded-xl font-bold cursor-pointer">關閉</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal 2: 保存登記建物 -->
-    <div id="registered-building-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
-        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800">
-            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-sm flex items-center"><i class="fa-solid fa-building text-sky-400 mr-2"></i> 保存登記建物</h3>
-                <button type="button" onclick="closeRegisteredBuildingModal()" class="text-stone-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="p-6 space-y-4 text-xs">
-                <div class="flex justify-between items-center">
-                    <span class="font-bold text-stone-700">建物資料列表</span>
-                    <button type="button" onclick="addRegBuildingRow()" class="px-3 py-1.5 btn-gold rounded-lg font-bold text-xs shadow-2xs flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-plus"></i> 新增建物</button>
-                </div>
-                <div id="reg-building-rows-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
-                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 flex justify-around font-mono text-xs font-bold text-stone-700">
-                    <div>總面積: <span id="sum-reg-area" class="text-sky-700">0 ㎡</span></div>
-                    <div>持分總面積: <span id="sum-reg-sqm" class="text-sky-700">0 ㎡</span></div>
-                    <div>持分總坪數: <span id="sum-reg-ping" class="text-sky-700">0 坪</span></div>
-                </div>
-            </div>
-            <div class="px-6 py-3 bg-stone-100 border-t flex justify-end">
-                <button type="button" onclick="closeRegisteredBuildingModal()" class="px-4 py-1.5 bg-white border rounded-xl font-bold cursor-pointer">關閉</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal 3: 未保存登記建物 -->
-    <div id="unregistered-building-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
-        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800">
-            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-sm flex items-center"><i class="fa-solid fa-house-chimney text-emerald-400 mr-2"></i> 未保存登記建物</h3>
-                <button type="button" onclick="closeUnregisteredBuildingModal()" class="text-stone-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="p-6 space-y-4 text-xs">
-                <div class="flex justify-between items-center">
-                    <span class="font-bold text-stone-700">增建/未保存建物列表</span>
-                    <button type="button" onclick="addUnregBuildingRow()" class="px-3 py-1.5 btn-gold rounded-lg font-bold text-xs shadow-2xs flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-plus"></i> 新增項目</button>
-                </div>
-                <div id="unreg-building-rows-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
-                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 flex justify-around font-mono text-xs font-bold text-stone-700">
-                    <div>總面積: <span id="sum-unreg-sqm" class="text-emerald-700">0 ㎡</span></div>
-                    <div>總坪數: <span id="sum-unreg-ping" class="text-emerald-700">0 坪</span></div>
-                </div>
-            </div>
-            <div class="px-6 py-3 bg-stone-100 border-t flex justify-end">
-                <button type="button" onclick="closeUnregisteredBuildingModal()" class="px-4 py-1.5 bg-white border rounded-xl font-bold cursor-pointer">關閉</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal 4: 土地變更評估 -->
-    <div id="land-change-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
-        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800">
-            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-sm flex items-center"><i class="fa-solid fa-earth-asia text-sky-400 mr-2"></i> 土地變更評估與回饋金試算</h3>
-                <button type="button" onclick="closeLandChangeModal()" class="text-stone-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="p-6 space-y-4 text-xs">
-                <div class="flex justify-between items-center">
-                    <span class="font-bold text-stone-700">回饋金試算列</span>
-                    <button type="button" onclick="addFeedbackRow()" class="px-3 py-1.5 btn-gold rounded-lg font-bold text-xs shadow-2xs flex items-center gap-1 cursor-pointer"><i class="fa-solid fa-plus"></i> 新增列</button>
-                </div>
-                <div id="feedback-rows-container" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
-                <div class="bg-stone-50 p-3 rounded-xl border border-stone-200 flex justify-between items-center font-mono text-xs font-bold">
-                    <span>回饋金預估總計：</span>
-                    <span id="feedback-grand-total" class="text-emerald-700 text-sm">NT$ 0</span>
-                </div>
-            </div>
-            <div class="px-6 py-3 bg-stone-100 border-t flex justify-end">
-                <button type="button" onclick="closeLandChangeModal()" class="px-4 py-1.5 bg-white border rounded-xl font-bold cursor-pointer">關閉</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal 5: 太陽能試算 -->
-    <div id="solar-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
-        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800">
-            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-sm flex items-center"><i class="fa-solid fa-solar-panel text-amber-400 mr-2"></i> 太陽能效益試算</h3>
-                <button type="button" onclick="closeSolarModal()" class="text-stone-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="p-6 space-y-4 text-xs">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="font-bold block mb-1">屋頂可用坪數</label>
-                        <input type="number" id="solar-roof-ping" oninput="calculateSolarAll()" placeholder="坪數" class="w-full border rounded-xl px-3 py-2 font-mono">
+            <div class="p-4 md:p-6 space-y-5 overflow-y-auto flex-1 text-xs bg-stone-50/50">
+                <!-- 一、案件評估基本輸入區 -->
+                <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-2xs space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-stone-100 pb-2">
+                        <h4 class="font-bold text-stone-800 text-xs flex items-center gap-1.5">
+                            <i class="fa-solid fa-clipboard-list text-[#C59B63]"></i> 一、案件評估 (初次拜訪用)
+                        </h4>
+                        <button type="button" onclick="toggleSolarRefModal(true)" class="px-3 py-1 bg-stone-800 hover:bg-stone-900 text-white rounded-lg font-medium transition flex items-center gap-1 shadow-2xs cursor-pointer">
+                            <i class="fa-solid fa-industry text-amber-400"></i> 製造業每日用電參考表格
+                        </button>
                     </div>
-                    <div>
-                        <label class="font-bold block mb-1">台電躉售費率 (元/度)</label>
-                        <input type="number" id="solar-taipower-price" value="4.5" step="0.1" oninput="calculateSolarAll()" class="w-full border rounded-xl px-3 py-2 font-mono">
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1">屋頂坪數 (坪)</label>
+                            <input type="number" id="solar-roof-ping" placeholder="0" oninput="calculateSolarAll()" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:border-[#C59B63] bg-white font-mono">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1">台電售電價格 (元/度)</label>
+                            <input type="number" step="0.01" id="solar-taipower-price" value="4.5" oninput="calculateSolarAll()" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:border-[#C59B63] bg-white font-mono">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1">工廠每度電費 (元)</label>
+                            <input type="number" step="0.1" id="solar-factory-elec-price" placeholder="例如: 3.5" oninput="calculateSolarAll()" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:border-[#C59B63] bg-white font-mono">
+                        </div>
                     </div>
                 </div>
-                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 space-y-2 font-mono">
-                    <div class="flex justify-between"><span>預估日發電量：</span><strong id="res-solar-daily-gen">0 度</strong></div>
-                    <div class="flex justify-between"><span>預估月發電量：</span><strong id="res-solar-monthly-gen">0 度</strong></div>
-                    <div class="flex justify-between text-amber-900 font-bold border-t border-amber-200 pt-2"><span>預估年售電收益：</span><strong id="res-solar-annual-rev">NT$ 0</strong></div>
+
+                <!-- 二、估算（依據坪數與售電價粗估） -->
+                <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-2xs space-y-4">
+                    <h4 class="font-bold text-stone-800 text-xs border-b border-stone-100 pb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-calculator text-sky-600"></i> 二、估算（依據坪數與售電價粗估）
+                    </h4>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
+                            <span class="block text-stone-500 mb-1">每日發電度數</span>
+                            <span id="res-solar-daily-gen" class="text-base font-bold text-stone-800 font-mono">0.0 度</span>
+                        </div>
+                        <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
+                            <span class="block text-stone-500 mb-1">每月發電度數</span>
+                            <span id="res-solar-monthly-gen" class="text-base font-bold text-stone-800 font-mono">0 度</span>
+                        </div>
+                        <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
+                            <span class="block text-stone-500 mb-1">每年發電度數</span>
+                            <span id="res-solar-annual-gen" class="text-base font-bold text-stone-800 font-mono">0 度</span>
+                        </div>
+                        <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
+                            <span class="block text-stone-500 mb-1">每年發電收益</span>
+                            <span id="res-solar-annual-rev" class="text-base font-bold text-emerald-700 font-mono">NT$ 0</span>
+                        </div>
+                        <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
+                            <span class="block text-stone-500 mb-1">台製模組 6% 每年回饋</span>
+                            <span id="res-solar-est-b" class="text-base font-bold text-emerald-700 font-mono">NT$ 0</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-200 space-y-3">
+                        <span class="font-bold text-stone-800 block">廠房租金收益 (估算用)</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-stone-500 mb-1">坪數 (手動自填)</label>
+                                <input type="number" id="solar-est-rent-ping" placeholder="0" oninput="calculateSolarAll()" class="w-full px-3 py-1.5 border border-stone-300 rounded-lg text-xs font-mono bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-stone-500 mb-1">附近實價登錄單價 (元/坪)</label>
+                                <input type="number" id="solar-est-rent-unit-price" placeholder="0" oninput="calculateSolarAll()" class="w-full px-3 py-1.5 border border-stone-300 rounded-lg text-xs font-mono bg-white">
+                            </div>
+                            <div>
+                                <span class="block text-stone-500 mb-1">廠房每年租金收益</span>
+                                <span id="res-solar-est-c" class="text-sm font-bold text-emerald-700 font-mono leading-8">NT$ 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-200 flex flex-col sm:flex-row justify-between items-center gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-stone-800">綠電收益 (每度</span>
+                            <input type="number" id="solar-est-green-price" value="0" step="0.1" oninput="calculateSolarAll()" class="w-16 px-2 py-1 border border-stone-300 rounded-lg text-center font-mono text-xs bg-white">
+                            <span class="font-bold text-stone-800">元 × 每年發電度數)</span>
+                        </div>
+                        <span id="res-solar-est-d" class="text-base font-bold text-emerald-700 font-mono">NT$ 0</span>
+                    </div>
+
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 flex justify-between items-center shadow-2xs">
+                        <span class="font-bold text-emerald-900 text-xs">預估發電收益 (每年發電收益 + 6%回饋 + 廠房租金 + 綠電收益)</span>
+                        <span id="res-solar-est-total" class="text-base font-bold text-emerald-800 font-mono">NT$ 0</span>
+                    </div>
+                </div>
+
+                <!-- 三、精算試算 -->
+                <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-2xs space-y-4">
+                    <h4 class="font-bold text-stone-800 text-xs border-b border-stone-100 pb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-chart-pie text-[#C59B63]"></i> 三、精算試算 (現勘報價後使用)
+                    </h4>
+                     
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1">模組數量 (片)</label>
+                            <input type="number" id="solar-panel-count" placeholder="0" oninput="calculateSolarAll()" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:border-[#C59B63] bg-white font-mono">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1">每片瓦數 (W)</label>
+                            <input type="number" id="solar-panel-watt" value="590" oninput="calculateSolarAll()" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:border-[#C59B63] bg-white font-mono">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
+                            <span class="block text-stone-500 mb-1">A. 每年發電收益</span>
+                            <span id="res-solar-calc-a" class="text-base font-bold text-emerald-700 font-mono">NT$ 0</span>
+                        </div>
+                        <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
+                            <span class="block text-stone-500 mb-1">B. 台製模組 6% 每年回饋 (A * 0.06)</span>
+                            <span id="res-solar-calc-b" class="text-base font-bold text-emerald-700 font-mono">NT$ 0</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-200 space-y-3">
+                        <span class="font-bold text-stone-800 block">C. 廠房租金收益 (精算用)</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-stone-500 mb-1">坪數 (手動自填)</label>
+                                <input type="number" id="solar-rent-ping" placeholder="0" oninput="calculateSolarAll()" class="w-full px-3 py-1.5 border border-stone-300 rounded-lg text-xs font-mono bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-stone-500 mb-1">附近實價登錄單價 (元/坪)</label>
+                                <input type="number" id="solar-rent-unit-price" placeholder="0" oninput="calculateSolarAll()" class="w-full px-3 py-1.5 border border-stone-300 rounded-lg text-xs font-mono bg-white">
+                            </div>
+                            <div>
+                                <span class="block text-stone-500 mb-1">廠房每年租金收益</span>
+                                <span id="res-solar-calc-c" class="text-sm font-bold text-emerald-700 font-mono leading-8">NT$ 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-stone-50 p-3.5 rounded-xl border border-stone-200 flex flex-col sm:flex-row justify-between items-center gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-stone-800">D. 綠電園區每年售電收益 (每度</span>
+                            <input type="number" id="solar-green-price" value="5" oninput="calculateSolarAll()" class="w-16 px-2 py-1 border border-stone-300 rounded-lg text-center font-mono text-xs bg-white">
+                            <span class="font-bold text-stone-800">元)</span>
+                        </div>
+                        <span id="res-solar-calc-d" class="text-base font-bold text-emerald-700 font-mono">NT$ 0</span>
+                    </div>
+
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 flex justify-between items-center shadow-2xs">
+                        <span class="font-bold text-emerald-900 text-xs">精算總收益 (A + B + C + D)</span>
+                        <span id="res-solar-total-rev" class="text-base font-bold text-emerald-800 font-mono">NT$ 0</span>
+                    </div>
+                </div>
+
+                <!-- 建置總成本與投資回收年限 -->
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1">建置總成本 (NT$)</label>
+                            <input type="number" id="solar-total-cost" placeholder="請輸入建置總成本" oninput="calculateSolarAll()" class="w-full px-3 py-2 border border-stone-300 rounded-lg focus:outline-none focus:border-[#C59B63] bg-white font-mono">
+                        </div>
+                        <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 flex justify-between items-center shadow-2xs">
+                            <span class="font-bold text-amber-900 text-xs">投資回收年限 (幾年回本)</span>
+                            <span id="res-solar-payback-years" class="text-base font-bold text-amber-800 font-mono">0.0 年</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="px-6 py-3 bg-stone-100 border-t flex justify-end">
-                <button type="button" onclick="closeSolarModal()" class="px-4 py-1.5 bg-white border rounded-xl font-bold cursor-pointer">關閉</button>
+
+            <div class="p-4 border-t border-stone-200 bg-stone-100 flex justify-end gap-3 shrink-0 sticky bottom-0 z-10">
+                <button type="button" onclick="closeSolarModal()" class="px-4 py-2 border border-stone-300 text-stone-600 rounded-xl font-bold hover:bg-white transition cursor-pointer">取消</button>
+                <button type="button" onclick="closeSolarModal()" class="px-5 py-2 btn-gold rounded-xl font-bold transition shadow-2xs cursor-pointer">確認儲存太陽能試算</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 1-1: 製造業每日用電參考表格 Modal -->
+    <div id="solar-ref-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-[10000] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden border border-stone-200">
+            <div class="p-4 bg-[#2C2A29] text-white flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-industry text-[#C59B63]"></i>
+                    <h3 class="font-bold text-xs tracking-wide">製造業每日用電度數參考對照表</h3>
+                </div>
+                <button type="button" onclick="toggleSolarRefModal(false)" class="text-stone-400 hover:text-white cursor-pointer p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-4 overflow-y-auto flex-1 text-xs">
+                <table class="w-full border-collapse text-left">
+                    <thead>
+                        <tr class="bg-stone-100 text-stone-700 border-b border-stone-200">
+                            <th class="p-3 font-bold">企業名稱</th>
+                            <th class="p-3 font-bold">用電量</th>
+                            <th class="p-3 font-bold">備註說明</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-stone-100 text-stone-600">
+                        <tr class="hover:bg-stone-50"><td class="p-3 font-medium text-stone-800">龍盟</td><td class="p-3 font-bold text-amber-600 font-mono">30 度/日</td><td class="p-3">設備組裝業</td></tr>
+                        <tr class="hover:bg-stone-50"><td class="p-3 font-medium text-stone-800">詮盛</td><td class="p-3 font-bold text-amber-600 font-mono">60 度/日</td><td class="p-3">銑床</td></tr>
+                        <tr class="hover:bg-stone-50"><td class="p-3 font-medium text-stone-800">浩銘</td><td class="p-3 font-bold text-amber-600 font-mono">80 度/日</td><td class="p-3">CNC*2、鑽床*1</td></tr>
+                        <tr class="hover:bg-stone-50"><td class="p-3 font-medium text-stone-800">環境</td><td class="p-3 font-bold text-amber-600 font-mono">130 度/日</td><td class="p-3">遠紅外線安防</td></tr>
+                        <tr class="hover:bg-stone-50"><td class="p-3 font-medium text-stone-800">河洛</td><td class="p-3 font-bold text-amber-600 font-mono">230 度/日</td><td class="p-3">印刷業</td></tr>
+                        <tr class="hover:bg-stone-50"><td class="p-3 font-medium text-stone-800">阜大</td><td class="p-3 font-bold text-amber-600 font-mono">230 度/日</td><td class="p-3">機電測試</td></tr>
+                        <tr class="hover:bg-stone-50"><td class="p-3 font-medium text-stone-800">呈福</td><td class="p-3 font-bold text-amber-600 font-mono">600 度/日</td><td class="p-3">工廠600坪</td></tr>
+                        <tr class="hover:bg-stone-50"><td class="p-3 font-medium text-stone-800">精進</td><td class="p-3 font-bold text-amber-600 font-mono">6萬/月</td><td class="p-3">農電木模業CNC*1</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-3 bg-stone-100 border-t border-stone-200 flex justify-end shrink-0">
+                <button type="button" onclick="toggleSolarRefModal(false)" class="px-5 py-1.5 bg-stone-800 hover:bg-stone-900 text-white rounded-xl text-xs font-bold cursor-pointer transition">
+                    關閉
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: 土地變更專屬評估與回饋金試算 Modal -->
+    <div id="land-change-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-[9999] p-3 overflow-y-auto">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] sm:max-h-[95vh] flex flex-col overflow-hidden border border-stone-200 relative">
+            <div class="p-4 md:p-5 border-b border-stone-800 flex justify-between items-center bg-[#2C2A29] text-white shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-[#C59B63]/20 border border-[#C59B63]/40 flex items-center justify-center text-[#C59B63] text-base shrink-0">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xs tracking-wide text-white">土地變更專屬評估與回饋金試算</h3>
+                        <p class="text-[10px] text-stone-400 font-normal">Ruili Land Alteration & Feedback Fee Evaluation Tool</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeLandChangeModal()" class="text-stone-400 hover:text-white p-1 transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-4 md:p-6 space-y-6 overflow-y-auto flex-1 text-xs bg-stone-50/50">
+                <!-- 一、基本條件評估 -->
+                <div class="bg-white p-4 md:p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                    <div class="flex items-center gap-2 border-b border-stone-100 pb-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
+                        <h4 class="font-bold text-stone-800 text-xs">一、基本條件評估</h4>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1.5">工廠登記發文日期</label>
+                            <input type="date" id="lc-factory-date" class="w-full px-3 py-2 border border-stone-300 rounded-xl focus:outline-none focus:border-[#C59B63] bg-white font-mono text-stone-700 shadow-2xs">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1.5">工廠登記字號</label>
+                            <input type="text" id="lc-factory-no" placeholder="例：特定工廠登記字號..." class="w-full px-3 py-2 border border-stone-300 rounded-xl focus:outline-none focus:border-[#C59B63] bg-white font-medium shadow-2xs">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1.5">組織型態</label>
+                            <select id="lc-org-type" class="w-full px-3 py-2 border border-stone-300 rounded-xl focus:outline-none focus:border-[#C59B63] bg-white font-medium text-stone-700 shadow-2xs">
+                                <option value="企業社">企業社</option>
+                                <option value="有限公司">有限公司</option>
+                                <option value="股份有限公司">股份有限公司</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1.5">主要產品</label>
+                            <input type="text" id="lc-main-product" placeholder="例：金屬機械加工、木模等..." class="w-full px-3 py-2 border border-stone-300 rounded-xl focus:outline-none focus:border-[#C59B63] bg-white font-medium shadow-2xs">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1.5">鄰路幾米</label>
+                            <input type="text" id="lc-road-width" placeholder="例：8米或12米" class="w-full px-3 py-2 border border-stone-300 rounded-xl focus:outline-none focus:border-[#C59B63] bg-white font-medium shadow-2xs">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1.5">送件前三年內是否因違反環保法規停工</label>
+                            <select id="lc-env-violation" class="w-full px-3 py-2 border border-stone-300 rounded-xl focus:outline-none focus:border-[#C59B63] bg-white font-medium text-stone-700 shadow-2xs">
+                                <option value="否">否</option>
+                                <option value="是">是</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1.5">隔離綠帶說明 (手動自填，需較長格式)</label>
+                        <textarea id="lc-green-belt" rows="3" placeholder="請詳細輸入隔離綠帶規劃與說明..." class="w-full px-3 py-2 border border-stone-300 rounded-xl focus:outline-none focus:border-[#C59B63] bg-white font-medium shadow-2xs"></textarea>
+                    </div>
+                </div>
+
+                <!-- 二、工廠登記證面積計算 -->
+                <div class="bg-white p-4 md:p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                    <div class="flex items-center gap-2 border-b border-stone-100 pb-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                        <h4 class="font-bold text-stone-800 text-xs">二、工廠登記證面積計算</h4>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-3 rounded-xl border border-stone-200 bg-stone-50/50 space-y-2">
+                            <span class="block font-semibold text-stone-700">廠地面積</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" step="0.01" placeholder="面積 (㎡)" oninput="window.calcFactoryArea(this)" class="factory-sqm px-3 py-1.5 border border-stone-300 rounded-lg bg-white font-mono">
+                                <input type="text" placeholder="坪數" readonly class="factory-ping px-3 py-1.5 border border-stone-200 rounded-lg bg-stone-100 font-mono font-bold text-stone-700">
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-xl border border-stone-200 bg-stone-50/50 space-y-2">
+                            <span class="block font-semibold text-stone-700">廠房面積</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" step="0.01" placeholder="面積 (㎡)" oninput="window.calcFactoryArea(this)" class="factory-sqm px-3 py-1.5 border border-stone-300 rounded-lg bg-white font-mono">
+                                <input type="text" placeholder="坪數" readonly class="factory-ping px-3 py-1.5 border border-stone-200 rounded-lg bg-stone-100 font-mono font-bold text-stone-700">
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-xl border border-stone-200 bg-stone-50/50 space-y-2">
+                            <span class="block font-semibold text-stone-700">建物面積</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" step="0.01" placeholder="面積 (㎡)" oninput="window.calcFactoryArea(this)" class="factory-sqm px-3 py-1.5 border border-stone-300 rounded-lg bg-white font-mono">
+                                <input type="text" placeholder="坪數" readonly class="factory-ping px-3 py-1.5 border border-stone-200 rounded-lg bg-stone-100 font-mono font-bold text-stone-700">
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-xl border border-stone-200 bg-stone-50/50 space-y-2">
+                            <span class="block font-semibold text-stone-700">建物及廠房面積合計</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" step="0.01" placeholder="面積 (㎡)" oninput="window.calcFactoryArea(this)" class="factory-sqm px-3 py-1.5 border border-stone-300 rounded-lg bg-white font-mono">
+                                <input type="text" placeholder="坪數" readonly class="factory-ping px-3 py-1.5 border border-stone-200 rounded-lg bg-stone-100 font-mono font-bold text-stone-700">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1">建蔽率 70% (土地及建物佔比說明)</label>
+                            <input type="text" placeholder="手動填入說明或比例" class="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1">容積率 180% (總樓地板面積說明)</label>
+                            <input type="text" placeholder="手動填入說明或總樓地板面積" class="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 三、回饋金試算 -->
+                <div class="bg-white p-4 md:p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                    <div class="flex justify-between items-center border-b border-stone-100 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                            <h4 class="font-bold text-stone-800 text-xs">三、回饋金試算</h4>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a href="https://maps.nlsc.gov.tw" target="_blank" class="px-3 py-1.5 bg-stone-100 hover:bg-[#C59B63] hover:text-white text-stone-700 border border-stone-300 rounded-xl font-bold transition flex items-center gap-1.5 shadow-2xs text-xs cursor-pointer">
+                                <i class="fa-solid fa-map-location-dot"></i> 地籍圖
+                            </a>
+                            <button type="button" onclick="window.addFeedbackRow()" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer">
+                                <i class="fa-solid fa-plus text-[10px]"></i> ＋新增地號
+                            </button>
+                        </div>
+                    </div>
+                    <div class="border border-stone-200 rounded-xl p-3 bg-stone-50/50 space-y-3">
+                        <div class="table-scroll-container">
+                            <div class="min-w-[600px]">
+                                <div class="grid grid-cols-[1.5fr_1fr_1fr_1.2fr_1.2fr_32px] gap-2 font-bold text-stone-600 border-b pb-2 text-center text-[11px]">
+                                    <div>地號</div>
+                                    <div>面積 (㎡)</div>
+                                    <div>公告現值 (NT$)</div>
+                                    <div>分區</div>
+                                    <div>回饋金試算 (NT$)</div>
+                                    <div>刪除</div>
+                                </div>
+                                <div id="feedback-rows-container" class="space-y-2 mt-2">
+                                    <div class="feedback-row grid grid-cols-[1.5fr_1fr_1fr_1.2fr_1.2fr_32px] gap-2 items-center bg-white p-2 rounded-xl border border-stone-200 shadow-2xs">
+                                        <input type="text" placeholder="例：頂番段123地號" class="px-2 py-1 border border-stone-300 rounded-lg text-xs">
+                                        <input type="number" step="0.01" placeholder="面積(㎡)" oninput="window.calcFeedbackTotal()" class="fb-area px-2 py-1 border border-stone-300 rounded-lg text-xs font-mono">
+                                        <input type="number" step="0.01" placeholder="公告現值" oninput="window.calcFeedbackTotal()" class="fb-price px-2 py-1 border border-stone-300 rounded-lg text-xs font-mono">
+                                        <select onchange="window.calcFeedbackTotal()" class="fb-zone px-2 py-1 border border-stone-300 rounded-lg text-xs bg-white font-medium">
+                                            <option value="都內">都內 (×0.1)</option>
+                                            <option value="非都">非都 (×0.5)</option>
+                                        </select>
+                                        <span class="fb-result font-bold text-emerald-700 text-xs font-mono text-center">NT$ 0</span>
+                                        <button type="button" onclick="this.closest('.feedback-row').remove(); window.calcFeedbackTotal();" class="text-stone-400 hover:text-rose-600 cursor-pointer flex justify-center"><i class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-emerald-50/80 p-3.5 rounded-xl border border-emerald-200 flex justify-between items-center shadow-inner">
+                        <span class="font-bold text-emerald-900 text-xs">回饋金估算總額</span>
+                        <span id="feedback-grand-total" class="text-sm font-bold text-emerald-800 font-mono">NT$ 0</span>
+                    </div>
+                </div>
+
+                <!-- 四、都內土地代金計算 -->
+                <div class="bg-white p-4 md:p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                    <div class="flex items-center gap-2 border-b border-stone-100 pb-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                        <h4 class="font-bold text-stone-800 text-xs">四、都內土地代金計算 (面積 × 0.3 × 公告現值 × 0.5)</h4>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1.5">代金計算面積 (手動自填)</label>
+                            <input type="number" step="0.01" id="urban-alt-area" placeholder="請輸入面積..." oninput="window.calcUrbanAltTotal()" class="w-full px-3 py-2 border border-stone-300 rounded-xl focus:outline-none focus:border-[#C59B63] bg-white font-mono text-xs shadow-2xs">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1.5">公告現值 (手動自填)</label>
+                            <input type="number" step="0.01" id="urban-alt-price" placeholder="請輸入公告現值..." oninput="window.calcUrbanAltTotal()" class="w-full px-3 py-2 border border-stone-300 rounded-xl focus:outline-none focus:border-[#C59B63] bg-white font-mono text-xs shadow-2xs">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-stone-700 mb-1.5">都內土地代金 (自動試算)</label>
+                            <input type="text" id="urban-alt-result" readonly value="NT$ 0" class="w-full px-3 py-2 border border-amber-300 rounded-xl bg-amber-50 font-mono font-bold text-amber-800 text-xs shadow-2xs text-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-stone-200 bg-stone-100 flex items-center justify-end gap-3 shrink-0 sticky bottom-0 z-10">
+                <button type="button" onclick="closeLandChangeModal()" class="px-4 py-2 border border-stone-300 text-stone-600 rounded-xl font-bold hover:bg-white transition text-xs cursor-pointer">取消</button>
+                <button type="button" onclick="closeLandChangeModal()" class="px-5 py-2 btn-gold rounded-xl font-bold transition shadow-2xs text-xs cursor-pointer">儲存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: 土地基本資料 -->
+    <div id="land-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-[9999] p-3 overflow-y-auto">
+        <div class="bg-white w-full max-w-6xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800 my-4">
+            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center shrink-0">
+                <h3 class="font-bold text-xs flex items-center tracking-wide">
+                    <i class="fa-solid fa-map-location-dot text-[#C59B63] mr-2 text-base"></i> 土地基本資料
+                </h3>
+                <button type="button" onclick="closeLandModal()" class="text-stone-400 hover:text-white cursor-pointer transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4 text-xs bg-stone-50/50 flex-1 overflow-y-auto">
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-2xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                        <div>
+                            <label class="font-bold block mb-1 text-stone-700">所有權人</label>
+                            <input type="text" id="land-owner-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="請輸入所有權人姓名">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1 text-stone-700">縣市</label>
+                            <input type="text" id="land-city" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例如：彰化縣">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1 text-stone-700">區域</label>
+                            <input type="text" id="land-district" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例如：鹿港鎮">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1 text-stone-700">地段</label>
+                            <input type="text" id="land-section" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例如：頂番段">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-2xs space-y-3">
+                    <div class="flex justify-between items-center pb-2 border-b border-stone-100">
+                        <span class="font-bold text-stone-800 text-xs">地號詳細列表</span>
+                        <button type="button" onclick="addLandRow()" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl font-bold text-xs shadow-2xs transition flex items-center space-x-1 cursor-pointer">
+                            <i class="fa-solid fa-plus text-[10px]"></i><span>新增地號</span>
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto w-full">
+                        <div class="min-w-[950px] space-y-2">
+                            <div class="grid grid-cols-[1fr_1fr_1.2fr_0.9fr_0.9fr_1.2fr_0.9fr_0.9fr_1fr_32px] gap-2 px-2 py-1.5 text-[11px] font-bold text-stone-600 text-center bg-stone-100/80 rounded-xl border border-stone-200">
+                                <div>地號</div>
+                                <div>登記日期</div>
+                                <div>使用分區/類別</div>
+                                <div>地目</div>
+                                <div>面積 (㎡)</div>
+                                <div>持分 (分子/分母)</div>
+                                <div>持分面積 (㎡)</div>
+                                <div>持分面積 (坪)</div>
+                                <div>他項權利</div>
+                                <div>刪除</div>
+                            </div>
+                            <div id="land-rows-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-stone-100 flex flex-wrap justify-around items-center font-bold text-xs text-stone-700">
+                        <div>總面積：<span id="sum-area" class="font-mono text-amber-700 font-bold ml-1">0.00 ㎡</span></div>
+                        <div>持分總面積：<span id="sum-sqm" class="font-mono text-amber-700 font-bold ml-1">0.00 ㎡</span></div>
+                        <div>持分總坪數：<span id="sum-ping" class="font-mono text-emerald-700 font-bold ml-1">0.00 坪</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-3.5 bg-stone-100 border-t border-stone-200 flex justify-end shrink-0">
+                <button type="button" onclick="closeLandModal()" class="px-5 py-1.5 bg-white hover:bg-stone-50 border border-stone-300 text-stone-700 rounded-xl font-bold transition text-xs cursor-pointer shadow-2xs">
+                    關閉
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: 保存登記建物 -->
+    <div id="registered-building-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-[9999] p-3 overflow-y-auto">
+        <div class="bg-white w-full max-w-5xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800 my-4">
+            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center shrink-0">
+                <h3 class="font-bold text-xs flex items-center"><i class="fa-solid fa-house-chimney-crack text-sky-400 mr-2 text-base"></i> 保存登記建物</h3>
+                <button type="button" onclick="closeRegisteredBuildingModal()" class="text-stone-400 hover:text-white cursor-pointer transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="p-6 space-y-4 text-xs bg-stone-50/50 flex-1 overflow-y-auto">
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-2xs grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">建物所有權人</label>
+                        <input type="text" placeholder="請輸入所有權人姓名" class="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-xs focus:outline-none focus:border-[#C59B63]">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">建物門牌</label>
+                        <input type="text" placeholder="請輸入建物門牌地址" class="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-xs focus:outline-none focus:border-[#C59B63]">
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-2xs space-y-3">
+                    <div class="flex justify-between items-center pb-2 border-b border-stone-100">
+                        <span class="font-bold text-stone-800 text-xs">建號詳細列表</span>
+                        <button type="button" onclick="addRegBuildingRow()" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl font-bold text-xs shadow-2xs transition flex items-center space-x-1 cursor-pointer">
+                            <i class="fa-solid fa-plus text-[10px]"></i><span>新增建號</span>
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto w-full">
+                        <div class="min-w-[850px] space-y-2">
+                            <div class="grid grid-cols-[1fr_1.2fr_1fr_1fr_0.9fr_1fr_0.9fr_0.9fr_32px] gap-2 px-2 py-1.5 font-bold text-stone-600 bg-stone-100/80 rounded-xl border border-stone-200 text-center text-[11px]">
+                                <div>建號</div>
+                                <div>坐落地號</div>
+                                <div>主要用途</div>
+                                <div>登記日期</div>
+                                <div>面積 (㎡)</div>
+                                <div>權利範圍</div>
+                                <div>平方公尺</div>
+                                <div>坪數</div>
+                                <div>刪除</div>
+                            </div>
+                            <div id="reg-building-rows-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-stone-100 flex flex-wrap justify-around items-center font-bold text-xs text-stone-700">
+                        <div>總面積：<span id="sum-reg-area" class="font-mono text-sky-700 font-bold ml-1">0.00 ㎡</span></div>
+                        <div>持分總面積：<span id="sum-reg-sqm" class="font-mono text-sky-700 font-bold ml-1">0.00 ㎡</span></div>
+                        <div>持分總坪數：<span id="sum-reg-ping" class="font-mono text-emerald-700 font-bold ml-1">0.00 坪</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-3.5 bg-stone-100 border-t border-stone-200 flex justify-end shrink-0">
+                <button type="button" onclick="closeRegisteredBuildingModal()" class="px-5 py-1.5 bg-white hover:bg-stone-50 border border-stone-300 text-stone-700 rounded-xl font-bold transition text-xs cursor-pointer shadow-2xs">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 5: 未保存登記建物 -->
+    <div id="unregistered-building-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-[9999] p-3 overflow-y-auto">
+        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800 my-4">
+            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center shrink-0">
+                <h3 class="font-bold text-xs flex items-center"><i class="fa-solid fa-house-circle-exclamation text-amber-400 mr-2 text-base"></i> 未保存登記建物</h3>
+                <button type="button" onclick="closeUnregisteredBuildingModal()" class="text-stone-400 hover:text-white cursor-pointer transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="p-6 space-y-4 text-xs bg-stone-50/50 flex-1 overflow-y-auto">
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-2xs">
+                    <label class="block font-semibold text-stone-700 mb-1">起造人</label>
+                    <input type="text" placeholder="請輸入起造人姓名" class="w-full px-3 py-2 border border-stone-300 rounded-xl bg-white text-xs focus:outline-none focus:border-[#C59B63]">
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-2xs space-y-3">
+                    <div class="flex justify-between items-center pb-2 border-b border-stone-100">
+                        <span class="font-bold text-stone-800 text-xs">未保存登記建物列表</span>
+                        <button type="button" onclick="addUnregBuildingRow()" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl font-bold text-xs shadow-2xs transition flex items-center space-x-1 cursor-pointer">
+                            <i class="fa-solid fa-plus text-[10px]"></i><span>新增筆數</span>
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto w-full">
+                        <div class="min-w-[650px] space-y-2">
+                            <div class="grid grid-cols-[1.5fr_1fr_1fr_1fr_1.5fr_32px] gap-2 font-bold text-stone-600 bg-stone-100/80 rounded-xl border border-stone-200 text-center text-[11px]">
+                                <div>主要用途 / 說明</div>
+                                <div>起造年份</div>
+                                <div>平方公尺 (㎡)</div>
+                                <div>坪數</div>
+                                <div>現況說明 / 評估</div>
+                                <div>刪除</div>
+                            </div>
+                            <div id="unreg-building-rows-container" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-stone-100 flex flex-wrap justify-around items-center font-bold text-xs text-stone-700">
+                        <div>總平方公尺：<span id="sum-unreg-sqm" class="font-mono text-emerald-700 font-bold ml-1">0.00 ㎡</span></div>
+                        <div>總坪數：<span id="sum-unreg-ping" class="font-mono text-emerald-700 font-bold ml-1">0.00 坪</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-3.5 bg-stone-100 border-t border-stone-200 flex justify-end shrink-0">
+                <button type="button" onclick="closeUnregisteredBuildingModal()" class="px-5 py-1.5 bg-white hover:bg-stone-50 border border-stone-300 text-stone-700 rounded-xl font-bold transition text-xs cursor-pointer shadow-2xs">關閉</button>
             </div>
         </div>
     </div>
