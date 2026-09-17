@@ -1,8 +1,7 @@
 // js/modules/land-basic.js
-
 window.landRowCount = 0;
 
-// 1. 新增地號列邏輯
+// 1. 新增土地地號列
 window.addLandRow = function(data = {}) {
     window.landRowCount++;
     const rowId = `land-row-${window.landRowCount}`;
@@ -14,7 +13,7 @@ window.addLandRow = function(data = {}) {
                 <option value="都計使用分區">都計使用分區</option>
                 <option value="非都使用地類別">非都使用地類別</option>
             </select>
-            <input type="text" value="${data.landType || ''}" placeholder="例：建築用地" class="land-type w-full px-2 py-1 border border-slate-300 rounded-lg text-xs focus:outline-none focus:border-[#C59B63]">
+            <input type="text" value="${data.landType || ''}" placeholder="例：建築用地" class="land-type w-full px-2 py-1 border border-stone-300 rounded-lg text-xs focus:outline-none focus:border-[#C59B63]">
             <input type="number" value="${data.area || ''}" step="0.01" min="0" placeholder="0.00" oninput="window.calculateLandTotals()" class="land-area-input w-full px-2 py-1 border border-stone-300 rounded-lg font-mono text-xs focus:outline-none focus:border-[#C59B63]">
             <div class="flex items-center gap-0.5">
                 <input type="number" value="${data.num || 1}" min="1" oninput="window.calculateLandTotals()" class="land-num-input w-full px-1 py-1 border border-stone-300 rounded-lg text-center font-mono text-xs focus:outline-none focus:border-[#C59B63]">
@@ -34,7 +33,7 @@ window.addLandRow = function(data = {}) {
     }
 };
 
-// 2. 自動計算總面積邏輯
+// 2. 自動換算總面積
 window.calculateLandTotals = function() {
     let totalArea = 0, totalSqm = 0;
     const rows = document.querySelectorAll('#land-rows-container > div');
@@ -63,20 +62,30 @@ window.calculateLandTotals = function() {
     if (sumPing) sumPing.textContent = `${(totalSqm * 0.3025).toFixed(2)} 坪`;
 };
 
-// 3. 彈窗開啟與關閉邏輯
+// 3. 打開土地基本資料 Modal (強化顯示邏輯與 z-index)
 window.openLandModal = function() {
     const modal = document.getElementById('land-modal');
-    if (modal) { 
-        modal.classList.remove('hidden'); 
-        modal.style.display = 'flex'; 
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+        modal.style.zIndex = '9999'; // 確保不會被主案件 Modal 擋住
+        
+        // 打開時若沒有資料列，自動預設建立第一列
+        const container = document.getElementById('land-rows-container');
+        if (container && container.children.length === 0) {
+            window.addLandRow();
+        }
+    } else {
+        alert('找不到 id="land-modal" 的元素！');
     }
 };
 
+// 4. 關閉土地基本資料 Modal
 window.closeLandModal = function() {
     const modal = document.getElementById('land-modal');
-    if (modal) { 
-        modal.classList.add('hidden'); 
-        modal.style.display = 'none'; 
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
     }
 };
 
