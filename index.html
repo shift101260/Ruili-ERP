@@ -619,7 +619,7 @@
 
     <!-- Modal 1: 太陽能發電效益試算與精算工具 -->
     <div id="solar-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-[9999] p-3 overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] sm:max-h-[95vh] flex flex-col overflow-hidden relative border border-stone-200 my-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] sm:max-h-[95vh] flex flex-col overflow-hidden relative border border-stone-200 my-4 text-stone-800">
             <div class="p-4 md:p-5 border-b border-stone-800 flex justify-between items-center bg-[#2C2A29] text-white shrink-0">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-sun text-[#C59B63] text-lg"></i>
@@ -677,7 +677,6 @@
                             <span class="block text-stone-500 mb-1">每年發電度數</span>
                             <span id="res-solar-annual-gen" class="text-base font-bold text-stone-800 font-mono">0 度</span>
                         </div>
-                        <!-- 💡 補齊每月發電收益 ID: res-solar-monthly-rev -->
                         <div class="bg-stone-50 p-3 rounded-lg border border-stone-200 shadow-2xs">
                             <span class="block text-stone-500 mb-1">每月發電收益</span>
                             <span id="res-solar-monthly-rev" class="text-base font-bold text-emerald-700 font-mono">NT$ 0</span>
@@ -730,7 +729,7 @@
                     <h4 class="font-bold text-stone-800 text-xs border-b border-stone-100 pb-2 flex items-center gap-1.5">
                         <i class="fa-solid fa-chart-pie text-[#C59B63]"></i> 三、精算試算 (現勘報價後使用)
                     </h4>
-                     
+                      
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block font-semibold text-stone-700 mb-1">模組數量 (片)</label>
@@ -801,9 +800,14 @@
                 </div>
             </div>
 
-            <div class="p-4 border-t border-stone-200 bg-stone-100 flex justify-end gap-3 shrink-0 sticky bottom-0 z-10">
-                <button type="button" onclick="closeSolarModal()" class="px-4 py-2 border border-stone-300 text-stone-600 rounded-xl font-bold hover:bg-white transition cursor-pointer">取消</button>
-                <button type="button" onclick="closeSolarModal()" class="px-5 py-2 btn-gold rounded-xl font-bold transition shadow-2xs cursor-pointer">儲存</button>
+            <!-- 底端按鈕列 -->
+            <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex items-center justify-end space-x-2.5 shrink-0 sticky bottom-0 z-10">
+                <button type="button" onclick="closeSolarModal()" class="px-3.5 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
+                    取消
+                </button>
+                <button type="button" onclick="closeSolarModal()" class="px-4 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                    <i class="fa-solid fa-check"></i><span>儲存</span>
+                </button>
             </div>
         </div>
     </div>
@@ -853,7 +857,7 @@
 
     <!-- Modal 2: 土地變更專屬評估與回饋金試算 Modal -->
     <div id="land-change-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-[9999] p-3 overflow-y-auto">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] sm:max-h-[95vh] flex flex-col overflow-hidden border border-stone-200 relative my-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] sm:max-h-[95vh] flex flex-col overflow-hidden border border-stone-200 relative my-4 text-stone-800">
             <div class="p-4 md:p-5 border-b border-stone-800 flex justify-between items-center bg-[#2C2A29] text-white shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-[#C59B63]/20 border border-[#C59B63]/40 flex items-center justify-center text-[#C59B63] text-base shrink-0">
@@ -1035,9 +1039,14 @@
                 </div>
             </div>
 
-            <div class="p-4 border-t border-stone-200 bg-stone-100 flex items-center justify-end gap-3 shrink-0 sticky bottom-0 z-10">
-                <button type="button" onclick="closeLandChangeModal()" class="px-4 py-2 border border-stone-300 text-stone-600 rounded-xl font-bold hover:bg-white transition text-xs cursor-pointer">取消</button>
-                <button type="button" onclick="closeLandChangeModal()" class="px-5 py-2 btn-gold rounded-xl font-bold transition shadow-2xs text-xs cursor-pointer">儲存</button>
+            <!-- 底端按鈕列 -->
+            <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex items-center justify-end space-x-2.5 shrink-0 sticky bottom-0 z-10">
+                <button type="button" onclick="closeLandChangeModal()" class="px-3.5 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
+                    取消
+                </button>
+                <button type="button" onclick="closeLandChangeModal()" class="px-4 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                    <i class="fa-solid fa-check"></i><span>儲存</span>
+                </button>
             </div>
         </div>
     </div>
@@ -1110,9 +1119,13 @@
                 </div>
             </div>
 
-            <div class="px-6 py-3.5 bg-stone-100 border-t border-stone-200 flex justify-end shrink-0">
-                <button type="button" onclick="closeLandModal()" class="px-5 py-1.5 bg-white hover:bg-stone-50 border border-stone-300 text-stone-700 rounded-xl font-bold transition text-xs cursor-pointer shadow-2xs">
-                    關閉
+            <!-- 底端按鈕列 -->
+            <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex items-center justify-end space-x-2.5 shrink-0 sticky bottom-0 z-10">
+                <button type="button" onclick="closeLandModal()" class="px-3.5 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
+                    取消
+                </button>
+                <button type="button" onclick="closeLandModal()" class="px-4 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                    <i class="fa-solid fa-check"></i><span>儲存</span>
                 </button>
             </div>
         </div>
@@ -1171,8 +1184,14 @@
                 </div>
             </div>
 
-            <div class="px-6 py-3.5 bg-stone-100 border-t border-stone-200 flex justify-end shrink-0">
-                <button type="button" onclick="closeRegisteredBuildingModal()" class="px-5 py-1.5 bg-white hover:bg-stone-50 border border-stone-300 text-stone-700 rounded-xl font-bold transition text-xs cursor-pointer shadow-2xs">關閉</button>
+            <!-- 底端按鈕列 -->
+            <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex items-center justify-end space-x-2.5 shrink-0 sticky bottom-0 z-10">
+                <button type="button" onclick="closeRegisteredBuildingModal()" class="px-3.5 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
+                    取消
+                </button>
+                <button type="button" onclick="closeRegisteredBuildingModal()" class="px-4 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                    <i class="fa-solid fa-check"></i><span>儲存</span>
+                </button>
             </div>
         </div>
     </div>
@@ -1220,8 +1239,14 @@
                 </div>
             </div>
 
-            <div class="px-6 py-3.5 bg-stone-100 border-t border-stone-200 flex justify-end shrink-0">
-                <button type="button" onclick="closeUnregisteredBuildingModal()" class="px-5 py-1.5 bg-white hover:bg-stone-50 border border-stone-300 text-stone-700 rounded-xl font-bold transition text-xs cursor-pointer shadow-2xs">關閉</button>
+            <!-- 底端按鈕列 -->
+            <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex items-center justify-end space-x-2.5 shrink-0 sticky bottom-0 z-10">
+                <button type="button" onclick="closeUnregisteredBuildingModal()" class="px-3.5 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
+                    取消
+                </button>
+                <button type="button" onclick="closeUnregisteredBuildingModal()" class="px-4 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                    <i class="fa-solid fa-check"></i><span>儲存</span>
+                </button>
             </div>
         </div>
     </div>
