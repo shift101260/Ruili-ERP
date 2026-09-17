@@ -1,7 +1,7 @@
 /** 
  * 開啟集團案件完整建檔與評估中心（八大區塊彈窗） 
  */ 
-export function openAddCaseModal(year = '2026') { 
+function openAddCaseModal(year = '2026') { 
     const yearInput = document.getElementById('edit-case-year'); 
     const idInput = document.getElementById('edit-case-id'); 
 
@@ -43,7 +43,7 @@ export function openAddCaseModal(year = '2026') {
 /**
  * 開啟 Google 地圖導航與搜尋
  */
-export function openGoogleMapDrawer() {
+function openGoogleMapDrawer() {
     const addressInput = document.getElementById('edit-case-address');
     const address = addressInput ? addressInput.value.trim() : '';
 
