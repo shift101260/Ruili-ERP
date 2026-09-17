@@ -2,12 +2,27 @@
 
 window.openUnregisteredBuildingModal = function() {
     const modal = document.getElementById('unregistered-building-modal');
-    if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+    if (modal) { 
+        modal.classList.remove('hidden'); 
+        modal.style.display = 'flex'; 
+    }
+
+    // 💡 關鍵修正：每次開啟彈窗時，自動清空並初始化一筆空白資料列
+    const container = document.getElementById('unreg-building-rows-container');
+    if (container) {
+        container.innerHTML = ''; // 清空舊資料
+        if (typeof window.addUnregBuildingRow === 'function') {
+            window.addUnregBuildingRow(); // 自動新增第一筆空白列
+        }
+    }
 };
 
 window.closeUnregisteredBuildingModal = function() {
     const modal = document.getElementById('unregistered-building-modal');
-    if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    if (modal) { 
+        modal.classList.add('hidden'); 
+        modal.style.display = 'none'; 
+    }
 };
 
 window.addUnregBuildingRow = function(data = {}) {
@@ -50,7 +65,5 @@ window.calculateUnregBuildingTotals = function() {
     if (sumSqm) sumSqm.textContent = `${totalSqm.toFixed(2)} ㎡`;
     if (sumPing) sumPing.textContent = `${(totalSqm * 0.3025).toFixed(2)} 坪`;
 };
-
-window.addUnregBuildingRow = addUnregBuildingRow;
 
 console.log('未保存登記建物模組載入成功！');
