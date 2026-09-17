@@ -1,4 +1,5 @@
-/** * 開啟集團案件完整建檔與評估中心（八大區塊彈窗） 
+/** 
+ * 開啟集團案件完整建檔與評估中心（八大區塊彈窗） 
  */ 
 export function openAddCaseModal(year = '2026') { 
     const yearInput = document.getElementById('edit-case-year'); 
@@ -38,5 +39,22 @@ export function openAddCaseModal(year = '2026') {
     const modal = document.getElementById('editCaseModal'); 
     if (modal) modal.classList.remove('hidden'); 
 }
-// 在 case-edit.js 的最下方加上這行：
+
+/**
+ * 開啟 Google 地圖導航與搜尋
+ */
+export function openGoogleMapDrawer() {
+    const addressInput = document.getElementById('edit-case-address');
+    const address = addressInput ? addressInput.value.trim() : '';
+
+    if (address) {
+        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+        window.open(googleMapsUrl, '_blank', 'noopener,noreferrer');
+    } else {
+        alert('請先輸入案件地址！');
+    }
+}
+
+// 全域物件掛載 (供 HTML onclick 屬性直接呼叫)
 window.openAddCaseModal = openAddCaseModal;
+window.openGoogleMapDrawer = openGoogleMapDrawer;
