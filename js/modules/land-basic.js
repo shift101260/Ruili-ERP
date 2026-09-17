@@ -1,70 +1,75 @@
-<!-- Modal 1: 土地基本資料（已補齊上方所有權人區塊） -->
-    <div id="land-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-[9999] p-3 overflow-y-auto">
-        <div class="bg-white w-full max-w-5xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 text-stone-800 my-4">
-            
-            <!-- 彈窗頂部 -->
-            <div class="bg-[#2C2A29] text-white px-6 py-4 flex justify-between items-center shrink-0">
-                <h3 class="font-bold text-sm flex items-center tracking-wide">
-                    <i class="fa-solid fa-map-location-dot text-[#C59B63] mr-2 text-base"></i> 土地基本資料
-                </h3>
-                <button type="button" onclick="closeLandModal()" class="text-stone-400 hover:text-white cursor-pointer transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+// js/modules/land-basic.js
+export let landRowCount = 0;
+
+export function addLandRow(data = {}) {
+    landRowCount++;
+    const rowId = `land-row-${landRowCount}`;
+    const html = `
+        <div id="${rowId}" class="grid grid-cols-[1fr_1fr_1.2fr_0.9fr_0.9fr_1.2fr_0.9fr_0.9fr_1fr_32px] gap-2 bg-white p-2 rounded-lg border border-slate-200 shadow-sm items-center text-xs">
+            <input type="text" value="${data.number || ''}" placeholder="例：0899-0000" class="land-number w-full px-2 py-1 border border-slate-300 rounded-lg">
+            <input type="text" value="${data.regDate || ''}" placeholder="例：112/05/20" class="land-reg-date w-full px-2 py-1 border border-slate-300 rounded-lg">
+            <select class="land-zone-type w-full px-2 py-1 border border-slate-300 rounded-lg bg-white">
+                <option value="都計使用分區">都計使用分區</option>
+                <option value="非都使用地類別">非都使用地類別</option>
+            </select>
+            <input type="text" value="${data.landType || ''}" placeholder="例：建築用地" class="land-type w-full px-2 py-1 border border-slate-300 rounded-lg">
+            <input type="number" value="${data.area || ''}" step="0.01" min="0" placeholder="0.00" oninput="window.calculateLandTotals()" class="land-area-input w-full px-2 py-1 border border-slate-300 rounded-lg font-mono">
+            <div class="flex items-center gap-0.5">
+                <input type="number" value="${data.num || 1}" min="1" oninput="window.calculateLandTotals()" class="land-num-input w-full px-1 py-1 border border-slate-300 rounded-lg text-center font-mono">
+                <span>/</span>
+                <input type="number" value="${data.den || 1}" min="1" oninput="window.calculateLandTotals()" class="land-den-input w-full px-1 py-1 border border-slate-300 rounded-lg text-center font-mono">
             </div>
-
-            <!-- 內容主體 -->
-            <div class="p-6 space-y-4 text-xs bg-stone-50/50 flex-1 overflow-y-auto">
-                
-                <!-- 💡 補齊第二張圖：所有權人、縣市、區域、地段區塊 -->
-                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-2xs">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700">所有權人</label>
-                            <input type="text" id="land-owner-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="請輸入所有權人姓名">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700">縣市</label>
-                            <input type="text" id="land-city" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例如：彰化縣">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700">區域</label>
-                            <input type="text" id="land-district" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例如：鹿港鎮">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700">地段</label>
-                            <input type="text" id="land-section" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例如：頂番段">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 下方：地號詳細列表區 -->
-                <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-2xs space-y-3">
-                    <div class="flex justify-between items-center pb-2">
-                        <span class="font-bold text-stone-800 text-xs">土地筆數列表</span>
-                        <button type="button" onclick="addLandRow()" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl font-bold text-xs shadow-2xs transition flex items-center space-x-1 cursor-pointer">
-                            <i class="fa-solid fa-plus text-[10px]"></i><span>新增土地</span>
-                        </button>
-                    </div>
-
-                    <!-- 滾動列表容器 -->
-                    <div class="overflow-x-auto w-full">
-                        <div id="land-rows-container" class="space-y-2 min-w-[850px] max-h-60 overflow-y-auto pr-1"></div>
-                    </div>
-
-                    <!-- 總計區 -->
-                    <div class="pt-3 border-t border-stone-100 flex flex-wrap justify-around items-center font-bold text-xs text-stone-700">
-                        <div>總面積：<span id="sum-area" class="font-mono text-amber-700 font-bold ml-1">0.00 ㎡</span></div>
-                        <div>持分總面積：<span id="sum-sqm" class="font-mono text-amber-700 font-bold ml-1">0.00 ㎡</span></div>
-                        <div>持分總坪數：<span id="sum-ping" class="font-mono text-amber-700 font-bold ml-1">0.00 坪</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 底端按鈕 -->
-            <div class="px-6 py-3.5 bg-stone-100 border-t border-stone-200 flex justify-end shrink-0">
-                <button type="button" onclick="closeLandModal()" class="px-5 py-1.5 bg-white hover:bg-stone-50 border border-stone-300 text-stone-700 rounded-xl font-bold transition text-xs cursor-pointer shadow-2xs">
-                    關閉
-                </button>
-            </div>
+            <input type="text" readonly class="land-sqm-output w-full px-2 py-1 bg-slate-100 border border-slate-200 rounded-lg font-mono font-bold">
+            <input type="text" readonly class="land-ping-output w-full px-2 py-1 bg-slate-100 border border-slate-200 rounded-lg font-mono font-bold">
+            <input type="text" value="${data.rights || ''}" placeholder="他項權利" class="land-rights w-full px-2 py-1 border border-slate-300 rounded-lg">
+            <button type="button" onclick="document.getElementById('${rowId}').remove(); window.calculateLandTotals();" class="text-slate-400 hover:text-rose-600 cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
         </div>
-    </div>
+    `;
+    const container = document.getElementById('land-rows-container');
+    if (container) {
+        container.insertAdjacentHTML('beforeend', html);
+        window.calculateLandTotals();
+    }
+}
+
+window.calculateLandTotals = function() {
+    let totalArea = 0, totalSqm = 0;
+    const rows = document.querySelectorAll('#land-rows-container > div');
+    rows.forEach(row => {
+        const areaVal = parseFloat(row.querySelector('.land-area-input')?.value || 0);
+        const numVal = parseFloat(row.querySelector('.land-num-input')?.value || 1);
+        const denVal = parseFloat(row.querySelector('.land-den-input')?.value || 1);
+        const sqm = areaVal * (numVal / (denVal <= 0 ? 1 : denVal));
+        const ping = sqm * 0.3025;
+        
+        const sqmOut = row.querySelector('.land-sqm-output');
+        const pingOut = row.querySelector('.land-ping-output');
+        if (sqmOut) sqmOut.value = sqm.toFixed(2);
+        if (pingOut) pingOut.value = ping.toFixed(2);
+        
+        totalArea += areaVal;
+        totalSqm += sqm;
+    });
+
+    const sumArea = document.getElementById('sum-area');
+    const sumSqm = document.getElementById('sum-sqm');
+    const sumPing = document.getElementById('sum-ping');
+    
+    if (sumArea) sumArea.textContent = `${totalArea.toFixed(2)} ㎡`;
+    if (sumSqm) sumSqm.textContent = `${totalSqm.toFixed(2)} ㎡`;
+    if (sumPing) sumPing.textContent = `${(totalSqm * 0.3025).toFixed(2)} 坪`;
+};
+
+window.addLandRow = addLandRow;
+
+// 彈窗開關控制
+window.openLandModal = () => {
+    const modal = document.getElementById('land-modal');
+    if (modal) { modal.classList.remove('hidden'); modal.style.display = 'flex'; }
+};
+window.closeLandModal = () => {
+    const modal = document.getElementById('land-modal');
+    if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+};
+
+console.log('土地基本資料模組載入成功！');
