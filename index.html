@@ -60,7 +60,18 @@
         }
     </style>
 </head>
-<body class="text-stone-800 flex h-screen overflow-hidden font-sans text-sm">
+<body class="text-stone-800 flex flex-col md:flex-row h-screen overflow-hidden font-sans text-sm">
+
+    <!-- 📱 手機版專屬頂部列 --> 
+    <div class="mobile-header-bar md:hidden flex items-center justify-between px-4 py-2.5 bg-[#2C2A29] text-white border-b border-[#292524]"> 
+        <div class="flex items-center space-x-2.5"> 
+            <div class="btn-gold w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shadow-xs">睿</div> 
+            <span class="text-xs font-bold tracking-wider">睿立集團系統</span> 
+        </div> 
+        <button onclick="toggleSidebar()" class="text-stone-300 hover:text-white p-1.5 focus:outline-none cursor-pointer"> 
+            <i class="fa-solid fa-bars text-base"></i> 
+        </button> 
+    </div> 
 
     <!-- 1. 左側功能導覽列 -->
     <aside class="ruili-sidebar text-stone-300 flex flex-col justify-between border-r border-stone-800 h-full w-56 bg-[#242321] shrink-0">
@@ -141,11 +152,11 @@
     </aside>
 
     <!-- 2. 主畫面內容 -->
-    <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-[#F5F4F0] p-6">
+    <main class="ruili-main flex-1 flex flex-col overflow-y-auto bg-[#F5F4F0] p-4 sm:p-6">
         <!-- 頂部卡片容器 -->
-        <header class="card-frame p-5 mb-5 flex justify-between items-center">
+        <header class="card-frame p-4 sm:p-5 mb-5 flex justify-between items-center">
             <div>
-                <h2 id="page-title" class="text-lg font-bold text-stone-800 flex items-center gap-2 tracking-wide">
+                <h2 id="page-title" class="text-base sm:text-lg font-bold text-stone-800 flex items-center gap-2 tracking-wide">
                     <span id="current-year-display">2026</span> 年度案件管理中心
                 </h2>
                 <p class="text-xs text-stone-500 mt-1">
@@ -153,14 +164,14 @@
                 </p>
             </div>
             
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
                 <div class="relative">
-                    <input type="text" id="case-search-input" oninput="filterCases()" placeholder="搜尋案件..." class="pl-3 pr-8 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] transition w-48">
+                    <input type="text" id="case-search-input" oninput="filterCases()" placeholder="搜尋案件..." class="pl-3 pr-8 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] transition w-full sm:w-48">
                     <i class="fa-solid fa-magnifying-glass absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
                 </div>
                 
-                <select id="batch-action-select" onchange="batchTransferCases(this.value)" class="px-3 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] text-stone-700">
-                    <option value="">------ 拋轉至 ------</option>
+                <select id="batch-action-select" onchange="batchTransferCases(this.value)" class="px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] text-stone-700">
+                    <option value="">-- 拋轉至 --</option>
                     <option value="EVALUATION">案件評估</option>
                     <option value="CONTRACTING">簽約案件</option>
                     <option value="CLOSED">結案中心</option>
@@ -174,7 +185,7 @@
                 <button onclick="location.reload()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-xs font-medium border border-stone-300 transition flex items-center gap-1 cursor-pointer">
                     <i class="fa-solid fa-rotate-left text-stone-500"></i>恢復
                 </button>
-                <button onclick="openAddCaseModal()" class="px-4 py-1.5 btn-gold rounded-md text-xs font-medium shadow-2xs transition flex items-center gap-1 cursor-pointer">
+                <button onclick="openAddCaseModal()" class="px-4 py-1.5 btn-gold rounded-md text-xs font-medium shadow-2xs transition flex items-center gap-1 cursor-pointer whitespace-nowrap">
                     <i class="fa-solid fa-plus"></i>新增
                 </button>
             </div>
@@ -465,11 +476,12 @@
                 </div>
             </div>
 
-            <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex justify-end items-center space-x-3 shrink-0">
+            <!-- 底端按鈕列：改為 flex-wrap 與 sticky 黏性置底，防止手機畫面跑版 -->
+            <div class="bg-stone-50 px-4 py-3 border-t border-stone-200 flex flex-wrap justify-end items-center gap-2 sticky bottom-0 z-10 shrink-0">
                 <button type="button" onclick="closeModal('editCaseModal')" class="px-3 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
                     取消
                 </button>
-                <button type="button" onclick="saveNewCase()" class="px-3 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                <button type="button" onclick="saveNewCase()" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
                     <i class="fa-solid fa-check"></i><span>儲存</span>
                 </button>
             </div>
