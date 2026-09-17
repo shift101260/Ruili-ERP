@@ -53,10 +53,12 @@ window.calculateLandTotals = function() {
     });
 
     const sumArea = document.getElementById('sum-area');
+    const sumAreaPing = document.getElementById('sum-area-ping'); // 💡 新增：總面積坪數元素
     const sumSqm = document.getElementById('sum-sqm');
     const sumPing = document.getElementById('sum-ping');
     
     if (sumArea) sumArea.textContent = `${totalArea.toFixed(2)} ㎡`;
+    if (sumAreaPing) sumAreaPing.textContent = `${(totalArea * 0.3025).toFixed(2)} 坪`; // 💡 計算公式：總面積 * 0.3025
     if (sumSqm) sumSqm.textContent = `${totalSqm.toFixed(2)} ㎡`;
     if (sumPing) sumPing.textContent = `${(totalSqm * 0.3025).toFixed(2)} 坪`;
 };
