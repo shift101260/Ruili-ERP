@@ -114,7 +114,7 @@ function saveNewCase() {
     closeModal('editCaseModal');
 }
 
-// 渲染所有分區表格 (加入 .table-scroll-container 優化手機滑動)
+// 渲染所有分區表格
 function renderAllSections() {
     const sections = ['EVALUATION', 'CONTRACTING', 'CLOSED', 'JUNK', 'FAILED'];
     const defaultTexts = {
