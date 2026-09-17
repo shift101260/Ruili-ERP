@@ -1,9 +1,28 @@
 // ==========================================
-// 睿立集團 ERP - 案件管理核心模組 (case-management.js)
+// 睿立集團 ERP - 案件管理與 RWD 手機控制模組 (case-management.js)
 // ==========================================
 
 // 全域案件記憶體資料庫
 let allCasesStore = [];
+
+// 📱 手機版側邊欄開關
+function toggleSidebar() {
+    const sidebar = document.querySelector('.ruili-sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('mobile-open');
+    }
+}
+
+// 💡 手機版點擊任何導覽按鈕後，自動收起側邊欄
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.nav-btn');
+    if (btn && window.innerWidth < 768) {
+        const sidebar = document.querySelector('.ruili-sidebar');
+        if (sidebar && sidebar.classList.contains('mobile-open')) {
+            toggleSidebar();
+        }
+    }
+});
 
 // 展開 / 折疊側邊欄年度選單
 function toggleYearList() {
@@ -68,7 +87,6 @@ function saveNewCase() {
         return;
     }
 
-    // 根據工作進度自動拋轉至相對應區塊
     let sectionStatus = 'EVALUATION';
     if (progressStatus === '簽約中') sectionStatus = 'CONTRACTING';
     else if (progressStatus === '結案中') sectionStatus = 'CLOSED';
@@ -96,7 +114,7 @@ function saveNewCase() {
     closeModal('editCaseModal');
 }
 
-// 渲染所有分區表格 (已移除操作欄位與編輯評估按鈕)
+// 渲染所有分區表格 (加入 .table-scroll-container 優化手機滑動)
 function renderAllSections() {
     const sections = ['EVALUATION', 'CONTRACTING', 'CLOSED', 'JUNK', 'FAILED'];
     const defaultTexts = {
@@ -121,50 +139,49 @@ function renderAllSections() {
                 <tr class="border-b border-stone-50 hover:bg-stone-50/60 transition case-item-row" data-name="${c.name}">
                     <td class="py-2.5 px-3"><input type="checkbox" class="case-checkbox" value="${c.id}"></td>
                     <td class="py-2.5 font-semibold text-stone-800">
-                        <button onclick="openAddCaseModal('${c.id}')" class="hover:text-[#C59B63] hover:underline text-left font-bold cursor-pointer">
+                        <button onclick="openAddCaseModal('${c.id}')" class="hover:text-[#C59B63] hover:underline text-left font-bold cursor-pointer whitespace-nowrap">
                             ${c.name}
                         </button>
                     </td>
-                    <td class="py-2.5"><span class="bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded text-[10px]">${c.progressStatus || '評估中'}</span></td>
-                    <td class="py-2.5 font-mono">NT$ ${Number(c.quotePrice || 0).toLocaleString()}</td>
-                    <td class="py-2.5 font-mono text-rose-600 font-semibold">NT$ ${Number(c.contractPrice || 0).toLocaleString()}</td>
+                    <td class="py-2.5 whitespace-nowrap"><span class="bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded text-[10px]">${c.progressStatus || '評估中'}</span></td>
+                    <td class="py-2.5 font-mono whitespace-nowrap">NT$ ${Number(c.quotePrice || 0).toLocaleString()}</td>
+                    <td class="py-2.5 font-mono text-rose-600 font-semibold whitespace-nowrap">NT$ ${Number(c.contractPrice || 0).toLocaleString()}</td>
                     <td class="py-2.5 text-stone-600 truncate max-w-xs" title="${c.note || ''}">${c.note || '-'}</td>
                 </tr>
             `).join('');
 
             container.innerHTML = `
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="text-[11px] text-stone-400 border-b border-stone-100">
-                            <th class="py-2 w-8 px-3"><input type="checkbox" onclick="toggleSelectAll('${status}', this)"></th>
-                            <th class="py-2">案件名稱</th>
-                            <th class="py-2">工作進度</th>
-                            <th class="py-2">報價金額</th>
-                            <th class="py-2">簽約金額</th>
-                            <th class="py-2">案件即時說明</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-xs text-stone-700">${rowsHtml}</tbody>
-                </table>
+                <div class="table-scroll-container">
+                    <table class="w-full text-left border-collapse min-w-[600px]">
+                        <thead>
+                            <tr class="text-[11px] text-stone-400 border-b border-stone-100">
+                                <th class="py-2 w-8 px-3"><input type="checkbox" onclick="toggleSelectAll('${status}', this)"></th>
+                                <th class="py-2">案件名稱</th>
+                                <th class="py-2">工作進度</th>
+                                <th class="py-2">報價金額</th>
+                                <th class="py-2">簽約金額</th>
+                                <th class="py-2">案件即時說明</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-xs text-stone-700">${rowsHtml}</tbody>
+                    </table>
+                </div>
             `;
         }
     });
 }
 
-// 全選/取消全選
 function toggleSelectAll(sectionStatus, masterCheckbox) {
     const container = document.getElementById(`container-${sectionStatus}`);
     const checkboxes = container.querySelectorAll('.case-checkbox');
     checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
 }
 
-// 取得被勾選案件 ID 列表
 function getSelectedCaseIds() {
     const checkboxes = document.querySelectorAll('.case-checkbox:checked');
     return Array.from(checkboxes).map(cb => cb.value);
 }
 
-// 批次拋轉案件
 function batchTransferCases(targetStatus) {
     if (!targetStatus) return;
     const selectedIds = getSelectedCaseIds();
@@ -184,7 +201,6 @@ function batchTransferCases(targetStatus) {
     document.getElementById('batch-action-select').value = '';
 }
 
-// 批次刪除案件
 function batchDeleteCases() {
     const selectedIds = getSelectedCaseIds();
     if (selectedIds.length === 0) {
@@ -198,7 +214,6 @@ function batchDeleteCases() {
     }
 }
 
-// 即時搜尋過濾
 function filterCases() {
     const keyword = document.getElementById('case-search-input').value.toLowerCase().trim();
     const rows = document.querySelectorAll('.case-item-row');
@@ -212,7 +227,6 @@ function filterCases() {
     });
 }
 
-// 切換模組/年份選單
 function switchModule(moduleName, btnElement, year) {
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('btn-gold', 'text-white', 'font-medium');
