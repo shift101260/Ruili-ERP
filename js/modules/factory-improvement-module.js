@@ -1,5 +1,8 @@
-// 全域變數用來儲存原始資料
+// 全域變數用來儲存資料與分頁狀態
 window.factoryRawData = [];
+window.factoryFilteredData = [];
+window.factoryCurrentPage = 1;
+window.factoryRowsPerPage = 50;
 
 function renderFactoryImprovementModule() {
     const container = document.getElementById('app-container');
@@ -48,21 +51,20 @@ function renderFactoryImprovementModule() {
                 </div>
             </div>
 
-            <!-- 資料表格區 (強制顯示右側滾動軸) -->
+            <!-- 資料表格區 (滿版設計，支援拖曳上傳) -->
             <div id="factoryDropZone" 
                  ondragover="handleFactoryDragOver(event)" 
                  ondragleave="handleFactoryDragLeave(event)" 
                  ondrop="handleFactoryDrop(event)"
                  class="w-full bg-white rounded-2xl border-2 border-dashed border-stone-200 shadow-2xs overflow-hidden transition-colors duration-200">
-                
-                <div class="overflow-x-auto overflow-y-scroll max-h-[70vh] w-full">
+                <div class="overflow-x-auto w-full">
                     <table class="w-full text-left border-collapse">
-                        <thead class="sticky top-0 z-10 bg-stone-100 shadow-xs">
-                            <tr class="border-b border-stone-200 text-xs font-bold text-stone-600 uppercase tracking-wider">
-                                <th class="py-4 px-6 w-24 whitespace-nowrap bg-stone-100">編號</th>
-                                <th class="py-4 px-6 w-32 whitespace-nowrap bg-stone-100">縣市</th>
-                                <th class="py-4 px-6 w-1/3 bg-stone-100">工廠名稱</th>
-                                <th class="py-4 px-6 bg-stone-100">廠址</th>
+                        <thead>
+                            <tr class="bg-stone-50/80 border-b border-stone-200 text-xs font-bold text-stone-500 uppercase tracking-wider">
+                                <th class="py-4 px-6 w-24 whitespace-nowrap">編號</th>
+                                <th class="py-4 px-6 w-32 whitespace-nowrap">縣市</th>
+                                <th class="py-4 px-6 w-1/3">工廠名稱</th>
+                                <th class="py-4 px-6">廠址</th>
                             </tr>
                         </thead>
                         <tbody id="factoryTableBody" class="divide-y divide-stone-100 text-xs text-stone-700">
@@ -77,9 +79,13 @@ function renderFactoryImprovementModule() {
                     </table>
                 </div>
                 
-                <!-- 底部統計筆數 -->
-                <div class="px-6 py-3.5 bg-stone-50/80 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500">
+                <!-- 底部統計與分頁控制按鈕區 -->
+                <div class="px-6 py-3.5 bg-stone-50/80 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-3">
                     <span>總共查詢到 <strong id="factoryResultCount" class="text-stone-900 font-bold">0</strong> 筆資料</span>
+                    
+                    <div id="factoryPagination" class="flex items-center space-x-2">
+                        <!-- 動態插入分頁按鈕 -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,7 +105,7 @@ function handleFactoryExcelUpload(e) {
     if (e.target.files?.[0]) processExcelFile(e.target.files[0]);
 }
 
-// ODS 格式精準解析演算法
+// 全強效 ODS/Excel 多層邏輯解析演算法
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 已載入 SheetJS！');
@@ -112,53 +118,53 @@ function processExcelFile(file) {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
             
-            let targetRows = null;
+            let parsedData = [];
 
-            // 自動找到包含資料的 Sheet
+            // 深度遍歷所有 Sheet，確保不漏抓資料
             for (let name of workbook.SheetNames) {
                 const sheet = workbook.Sheets[name];
                 const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
-                if (rows && rows.length > 1) {
-                    targetRows = rows;
-                    break;
+                if (!rows || rows.length <= 1) continue;
+
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
+                    if (!row || row.length === 0) continue;
+
+                    // 轉為字串
+                    const col0 = String(row[0] || '').trim(); // 編號
+                    const col1 = String(row[1] || '').trim(); // 縣市
+                    const col2 = String(row[2] || '').trim(); // 工廠名稱
+                    const col3 = String(row[3] || '').trim(); // 廠址
+
+                    // 跳過抬頭與欄位名稱
+                    if (col0.includes('名單') || col0.includes('列表日期') || col0 === '編號' || col1 === '縣市') {
+                        continue;
+                    }
+
+                    // 只要「縣市」與「工廠名稱」有一項存在就納入
+                    if (col1 || col2) {
+                        parsedData.push({
+                            id: col0 || (parsedData.length + 1),
+                            city: col1 || '未填寫',
+                            name: col2 || '未填寫',
+                            address: col3 || '未填寫'
+                        });
+                    }
                 }
+
+                if (parsedData.length > 0) break; // 已順利找到資料集即停止
             }
 
-            if (!targetRows || targetRows.length === 0) {
-                alert('表格檔案內無有效資料！');
+            if (parsedData.length === 0) {
+                alert('未找到有效工廠資料，請確認檔案內容！');
                 return;
             }
 
-            let parsedData = [];
-
-            for (let i = 0; i < targetRows.length; i++) {
-                const row = targetRows[i];
-                if (!row || row.length < 3) continue;
-
-                // 轉為字串
-                const col0 = String(row[0] || '').trim(); // A欄：編號 / 大標題
-                const col1 = String(row[1] || '').trim(); // B欄：縣市
-                const col2 = String(row[2] || '').trim(); // C欄：工廠名稱
-                const col3 = String(row[3] || '').trim(); // D欄：廠址
-
-                // 忽略頂部宣告標題與標頭列
-                if (col0.includes('名單') || col0.includes('列表日期') || col0 === '編號' || col1 === '縣市') {
-                    continue;
-                }
-
-                // 讀取 A欄(編號), B欄(縣市), C欄(工廠名稱), D欄(廠址)
-                if (col1 && col2) {
-                    parsedData.push({
-                        id: col0 || (parsedData.length + 1),
-                        city: col1,
-                        name: col2,
-                        address: col3 || '未填寫'
-                    });
-                }
-            }
-
             window.factoryRawData = parsedData;
-            renderFactoryTable(window.factoryRawData);
+            window.factoryFilteredData = parsedData;
+            window.factoryCurrentPage = 1;
+
+            renderFactoryTable();
 
             const searchInput = document.getElementById('factorySearchInput');
             if (searchInput) searchInput.value = '';
@@ -176,30 +182,32 @@ function filterFactoryData() {
     const keyword = document.getElementById('factorySearchInput').value.trim().toLowerCase();
     
     if (!keyword) {
-        renderFactoryTable(window.factoryRawData);
-        return;
+        window.factoryFilteredData = window.factoryRawData;
+    } else {
+        window.factoryFilteredData = window.factoryRawData.filter(item => {
+            return String(item.id).toLowerCase().includes(keyword) ||
+                   item.city.toLowerCase().includes(keyword) ||
+                   item.name.toLowerCase().includes(keyword) ||
+                   item.address.toLowerCase().includes(keyword);
+        });
     }
 
-    const filtered = window.factoryRawData.filter(item => {
-        return String(item.id).toLowerCase().includes(keyword) ||
-               item.city.toLowerCase().includes(keyword) ||
-               item.name.toLowerCase().includes(keyword) ||
-               item.address.toLowerCase().includes(keyword);
-    });
-
-    renderFactoryTable(filtered);
+    window.factoryCurrentPage = 1; // 重置回第一頁
+    renderFactoryTable();
 }
 
-// 繪製表格內容
-function renderFactoryTable(data) {
+// 分頁渲染表格內容
+function renderFactoryTable() {
     const tbody = document.getElementById('factoryTableBody');
     const countEl = document.getElementById('factoryResultCount');
+    const paginationEl = document.getElementById('factoryPagination');
     
     if (!tbody) return;
 
-    countEl.innerText = data.length;
+    const total = window.factoryFilteredData.length;
+    countEl.innerText = total;
 
-    if (data.length === 0) {
+    if (total === 0) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="4" class="py-20 text-center text-stone-400">
@@ -208,10 +216,19 @@ function renderFactoryTable(data) {
                 </td>
             </tr>
         `;
+        if (paginationEl) paginationEl.innerHTML = '';
         return;
     }
 
-    tbody.innerHTML = data.map(item => `
+    // 計算當頁資料範圍
+    const totalPages = Math.ceil(total / window.factoryRowsPerPage);
+    if (window.factoryCurrentPage > totalPages) window.factoryCurrentPage = totalPages;
+
+    const startIdx = (window.factoryCurrentPage - 1) * window.factoryRowsPerPage;
+    const pageData = window.factoryFilteredData.slice(startIdx, startIdx + window.factoryRowsPerPage);
+
+    // 繪製表格
+    tbody.innerHTML = pageData.map(item => `
         <tr class="hover:bg-amber-50/30 transition">
             <td class="py-3.5 px-6 font-bold text-stone-400 whitespace-nowrap">${item.id}</td>
             <td class="py-3.5 px-6 font-bold text-stone-900 whitespace-nowrap">${item.city}</td>
@@ -219,6 +236,25 @@ function renderFactoryTable(data) {
             <td class="py-3.5 px-6 text-stone-600">${item.address}</td>
         </tr>
     `).join('');
+
+    // 繪製分頁控制按鈕
+    if (paginationEl) {
+        paginationEl.innerHTML = `
+            <button onclick="changeFactoryPage(-1)" ${window.factoryCurrentPage === 1 ? 'disabled class="px-3 py-1 bg-stone-100 text-stone-300 rounded-lg text-xs cursor-not-allowed"' : 'class="px-3 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-bold transition cursor-pointer"'}>
+                上一頁
+            </button>
+            <span class="text-stone-600 text-xs px-2">第 <strong>${window.factoryCurrentPage}</strong> / <strong>${totalPages}</strong> 頁</span>
+            <button onclick="changeFactoryPage(1)" ${window.factoryCurrentPage === totalPages ? 'disabled class="px-3 py-1 bg-stone-100 text-stone-300 rounded-lg text-xs cursor-not-allowed"' : 'class="px-3 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-bold transition cursor-pointer"'}>
+                下一頁
+            </button>
+        `;
+    }
+}
+
+// 換頁處理
+function changeFactoryPage(delta) {
+    window.factoryCurrentPage += delta;
+    renderFactoryTable();
 }
 
 // 掛載全域
@@ -228,3 +264,4 @@ window.handleFactoryDragOver = handleFactoryDragOver;
 window.handleFactoryDragLeave = handleFactoryDragLeave;
 window.handleFactoryDrop = handleFactoryDrop;
 window.filterFactoryData = filterFactoryData;
+window.changeFactoryPage = changeFactoryPage;
