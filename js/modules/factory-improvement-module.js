@@ -58,7 +58,7 @@ function renderFactoryImprovementModule() {
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-stone-50/80 border-b border-stone-200 text-xs font-bold text-stone-500 uppercase tracking-wider">
-                                <th class="py-4 px-6 w-20 whitespace-nowrap">編號</th>
+                                <th class="py-4 px-6 w-24 whitespace-nowrap">編號</th>
                                 <th class="py-4 px-6 w-32 whitespace-nowrap">縣市</th>
                                 <th class="py-4 px-6 w-1/3">工廠名稱</th>
                                 <th class="py-4 px-6">廠址</th>
@@ -98,7 +98,7 @@ function handleFactoryExcelUpload(e) {
     if (e.target.files?.[0]) processExcelFile(e.target.files[0]);
 }
 
-// 專為您的 ODS 格式量身打造的解析演算法 (包含編號)
+// ODS 格式精準解析演算法 (對應 A欄=編號, B欄=縣市, C欄=工廠名稱, D欄=廠址)
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 已載入 SheetJS！');
@@ -113,7 +113,7 @@ function processExcelFile(file) {
             
             let targetRows = null;
 
-            // 自動找到非空白的 Sheet
+            // 自動找到包含資料的 Sheet
             for (let name of workbook.SheetNames) {
                 const sheet = workbook.Sheets[name];
                 const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
@@ -129,7 +129,6 @@ function processExcelFile(file) {
             }
 
             let parsedData = [];
-            let autoId = 1;
 
             for (let i = 0; i < targetRows.length; i++) {
                 const row = targetRows[i];
@@ -146,10 +145,10 @@ function processExcelFile(file) {
                     continue;
                 }
 
-                // 精準讀取 A欄(編號), B欄(縣市), C欄(工廠名稱), D欄(廠址)
+                // 讀取 A欄(編號), B欄(縣市), C欄(工廠名稱), D欄(廠址)
                 if (col1 && col2) {
                     parsedData.push({
-                        id: col0 || autoId++,
+                        id: col0 || (parsedData.length + 1),
                         city: col1,
                         name: col2,
                         address: col3 || '未填寫'
@@ -171,7 +170,7 @@ function processExcelFile(file) {
     reader.readAsArrayBuffer(file);
 }
 
-// 關鍵字即時搜尋 (包含編號搜尋)
+// 關鍵字即時搜尋 (包含編號)
 function filterFactoryData() {
     const keyword = document.getElementById('factorySearchInput').value.trim().toLowerCase();
     
@@ -190,7 +189,7 @@ function filterFactoryData() {
     renderFactoryTable(filtered);
 }
 
-// 繪製表格內容 (增加編號欄位)
+// 繪製表格內容 (4 欄精準對齊)
 function renderFactoryTable(data) {
     const tbody = document.getElementById('factoryTableBody');
     const countEl = document.getElementById('factoryResultCount');
@@ -213,7 +212,7 @@ function renderFactoryTable(data) {
 
     tbody.innerHTML = data.map(item => `
         <tr class="hover:bg-amber-50/30 transition">
-            <td class="py-3.5 px-6 font-medium text-stone-500 whitespace-nowrap">${item.id}</td>
+            <td class="py-3.5 px-6 font-bold text-stone-400 whitespace-nowrap">${item.id}</td>
             <td class="py-3.5 px-6 font-bold text-stone-900 whitespace-nowrap">${item.city}</td>
             <td class="py-3.5 px-6 font-medium text-stone-800">${item.name}</td>
             <td class="py-3.5 px-6 text-stone-600">${item.address}</td>
