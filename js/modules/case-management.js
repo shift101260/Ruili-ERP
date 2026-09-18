@@ -228,6 +228,7 @@ function filterCases() {
 }
 
 function switchModule(moduleName, btnElement, year) {
+    // 1. 切換選單按鈕高亮樣式
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('btn-gold', 'text-white', 'font-medium');
         btn.classList.add('hover:bg-stone-800/80', 'text-stone-300');
@@ -235,8 +236,27 @@ function switchModule(moduleName, btnElement, year) {
     if (btnElement) {
         btnElement.classList.add('btn-gold', 'text-white', 'font-medium');
     }
+
+    // 2. 判斷切換至「工具專區」
+    if (moduleName === 'tools-module') {
+        if (typeof window.renderToolsModule === 'function') {
+            window.renderToolsModule();
+        } else {
+            console.error("找不到 renderToolsModule 函數，請確認 index.html 底部已引入 tools-module.js");
+        }
+        return;
+    }
+
+    // 3. 原本的年份切換邏輯（適用於案件管理）
     if (year) {
-        document.getElementById('current-year-display').innerText = year;
-        document.getElementById('current-year-sub').innerText = year;
+        const yearDisplay = document.getElementById('current-year-display');
+        const yearSub = document.getElementById('current-year-sub');
+        if (yearDisplay) yearDisplay.innerText = year;
+        if (yearSub) yearSub.innerText = year;
+        
+        // 若從工具專區切回案件管理，確保重新渲染案件卡片
+        if (typeof window.renderCases === 'function') {
+            window.renderCases(year);
+        }
     }
 }
