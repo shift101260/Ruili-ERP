@@ -5,6 +5,9 @@ function renderFactoryImprovementModule() {
     const container = document.getElementById('app-container');
     if (!container) return;
 
+    // 強制讓外層容器滿版
+    container.className = "w-full min-h-screen px-4 sm:px-6 lg:px-8";
+
     container.innerHTML = `
         <div class="w-full space-y-6 pb-12">
             <!-- 頂部頁面標題與返回按鈕 -->
@@ -15,21 +18,21 @@ function renderFactoryImprovementModule() {
                     </button>
                     <div>
                         <h2 class="text-lg font-bold text-stone-900">工廠改善計畫查詢</h2>
-                        <p class="text-xs text-stone-500 mt-0.5">匯入 Excel 檔案進行跨欄位智慧關鍵字搜尋</p>
+                        <p class="text-xs text-stone-500 mt-0.5">匯入表格檔案進行跨欄位智慧關鍵字搜尋</p>
                     </div>
                 </div>
             </div>
 
             <!-- 操作控制區：上傳與關鍵字搜尋 -->
-            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
-                <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4 w-full">
+                <div class="flex flex-col md:flex-row gap-4 items-center justify-between w-full">
                     
-                    <!-- 1. Excel 上傳按鈕 -->
+                    <!-- 1. 表格上傳按鈕 (支援 xlsx, xls, ods, csv) -->
                     <div class="w-full md:w-auto shrink-0">
                         <label class="cursor-pointer inline-flex items-center justify-center space-x-2 px-5 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition shadow-sm w-full md:w-auto">
                             <i class="fa-solid fa-file-excel text-sm"></i>
-                            <span>匯入 Excel 改善計畫表</span>
-                            <input type="file" id="factoryExcelInput" accept=".xlsx, .xls" class="hidden" onchange="handleFactoryExcelUpload(event)">
+                            <span>匯入 Excel / ODS 改善計畫表</span>
+                            <input type="file" id="factoryExcelInput" accept=".xlsx, .xls, .ods, .csv" class="hidden" onchange="handleFactoryExcelUpload(event)">
                         </label>
                     </div>
 
@@ -41,27 +44,27 @@ function renderFactoryImprovementModule() {
                 </div>
             </div>
 
-            <!-- 資料表格區 (支援點擊與拖曳檔案上傳) -->
+            <!-- 資料表格區 (滿版設計，支援拖曳上傳) -->
             <div id="factoryDropZone" 
                  ondragover="handleFactoryDragOver(event)" 
                  ondragleave="handleFactoryDragLeave(event)" 
                  ondrop="handleFactoryDrop(event)"
-                 class="bg-white rounded-2xl border-2 border-dashed border-stone-200 shadow-2xs overflow-hidden transition-colors duration-200">
-                <div class="overflow-x-auto">
+                 class="w-full bg-white rounded-2xl border-2 border-dashed border-stone-200 shadow-2xs overflow-hidden transition-colors duration-200">
+                <div class="overflow-x-auto w-full">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-stone-50/80 border-b border-stone-200 text-xs font-bold text-stone-500 uppercase tracking-wider">
-                                <th class="py-4 px-6 w-32">縣市</th>
+                                <th class="py-4 px-6 w-32 whitespace-nowrap">縣市</th>
                                 <th class="py-4 px-6 w-1/3">工廠名稱</th>
                                 <th class="py-4 px-6">廠址</th>
                             </tr>
                         </thead>
                         <tbody id="factoryTableBody" class="divide-y divide-stone-100 text-xs text-stone-700">
                             <tr>
-                                <td colspan="3" class="py-16 text-center text-stone-400">
+                                <td colspan="3" class="py-20 text-center text-stone-400">
                                     <i class="fa-solid fa-file-circle-plus text-4xl mb-3 text-stone-300"></i>
-                                    <p class="text-sm font-medium">請點擊上方按鈕，或將 Excel 檔案拖曳至此處區域</p>
-                                    <p class="text-xs text-stone-400 mt-1">支援 .xlsx / .xls 格式</p>
+                                    <p class="text-sm font-medium">請點擊上方按鈕，或將 Excel / ODS 檔案拖曳至此區域</p>
+                                    <p class="text-xs text-stone-400 mt-1">支援 .xlsx / .xls / .ods / .csv 格式</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -77,7 +80,7 @@ function renderFactoryImprovementModule() {
     `;
 }
 
-// 處理拖曳事件視覺效果
+// 處理拖曳視覺效果
 function handleFactoryDragOver(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -92,7 +95,6 @@ function handleFactoryDragLeave(event) {
     if (zone) zone.classList.remove('border-amber-500', 'bg-amber-50/20');
 }
 
-// 處理拖放檔案釋放
 function handleFactoryDrop(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -105,7 +107,6 @@ function handleFactoryDrop(event) {
     }
 }
 
-// 處理點擊按鈕選取檔案
 function handleFactoryExcelUpload(event) {
     const file = event.target.files[0];
     if (file) {
@@ -113,7 +114,7 @@ function handleFactoryExcelUpload(event) {
     }
 }
 
-// 解析 Excel 核心邏輯
+// 解析表格的核心邏輯 (相容 ODS / XLSX / CSV)
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 頁面已載入 sheetjs！');
@@ -130,10 +131,15 @@ function processExcelFile(file) {
             
             const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
             
-            // 自動適配多種常見標頭名稱
+            if (jsonData.length === 0) {
+                alert('上傳的表格內容為空！');
+                return;
+            }
+
+            // 彈性欄位比對
             window.factoryRawData = jsonData.map(item => ({
-                city: item['縣市'] || item['縣市別'] || item['City'] || '未填寫',
-                name: item['工廠名稱'] || item['廠名'] || item['FactoryName'] || '未填寫',
+                city: item['縣市'] || item['縣市別'] || item['City'] || item['縣/市'] || '未填寫',
+                name: item['工廠名稱'] || item['廠名'] || item['FactoryName'] || item['事業名稱'] || '未填寫',
                 address: item['廠址'] || item['地址'] || item['工廠地址'] || item['Address'] || '未填寫'
             }));
 
@@ -142,14 +148,14 @@ function processExcelFile(file) {
             const searchInput = document.getElementById('factorySearchInput');
             if (searchInput) searchInput.value = '';
         } catch (error) {
-            console.error('Excel 解析失敗:', error);
-            alert('Excel 解析失敗，請確認檔案格式是否正確。');
+            console.error('檔案解析失敗:', error);
+            alert('表格解析失敗，請確認檔案內容格式。');
         }
     };
     reader.readAsArrayBuffer(file);
 }
 
-// 關鍵字即時過濾
+// 關鍵字搜尋
 function filterFactoryData() {
     const keyword = document.getElementById('factorySearchInput').value.trim().toLowerCase();
     
@@ -167,7 +173,7 @@ function filterFactoryData() {
     renderFactoryTable(filtered);
 }
 
-// 繪製表格內容
+// 渲染表格
 function renderFactoryTable(data) {
     const tbody = document.getElementById('factoryTableBody');
     const countEl = document.getElementById('factoryResultCount');
@@ -179,7 +185,7 @@ function renderFactoryTable(data) {
     if (data.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="3" class="py-16 text-center text-stone-400">
+                <td colspan="3" class="py-20 text-center text-stone-400">
                     <i class="fa-solid fa-magnifying-glass text-3xl mb-3 text-stone-300"></i>
                     <p class="text-sm font-medium">未找到符合關鍵字的資料</p>
                 </td>
@@ -197,7 +203,7 @@ function renderFactoryTable(data) {
     `).join('');
 }
 
-// 掛載至全域 window
+// 掛載全域
 window.renderFactoryImprovementModule = renderFactoryImprovementModule;
 window.handleFactoryExcelUpload = handleFactoryExcelUpload;
 window.handleFactoryDragOver = handleFactoryDragOver;
