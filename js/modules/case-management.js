@@ -28,12 +28,14 @@ document.addEventListener('click', function(e) {
 function toggleYearList() {
     const container = document.getElementById('year-list-container');
     const chevron = document.getElementById('year-chevron');
-    if (container.classList.contains('hidden')) {
-        container.classList.remove('hidden');
-        chevron.classList.remove('-rotate-90');
-    } else {
-        container.classList.add('hidden');
-        chevron.classList.add('-rotate-90');
+    if (container) {
+        if (container.classList.contains('hidden')) {
+            container.classList.remove('hidden');
+            if (chevron) chevron.classList.remove('-rotate-90');
+        } else {
+            container.classList.add('hidden');
+            if (chevron) chevron.classList.add('-rotate-90');
+        }
     }
 }
 
@@ -67,7 +69,8 @@ function openAddCaseModal(caseId = null) {
         document.getElementById('quote-price-amount').value = '';
         document.getElementById('contract-amount').value = '';
         document.getElementById('edit-case-note').value = '';
-        document.getElementById('edit-case-time-display').innerText = new Date().toLocaleString();
+        const timeDisplay = document.getElementById('edit-case-time-display');
+        if (timeDisplay) timeDisplay.innerText = new Date().toLocaleString();
     }
     modal.classList.remove('hidden');
 }
@@ -114,6 +117,111 @@ function saveNewCase() {
     closeModal('editCaseModal');
 }
 
+// 渲染案件管理基礎頁面骨架 (當從工具專區切回案件管理時自動重構 HTML)
+function renderCaseManagementView(year = 2026) {
+    const container = document.getElementById('app-container');
+    if (!container) return;
+
+    // 若容器內沒有 5 大分區，重新寫入案件管理的主架構
+    if (!document.getElementById('container-EVALUATION')) {
+        container.innerHTML = `
+            <header class="card-frame p-4 sm:p-5 mb-5 flex justify-between items-center">
+                <div>
+                    <h2 id="page-title" class="text-base sm:text-lg font-bold text-stone-800 flex items-center gap-2 tracking-wide">
+                        <span id="current-year-display">${year}</span> 年度案件管理中心
+                    </h2>
+                    <p class="text-xs text-stone-500 mt-1">
+                        管理 <span id="current-year-sub" class="font-medium">${year}</span> 年度案件，支援關鍵字搜尋、勾選、刪除、恢復與狀態跨區塊拋轉。
+                    </p>
+                </div>
+                
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="relative">
+                        <input type="text" id="case-search-input" oninput="filterCases()" placeholder="搜尋案件..." class="pl-3 pr-8 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] transition w-full sm:w-48">
+                        <i class="fa-solid fa-magnifying-glass absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
+                    </div>
+                    
+                    <select id="batch-action-select" onchange="batchTransferCases(this.value)" class="px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] text-stone-700">
+                        <option value="">-- 拋轉至 --</option>
+                        <option value="EVALUATION">案件評估</option>
+                        <option value="CONTRACTING">簽約案件</option>
+                        <option value="CLOSED">結案中心</option>
+                        <option value="JUNK">廢件專區</option>
+                        <option value="FAILED">案件失敗</option>
+                    </select>
+
+                    <button onclick="batchDeleteCases()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-xs font-medium border border-stone-300 transition flex items-center gap-1 cursor-pointer">
+                        <i class="fa-solid fa-trash-can text-stone-500"></i>刪除
+                    </button>
+                    <button onclick="location.reload()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-xs font-medium border border-stone-300 transition flex items-center gap-1 cursor-pointer">
+                        <i class="fa-solid fa-rotate-left text-stone-500"></i>恢復
+                    </button>
+                    <button onclick="openAddCaseModal()" class="px-4 py-1.5 btn-gold rounded-md text-xs font-medium shadow-2xs transition flex items-center gap-1 cursor-pointer whitespace-nowrap">
+                        <i class="fa-solid fa-plus"></i>新增
+                    </button>
+                </div>
+            </header>
+
+            <div class="space-y-4">
+                <div class="card-frame overflow-hidden">
+                    <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                            <h3 class="text-xs font-bold text-stone-800">案件評估</h3>
+                        </div>
+                        <span id="count-EVALUATION" class="text-xs font-semibold bg-amber-50 text-amber-700 px-2.5 py-0.5 rounded-full border border-amber-200/60">0 件</span>
+                    </div>
+                    <div id="container-EVALUATION" class="p-4 text-xs text-stone-400 text-center py-6">目前無案件評估紀錄</div>
+                </div>
+
+                <div class="card-frame overflow-hidden">
+                    <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                            <h3 class="text-xs font-bold text-stone-800">簽約案件</h3>
+                        </div>
+                        <span id="count-CONTRACTING" class="text-xs font-semibold bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200/60">0 件</span>
+                    </div>
+                    <div id="container-CONTRACTING" class="p-4 text-xs text-stone-400 text-center py-6">目前無簽約案件記錄</div>
+                </div>
+
+                <div class="card-frame overflow-hidden">
+                    <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                            <h3 class="text-xs font-bold text-stone-800">結案中心</h3>
+                        </div>
+                        <span id="count-CLOSED" class="text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">0 件</span>
+                    </div>
+                    <div id="container-CLOSED" class="p-4 text-xs text-stone-400 text-center py-6">目前無結案紀錄</div>
+                </div>
+
+                <div class="card-frame overflow-hidden">
+                    <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-stone-400"></span>
+                            <h3 class="text-xs font-bold text-stone-800">廢件專區</h3>
+                        </div>
+                        <span id="count-JUNK" class="text-xs font-semibold bg-stone-100 text-stone-600 px-2.5 py-0.5 rounded-full border border-stone-200">0 件</span>
+                    </div>
+                    <div id="container-JUNK" class="p-4 text-xs text-stone-400 text-center py-6">目前無相關廢件紀錄</div>
+                </div>
+
+                <div class="card-frame overflow-hidden">
+                    <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                            <h3 class="text-xs font-bold text-stone-800">案件失敗</h3>
+                        </div>
+                        <span id="count-FAILED" class="text-xs font-semibold bg-rose-50 text-rose-700 px-2.5 py-0.5 rounded-full border border-rose-200/60">0 件</span>
+                    </div>
+                    <div id="container-FAILED" class="p-4 text-xs text-stone-400 text-center py-6">目前無相關失敗紀錄</div>
+                </div>
+            </div>
+        `;
+    }
+}
+
 // 渲染所有分區表格
 function renderAllSections() {
     const sections = ['EVALUATION', 'CONTRACTING', 'CLOSED', 'JUNK', 'FAILED'];
@@ -128,6 +236,8 @@ function renderAllSections() {
     sections.forEach(status => {
         const container = document.getElementById(`container-${status}`);
         const countBadge = document.getElementById(`count-${status}`);
+        if (!container || !countBadge) return;
+
         const filtered = allCasesStore.filter(c => c.sectionStatus === status);
 
         countBadge.innerText = `${filtered.length} 件`;
@@ -173,6 +283,7 @@ function renderAllSections() {
 
 function toggleSelectAll(sectionStatus, masterCheckbox) {
     const container = document.getElementById(`container-${sectionStatus}`);
+    if (!container) return;
     const checkboxes = container.querySelectorAll('.case-checkbox');
     checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
 }
@@ -187,7 +298,8 @@ function batchTransferCases(targetStatus) {
     const selectedIds = getSelectedCaseIds();
     if (selectedIds.length === 0) {
         alert('請先勾選要拋轉的案件！');
-        document.getElementById('batch-action-select').value = '';
+        const sel = document.getElementById('batch-action-select');
+        if (sel) sel.value = '';
         return;
     }
 
@@ -198,7 +310,8 @@ function batchTransferCases(targetStatus) {
     });
 
     renderAllSections();
-    document.getElementById('batch-action-select').value = '';
+    const sel = document.getElementById('batch-action-select');
+    if (sel) sel.value = '';
 }
 
 function batchDeleteCases() {
@@ -215,7 +328,9 @@ function batchDeleteCases() {
 }
 
 function filterCases() {
-    const keyword = document.getElementById('case-search-input').value.toLowerCase().trim();
+    const input = document.getElementById('case-search-input');
+    if (!input) return;
+    const keyword = input.value.toLowerCase().trim();
     const rows = document.querySelectorAll('.case-item-row');
     rows.forEach(row => {
         const name = row.getAttribute('data-name').toLowerCase();
@@ -227,6 +342,7 @@ function filterCases() {
     });
 }
 
+// 頁面與模組切換主控制邏輯
 function switchModule(moduleName, btnElement, year) {
     // 1. 切換選單按鈕高亮樣式
     document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -237,7 +353,7 @@ function switchModule(moduleName, btnElement, year) {
         btnElement.classList.add('btn-gold', 'text-white', 'font-medium');
     }
 
-    // 2. 判斷切換至「工具專區」
+    // 2. 切換至「工具專區」
     if (moduleName === 'tools-module') {
         if (typeof window.renderToolsModule === 'function') {
             window.renderToolsModule();
@@ -247,16 +363,29 @@ function switchModule(moduleName, btnElement, year) {
         return;
     }
 
-    // 3. 原本的年份切換邏輯（適用於案件管理）
-    if (year) {
-        const yearDisplay = document.getElementById('current-year-display');
-        const yearSub = document.getElementById('current-year-sub');
-        if (yearDisplay) yearDisplay.innerText = year;
-        if (yearSub) yearSub.innerText = year;
-        
-        // 若從工具專區切回案件管理，確保重新渲染案件卡片
-        if (typeof window.renderCases === 'function') {
-            window.renderCases(year);
-        }
-    }
+    // 3. 切換至「案件管理」或「年度切換」
+    const currentYear = year || 2026;
+    renderCaseManagementView(currentYear);
+
+    const yearDisplay = document.getElementById('current-year-display');
+    const yearSub = document.getElementById('current-year-sub');
+    if (yearDisplay) yearDisplay.innerText = currentYear;
+    if (yearSub) yearSub.innerText = currentYear;
+
+    renderAllSections();
 }
+
+// 掛載所有函數至全域 window，確保 HTML onclick 能無縫調用
+window.toggleSidebar = toggleSidebar;
+window.toggleYearList = toggleYearList;
+window.closeModal = closeModal;
+window.openAddCaseModal = openAddCaseModal;
+window.saveNewCase = saveNewCase;
+window.renderCaseManagementView = renderCaseManagementView;
+window.renderAllSections = renderAllSections;
+window.toggleSelectAll = toggleSelectAll;
+window.batchTransferCases = batchTransferCases;
+window.batchDeleteCases = batchDeleteCases;
+window.filterCases = filterCases;
+window.switchModule = switchModule;
+```<FollowUp>完成儲存後，請重新整理頁面並測試點擊「工具專區」與「2026 案件」，畫面是否能順暢切換了？</FollowUp>
