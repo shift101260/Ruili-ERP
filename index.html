@@ -508,7 +508,7 @@
         </button>
     </div>
 
-    <!-- 💡 將內部原本寫死的列刪除，留空容器讓 JS 自動初始化即可 -->
+    <!-- 💡 留空容器，由 JS 開啟 Modal 時自動產生帶有垃圾桶的第一列 -->
     <div class="overflow-x-auto w-full pb-2">
         <div id="suppliers-rows-container" class="space-y-3 min-w-[700px]"></div>
     </div>
@@ -532,42 +532,6 @@
         </div>
     </div>
 </div>
-
-                    <div class="overflow-x-auto w-full pb-2">
-                        <div id="suppliers-rows-container" class="space-y-3 min-w-[700px]">
-                            <div class="grid grid-cols-6 gap-3 items-center bg-stone-50 p-3 rounded-xl border border-stone-200">
-                                <div><input type="text" placeholder="供應商名稱" class="supplier-name w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63]"></div>
-                                <div><input type="text" placeholder="施作項目" class="supplier-item w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63]"></div>
-                                <div><input type="number" placeholder="未稅價格" oninput="calculateQuoteTotals()" class="supplier-untaxed w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63] font-mono"></div>
-                                <div><input type="number" placeholder="報價金額" oninput="calculateQuoteTotals()" class="supplier-amount w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63] font-mono"></div>
-                                <div><input type="number" placeholder="簽約金額" oninput="calculateQuoteTotals()" class="supplier-contract w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63] font-mono text-rose-600 font-bold"></div>
-                                <div class="flex items-center space-x-2">
-                                    <input type="number" value="5" oninput="calculateQuoteTotals()" class="supplier-tax w-14 bg-white border border-stone-300 rounded-xl px-2 py-1.5 text-xs text-center font-mono">
-                                    <span class="text-[10px] text-stone-500 font-bold">稅%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">總報價金額 (自動)</label>
-                            <input type="text" id="calc-total-quote" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">稅後總金額 (自動)</label>
-                            <input type="text" id="calc-tax-after" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">簽約總金額 (自動)</label>
-                            <input type="text" id="calc-total-contract" class="w-full bg-rose-50 border border-rose-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-rose-700" readonly value="NT$ 0">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">案件總利潤 (自動)</label>
-                            <input type="text" id="calc-total-profit" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-emerald-700" readonly value="NT$ 0">
-                        </div>
-                    </div>
-                </div>
 
                 <!-- 區塊七：案件介紹人與佣金機制 -->
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
