@@ -41,8 +41,12 @@ function renderFactoryImprovementModule() {
                 </div>
             </div>
 
-            <!-- 資料表格區 (滿版設計) -->
-            <div class="bg-white rounded-2xl border border-stone-200 shadow-2xs overflow-hidden">
+            <!-- 資料表格區 (支援點擊與拖曳檔案上傳) -->
+            <div id="factoryDropZone" 
+                 ondragover="handleFactoryDragOver(event)" 
+                 ondragleave="handleFactoryDragLeave(event)" 
+                 ondrop="handleFactoryDrop(event)"
+                 class="bg-white rounded-2xl border-2 border-dashed border-stone-200 shadow-2xs overflow-hidden transition-colors duration-200">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -56,7 +60,7 @@ function renderFactoryImprovementModule() {
                             <tr>
                                 <td colspan="3" class="py-16 text-center text-stone-400">
                                     <i class="fa-solid fa-file-circle-plus text-4xl mb-3 text-stone-300"></i>
-                                    <p class="text-sm font-medium">請點擊上方按鈕匯入 Excel 檔案</p>
+                                    <p class="text-sm font-medium">請點擊上方按鈕，或將 Excel 檔案拖曳至此處區域</p>
                                     <p class="text-xs text-stone-400 mt-1">支援 .xlsx / .xls 格式</p>
                                 </td>
                             </tr>
@@ -73,11 +77,44 @@ function renderFactoryImprovementModule() {
     `;
 }
 
-// 處理 Excel 檔案解析
+// 處理拖曳事件視覺效果
+function handleFactoryDragOver(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const zone = document.getElementById('factoryDropZone');
+    if (zone) zone.classList.add('border-amber-500', 'bg-amber-50/20');
+}
+
+function handleFactoryDragLeave(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const zone = document.getElementById('factoryDropZone');
+    if (zone) zone.classList.remove('border-amber-500', 'bg-amber-50/20');
+}
+
+// 處理拖放檔案釋放
+function handleFactoryDrop(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const zone = document.getElementById('factoryDropZone');
+    if (zone) zone.classList.remove('border-amber-500', 'bg-amber-50/20');
+
+    const files = event.dataTransfer.files;
+    if (files && files.length > 0) {
+        processExcelFile(files[0]);
+    }
+}
+
+// 處理點擊按鈕選取檔案
 function handleFactoryExcelUpload(event) {
     const file = event.target.files[0];
-    if (!file) return;
+    if (file) {
+        processExcelFile(file);
+    }
+}
 
+// 解析 Excel 核心邏輯
+function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 頁面已載入 sheetjs！');
         return;
@@ -101,7 +138,9 @@ function handleFactoryExcelUpload(event) {
             }));
 
             renderFactoryTable(window.factoryRawData);
-            document.getElementById('factorySearchInput').value = '';
+            
+            const searchInput = document.getElementById('factorySearchInput');
+            if (searchInput) searchInput.value = '';
         } catch (error) {
             console.error('Excel 解析失敗:', error);
             alert('Excel 解析失敗，請確認檔案格式是否正確。');
@@ -161,4 +200,7 @@ function renderFactoryTable(data) {
 // 掛載至全域 window
 window.renderFactoryImprovementModule = renderFactoryImprovementModule;
 window.handleFactoryExcelUpload = handleFactoryExcelUpload;
+window.handleFactoryDragOver = handleFactoryDragOver;
+window.handleFactoryDragLeave = handleFactoryDragLeave;
+window.handleFactoryDrop = handleFactoryDrop;
 window.filterFactoryData = filterFactoryData;
