@@ -5,7 +5,7 @@ function renderFactoryImprovementModule() {
     const container = document.getElementById('app-container');
     if (!container) return;
 
-    // 強制讓外層容器滿版呈現，不受父層 fixed max-width 限制
+    // 強制讓外層容器滿版呈現
     container.className = "w-full min-h-screen px-2 sm:px-4 lg:px-6";
     if (container.parentElement) {
         container.parentElement.style.maxWidth = "none";
@@ -31,7 +31,7 @@ function renderFactoryImprovementModule() {
             <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4 w-full">
                 <div class="flex flex-col md:flex-row gap-4 items-center justify-between w-full">
                     
-                    <!-- 1. 表格上傳按鈕 (金色風格) -->
+                    <!-- 1. 表格上傳按鈕 (系統金色) -->
                     <div class="w-full md:w-auto shrink-0">
                         <label class="cursor-pointer inline-flex items-center justify-center space-x-2 px-5 py-3 bg-[#c8a362] hover:bg-[#b59152] text-white rounded-xl text-xs font-bold transition shadow-sm w-full md:w-auto">
                             <i class="fa-solid fa-file-excel text-sm"></i>
@@ -97,7 +97,7 @@ function handleFactoryExcelUpload(e) {
     if (e.target.files?.[0]) processExcelFile(e.target.files[0]);
 }
 
-// 多 Sheet 智慧識別與多規格解析演算法
+// 專為您的 ODS 格式量身打造的解析演算法
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 已載入 SheetJS！');
@@ -112,11 +112,11 @@ function processExcelFile(file) {
             
             let targetRows = null;
 
-            // 1. 自動尋找「包含資料」的正確 Sheet（解決 ODS 第一個 Sheet 為空白樣式檔的問題）
+            // 自動找到非空白的 Sheet
             for (let name of workbook.SheetNames) {
                 const sheet = workbook.Sheets[name];
                 const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
-                if (rows && rows.length > 1) { // 至少有標題與資料
+                if (rows && rows.length > 1) {
                     targetRows = rows;
                     break;
                 }
@@ -127,60 +127,29 @@ function processExcelFile(file) {
                 return;
             }
 
-            // 2. 智慧尋找欄位標題行（欄名可能在第 1 行或第 2 行）
-            let cityIdx = -1, nameIdx = -1, addrIdx = -1;
-            let headerRowIndex = -1;
-
-            for (let r = 0; r < Math.min(targetRows.length, 10); r++) {
-                const row = targetRows[r].map(c => String(c || '').trim());
-                for (let c = 0; c < row.length; c++) {
-                    const val = row[c];
-                    if (val.includes('縣市')) cityIdx = c;
-                    if (val.includes('工廠名稱') || val.includes('廠名') || val.includes('事業名稱')) nameIdx = c;
-                    if (val.includes('廠址') || val.includes('地址')) addrIdx = c;
-                }
-                // 如果成功定位到 key 欄位，以此行作為標頭行
-                if (cityIdx !== -1 || nameIdx !== -1 || addrIdx !== -1) {
-                    headerRowIndex = r;
-                    break;
-                }
-            }
-
             let parsedData = [];
 
-            // 3. 根據欄位索引或預設順序提煉資料
-            for (let i = headerRowIndex + 1; i < targetRows.length; i++) {
+            for (let i = 0; i < targetRows.length; i++) {
                 const row = targetRows[i];
-                if (!row || row.length === 0) continue;
+                if (!row || row.length < 3) continue;
 
-                let city = '', name = '', address = '';
+                // 轉為字串
+                const col0 = String(row[0] || '').trim(); // A欄：編號/大標題
+                const col1 = String(row[1] || '').trim(); // B欄：縣市
+                const col2 = String(row[2] || '').trim(); // C欄：工廠名稱
+                const col3 = String(row[3] || '').trim(); // D欄：廠址
 
-                if (cityIdx !== -1 || nameIdx !== -1 || addrIdx !== -1) {
-                    city = cityIdx !== -1 ? String(row[cityIdx] || '').trim() : '';
-                    name = nameIdx !== -1 ? String(row[nameIdx] || '').trim() : '';
-                    address = addrIdx !== -1 ? String(row[addrIdx] || '').trim() : '';
-                } else {
-                    // 若無明確標頭，備用方案按 4 欄 [編號, 縣市, 工廠名稱, 廠址] 或 3 欄相容
-                    const raw0 = String(row[0] || '').trim();
-                    const raw1 = String(row[1] || '').trim();
-                    const raw2 = String(row[2] || '').trim();
-                    const raw3 = String(row[3] || '').trim();
-
-                    if (raw1 && raw2 && raw3) {
-                        city = raw1; name = raw2; address = raw3;
-                    } else if (raw0 && raw1 && raw2) {
-                        city = raw0; name = raw1; address = raw2;
-                    }
+                // 忽略頂部宣告標題與標頭列
+                if (col0.includes('名單') || col0.includes('列表日期') || col0 === '編號' || col1 === '縣市') {
+                    continue;
                 }
 
-                // 過濾掉宣告行與無效列
-                if (city.includes('名單') || city.includes('列表日期') || name.includes('工廠名稱')) continue;
-
-                if (city || name || address) {
+                // 精準讀取 B欄(縣市), C欄(工廠名稱), D欄(廠址)
+                if (col1 && col2) {
                     parsedData.push({
-                        city: city || '未填寫',
-                        name: name || '未填寫',
-                        address: address || '未填寫'
+                        city: col1,
+                        name: col2,
+                        address: col3 || '未填寫'
                     });
                 }
             }
@@ -193,7 +162,7 @@ function processExcelFile(file) {
 
         } catch (error) {
             console.error('檔案解析失敗:', error);
-            alert('表格解析失敗，請確認檔案內容格式！');
+            alert('表格解析失敗，請確認檔案格式！');
         }
     };
     reader.readAsArrayBuffer(file);
