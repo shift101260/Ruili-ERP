@@ -5,7 +5,7 @@ function renderFactoryImprovementModule() {
     const container = document.getElementById('app-container');
     if (!container) return;
 
-    // 強制讓外層容器滿版呈現
+    // 強制讓外層容器滿版呈現，不受父層 fixed max-width 限制
     container.className = "w-full min-h-screen px-2 sm:px-4 lg:px-6";
     if (container.parentElement) {
         container.parentElement.style.maxWidth = "none";
@@ -31,9 +31,9 @@ function renderFactoryImprovementModule() {
             <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4 w-full">
                 <div class="flex flex-col md:flex-row gap-4 items-center justify-between w-full">
                     
-                    <!-- 1. 表格上傳按鈕 -->
+                    <!-- 1. 表格上傳按鈕 (金色風格) -->
                     <div class="w-full md:w-auto shrink-0">
-                        <label class="cursor-pointer inline-flex items-center justify-center space-x-2 px-5 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition shadow-sm w-full md:w-auto">
+                        <label class="cursor-pointer inline-flex items-center justify-center space-x-2 px-5 py-3 bg-[#c8a362] hover:bg-[#b59152] text-white rounded-xl text-xs font-bold transition shadow-sm w-full md:w-auto">
                             <i class="fa-solid fa-file-excel text-sm"></i>
                             <span>匯入 Excel / ODS 改善計畫表</span>
                             <input type="file" id="factoryExcelInput" class="hidden" onchange="handleFactoryExcelUpload(event)">
@@ -43,7 +43,7 @@ function renderFactoryImprovementModule() {
                     <!-- 2. 關鍵字搜尋框 -->
                     <div class="relative w-full md:w-1/2">
                         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-                        <input type="text" id="factorySearchInput" oninput="filterFactoryData()" placeholder="請輸入縣市、工廠名稱或廠址關鍵字搜尋..." class="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-amber-500 focus:bg-white transition">
+                        <input type="text" id="factorySearchInput" oninput="filterFactoryData()" placeholder="請輸入縣市、工廠名稱或廠址關鍵字搜尋..." class="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#c8a362] focus:bg-white transition">
                     </div>
                 </div>
             </div>
@@ -84,12 +84,12 @@ function renderFactoryImprovementModule() {
     `;
 }
 
-// 拖曳處理
-function handleFactoryDragOver(e) { e.preventDefault(); e.stopPropagation(); document.getElementById('factoryDropZone')?.classList.add('border-amber-500', 'bg-amber-50/20'); }
-function handleFactoryDragLeave(e) { e.preventDefault(); e.stopPropagation(); document.getElementById('factoryDropZone')?.classList.remove('border-amber-500', 'bg-amber-50/20'); }
+// 拖曳視覺處理
+function handleFactoryDragOver(e) { e.preventDefault(); e.stopPropagation(); document.getElementById('factoryDropZone')?.classList.add('border-[#c8a362]', 'bg-amber-50/20'); }
+function handleFactoryDragLeave(e) { e.preventDefault(); e.stopPropagation(); document.getElementById('factoryDropZone')?.classList.remove('border-[#c8a362]', 'bg-amber-50/20'); }
 function handleFactoryDrop(e) {
     e.preventDefault(); e.stopPropagation();
-    document.getElementById('factoryDropZone')?.classList.remove('border-amber-500', 'bg-amber-50/20');
+    document.getElementById('factoryDropZone')?.classList.remove('border-[#c8a362]', 'bg-amber-50/20');
     if (e.dataTransfer.files?.length > 0) processExcelFile(e.dataTransfer.files[0]);
 }
 
@@ -97,7 +97,7 @@ function handleFactoryExcelUpload(e) {
     if (e.target.files?.[0]) processExcelFile(e.target.files[0]);
 }
 
-// 全欄位智慧辨識演算法 (解開合併儲存格與欄位偏移問題)
+// 多 Sheet 智慧識別與多規格解析演算法
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 已載入 SheetJS！');
@@ -109,55 +109,74 @@ function processExcelFile(file) {
         try {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
-            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             
-            // 轉為二維陣列
-            const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-            
-            if (!rows || rows.length === 0) {
-                alert('表格內容為空！');
+            let targetRows = null;
+
+            // 1. 自動尋找「包含資料」的正確 Sheet（解決 ODS 第一個 Sheet 為空白樣式檔的問題）
+            for (let name of workbook.SheetNames) {
+                const sheet = workbook.Sheets[name];
+                const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+                if (rows && rows.length > 1) { // 至少有標題與資料
+                    targetRows = rows;
+                    break;
+                }
+            }
+
+            if (!targetRows || targetRows.length === 0) {
+                alert('表格檔案內無有效資料！');
                 return;
+            }
+
+            // 2. 智慧尋找欄位標題行（欄名可能在第 1 行或第 2 行）
+            let cityIdx = -1, nameIdx = -1, addrIdx = -1;
+            let headerRowIndex = -1;
+
+            for (let r = 0; r < Math.min(targetRows.length, 10); r++) {
+                const row = targetRows[r].map(c => String(c || '').trim());
+                for (let c = 0; c < row.length; c++) {
+                    const val = row[c];
+                    if (val.includes('縣市')) cityIdx = c;
+                    if (val.includes('工廠名稱') || val.includes('廠名') || val.includes('事業名稱')) nameIdx = c;
+                    if (val.includes('廠址') || val.includes('地址')) addrIdx = c;
+                }
+                // 如果成功定位到 key 欄位，以此行作為標頭行
+                if (cityIdx !== -1 || nameIdx !== -1 || addrIdx !== -1) {
+                    headerRowIndex = r;
+                    break;
+                }
             }
 
             let parsedData = [];
 
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
+            // 3. 根據欄位索引或預設順序提煉資料
+            for (let i = headerRowIndex + 1; i < targetRows.length; i++) {
+                const row = targetRows[i];
                 if (!row || row.length === 0) continue;
 
-                // 過濾掉不相關的陣列項目（轉為乾淨字串陣列）
-                const cells = row.map(c => String(c || '').trim()).filter(c => c !== '');
-                
-                if (cells.length === 0) continue;
+                let city = '', name = '', address = '';
 
-                // 跳過頂部標題列
-                const fullLine = cells.join('');
-                if (fullLine.includes('名單') || fullLine.includes('列表日期') || fullLine.includes('工廠改善計畫')) {
-                    continue;
+                if (cityIdx !== -1 || nameIdx !== -1 || addrIdx !== -1) {
+                    city = cityIdx !== -1 ? String(row[cityIdx] || '').trim() : '';
+                    name = nameIdx !== -1 ? String(row[nameIdx] || '').trim() : '';
+                    address = addrIdx !== -1 ? String(row[addrIdx] || '').trim() : '';
+                } else {
+                    // 若無明確標頭，備用方案按 4 欄 [編號, 縣市, 工廠名稱, 廠址] 或 3 欄相容
+                    const raw0 = String(row[0] || '').trim();
+                    const raw1 = String(row[1] || '').trim();
+                    const raw2 = String(row[2] || '').trim();
+                    const raw3 = String(row[3] || '').trim();
+
+                    if (raw1 && raw2 && raw3) {
+                        city = raw1; name = raw2; address = raw3;
+                    } else if (raw0 && raw1 && raw2) {
+                        city = raw0; name = raw1; address = raw2;
+                    }
                 }
 
-                let city = '';
-                let name = '';
-                let address = '';
+                // 過濾掉宣告行與無效列
+                if (city.includes('名單') || city.includes('列表日期') || name.includes('工廠名稱')) continue;
 
-                // 智慧分析這一列中的每個儲存格內容特徵
-                cells.forEach(cell => {
-                    // 1. 判斷縣市 (包含市/縣，且長度 <= 4)
-                    if (!city && (cell.endsWith('市') || cell.endsWith('縣')) && cell.length <= 4 && !cell.includes('公司')) {
-                        city = cell;
-                    }
-                    // 2. 判斷廠址 (長度較長，且包含路/街/巷/號/區)
-                    else if (!address && (cell.includes('號') || cell.includes('路') || cell.includes('街') || cell.includes('區')) && cell.length >= 6) {
-                        address = cell;
-                    }
-                    // 3. 判斷工廠名稱 (非數字編號、非縣市、非地址)
-                    else if (!name && isNaN(cell) && cell !== '編號' && cell !== '縣市' && cell !== '工廠名稱' && cell !== '廠址') {
-                        name = cell;
-                    }
-                });
-
-                // 只要有找到工廠名稱或縣市，就當作有效資料納入
-                if (name || (city && address)) {
+                if (city || name || address) {
                     parsedData.push({
                         city: city || '未填寫',
                         name: name || '未填寫',
@@ -174,7 +193,7 @@ function processExcelFile(file) {
 
         } catch (error) {
             console.error('檔案解析失敗:', error);
-            alert('表格解析失敗，請確認檔案格式！');
+            alert('表格解析失敗，請確認檔案內容格式！');
         }
     };
     reader.readAsArrayBuffer(file);
