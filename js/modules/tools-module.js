@@ -1,8 +1,13 @@
 // js/modules/tools-module.js
 
-window.renderToolsModule = function() {
+function renderToolsModule() {
+    console.log("正在渲染工具專區...");
+    
     const container = document.getElementById('app-container');
-    if (!container) return;
+    if (!container) {
+        console.error("找不到 #app-container 容器！請檢查 index.html 中的 <main id=\"app-container\">");
+        return;
+    }
 
     container.innerHTML = `
         <div class="space-y-8 max-w-7xl mx-auto pb-12">
@@ -84,7 +89,7 @@ window.renderToolsModule = function() {
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <!-- 工廠改善計畫查詢 -->
-                    <div onclick="renderFactoryImprovementModule()" class="p-4 bg-white hover:bg-amber-50/50 border border-stone-200 hover:border-amber-300 rounded-2xl transition flex items-center space-x-3.5 shadow-2xs group cursor-pointer">
+                    <div onclick="if(typeof renderFactoryImprovementModule==='function') renderFactoryImprovementModule()" class="p-4 bg-white hover:bg-amber-50/50 border border-stone-200 hover:border-amber-300 rounded-2xl transition flex items-center space-x-3.5 shadow-2xs group cursor-pointer">
                         <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition">
                             <i class="fa-solid fa-file-pdf"></i>
                         </div>
@@ -111,7 +116,7 @@ window.renderToolsModule = function() {
 
         </div>
     `;
-};
+}
 
-// 掛載至全域 window 物件，供左側選單點擊時呼叫
+// 掛載至全域 window
 window.renderToolsModule = renderToolsModule;
