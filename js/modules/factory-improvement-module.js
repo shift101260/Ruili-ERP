@@ -5,7 +5,7 @@ function renderFactoryImprovementModule() {
     const container = document.getElementById('app-container');
     if (!container) return;
 
-    // 強制移除父層任何限制寬度的 class，改為滿版
+    // 強制讓外層容器滿版呈現
     container.className = "w-full min-h-screen px-2 sm:px-4 lg:px-6";
     if (container.parentElement) {
         container.parentElement.style.maxWidth = "none";
@@ -31,7 +31,7 @@ function renderFactoryImprovementModule() {
             <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4 w-full">
                 <div class="flex flex-col md:flex-row gap-4 items-center justify-between w-full">
                     
-                    <!-- 1. 表格上傳按鈕 (不限格式，讓 Mac 可以任意點選所有檔案) -->
+                    <!-- 1. 表格上傳按鈕 -->
                     <div class="w-full md:w-auto shrink-0">
                         <label class="cursor-pointer inline-flex items-center justify-center space-x-2 px-5 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition shadow-sm w-full md:w-auto">
                             <i class="fa-solid fa-file-excel text-sm"></i>
@@ -84,44 +84,23 @@ function renderFactoryImprovementModule() {
     `;
 }
 
-// 處理拖曳視覺效果
-function handleFactoryDragOver(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    const zone = document.getElementById('factoryDropZone');
-    if (zone) zone.classList.add('border-amber-500', 'bg-amber-50/20');
+// 拖曳處理
+function handleFactoryDragOver(e) { e.preventDefault(); e.stopPropagation(); document.getElementById('factoryDropZone')?.classList.add('border-amber-500', 'bg-amber-50/20'); }
+function handleFactoryDragLeave(e) { e.preventDefault(); e.stopPropagation(); document.getElementById('factoryDropZone')?.classList.remove('border-amber-500', 'bg-amber-50/20'); }
+function handleFactoryDrop(e) {
+    e.preventDefault(); e.stopPropagation();
+    document.getElementById('factoryDropZone')?.classList.remove('border-amber-500', 'bg-amber-50/20');
+    if (e.dataTransfer.files?.length > 0) processExcelFile(e.dataTransfer.files[0]);
 }
 
-function handleFactoryDragLeave(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    const zone = document.getElementById('factoryDropZone');
-    if (zone) zone.classList.remove('border-amber-500', 'bg-amber-50/20');
+function handleFactoryExcelUpload(e) {
+    if (e.target.files?.[0]) processExcelFile(e.target.files[0]);
 }
 
-function handleFactoryDrop(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    const zone = document.getElementById('factoryDropZone');
-    if (zone) zone.classList.remove('border-amber-500', 'bg-amber-50/20');
-
-    const files = event.dataTransfer.files;
-    if (files && files.length > 0) {
-        processExcelFile(files[0]);
-    }
-}
-
-function handleFactoryExcelUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-        processExcelFile(file);
-    }
-}
-
-// 解析表格的核心邏輯 (相容 ODS / XLSX / CSV)
+// 專門針對「含大標題 / 合併儲存格」的強效 Excel 解析演算法
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
-        alert('尚未載入 XLSX 解析庫，請確認 HTML 頁面已載入 sheetjs！');
+        alert('尚未載入 XLSX 解析庫，請確認 HTML 已載入 SheetJS！');
         return;
     }
 
@@ -130,36 +109,69 @@ function processExcelFile(file) {
         try {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, { type: 'array' });
-            const firstSheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[firstSheetName];
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             
-            const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+            // 轉為二維陣列 (header: 1 代表逐行逐欄讀取)
+            const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
             
-            if (jsonData.length === 0) {
-                alert('上傳的表格內容為空！');
+            if (!rows || rows.length === 0) {
+                alert('表格內容為空！');
                 return;
             }
 
-            // 彈性欄位比對（包含常見的各種寫法）
-            window.factoryRawData = jsonData.map(item => ({
-                city: item['縣市'] || item['縣市別'] || item['City'] || item['縣/市'] || '未填寫',
-                name: item['工廠名稱'] || item['廠名'] || item['FactoryName'] || item['事業名稱'] || '未填寫',
-                address: item['廠址'] || item['地址'] || item['工廠地址'] || item['Address'] || '未填寫'
-            }));
+            let parsedData = [];
 
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                if (!row || row.length === 0) continue;
+
+                // 轉為字串並移除前後空白
+                const raw0 = String(row[0] || '').trim(); // 可能為 編號 或 縣市
+                const raw1 = String(row[1] || '').trim(); // 可能為 縣市 或 工廠名稱
+                const raw2 = String(row[2] || '').trim(); // 可能為 工廠名稱 或 廠址
+                const raw3 = String(row[3] || '').trim(); // 可能為 廠址
+
+                // 排除最頂部的「各縣市申請納管...」等大標題列或欄位名稱列
+                if (raw0.includes('名單') || raw0.includes('列表日期') || raw0 === '編號' || raw0 === '縣市' || raw1 === '縣市') {
+                    continue;
+                }
+
+                // 比對格式 (針對：A欄=編號, B欄=縣市, C欄=工廠名稱, D欄=廠址)
+                let city = '', name = '', address = '';
+
+                if (raw1 && raw2 && raw3) {
+                    // 4欄格式：[0]編號, [1]縣市, [2]工廠名稱, [3]廠址
+                    city = raw1;
+                    name = raw2;
+                    address = raw3;
+                } else if (raw0 && raw1 && raw2) {
+                    // 3欄格式：[0]縣市, [1]工廠名稱, [2]廠址
+                    city = raw0;
+                    name = raw1;
+                    address = raw2;
+                }
+
+                // 只要這三個關鍵欄位有值，就存入結果
+                if (city && name && city !== '未填寫') {
+                    parsedData.push({ city, name, address });
+                }
+            }
+
+            window.factoryRawData = parsedData;
             renderFactoryTable(window.factoryRawData);
-            
+
             const searchInput = document.getElementById('factorySearchInput');
             if (searchInput) searchInput.value = '';
+
         } catch (error) {
             console.error('檔案解析失敗:', error);
-            alert('表格解析失敗，請確認檔案內容格式是否正確。');
+            alert('表格解析失敗，請確認檔案格式是否正確！');
         }
     };
     reader.readAsArrayBuffer(file);
 }
 
-// 關鍵字搜尋
+// 關鍵字即時搜尋
 function filterFactoryData() {
     const keyword = document.getElementById('factorySearchInput').value.trim().toLowerCase();
     
@@ -177,7 +189,7 @@ function filterFactoryData() {
     renderFactoryTable(filtered);
 }
 
-// 渲染表格
+// 繪製表格內容
 function renderFactoryTable(data) {
     const tbody = document.getElementById('factoryTableBody');
     const countEl = document.getElementById('factoryResultCount');
