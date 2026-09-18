@@ -1,4 +1,4 @@
-// 全域變數用來儲存原始資料與篩選後資料
+// 全域變數用來儲存原始資料
 window.factoryRawData = [];
 
 function renderFactoryImprovementModule() {
@@ -10,7 +10,7 @@ function renderFactoryImprovementModule() {
             <!-- 頂部頁面標題與返回按鈕 -->
             <div class="flex items-center justify-between border-b border-stone-200 pb-4">
                 <div class="flex items-center space-x-3">
-                    <button onclick="if(typeof renderToolsModule==='function') renderToolsModule()" class="p-2 hover:bg-stone-100 text-stone-600 rounded-xl transition cursor-pointer">
+                    <button type="button" onclick="if(typeof renderToolsModule==='function') renderToolsModule()" class="p-2 hover:bg-stone-100 text-stone-600 rounded-xl transition cursor-pointer">
                         <i class="fa-solid fa-arrow-left text-base"></i>
                     </button>
                     <div>
@@ -90,20 +90,15 @@ function handleFactoryExcelUpload(event) {
             const firstSheetName = workbook.SheetNames[0];
             const worksheet = workbook.Sheets[firstSheetName];
             
-            // 轉為 JSON 格式
             const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
             
-            // 格式化資料，自動對應欄位名稱（支援常見的 Excel 表頭命名）
             window.factoryRawData = jsonData.map(item => ({
                 city: item['縣市'] || item['縣市別'] || item['City'] || '未填寫',
                 name: item['工廠名稱'] || item['廠名'] || item['FactoryName'] || '未填寫',
                 address: item['廠址'] || item['地址'] || item['工廠地址'] || item['Address'] || '未填寫'
             }));
 
-            // 渲染資料
             renderFactoryTable(window.factoryRawData);
-            
-            // 重置搜尋框
             document.getElementById('factorySearchInput').value = '';
         } catch (error) {
             console.error('Excel 解析失敗:', error);
