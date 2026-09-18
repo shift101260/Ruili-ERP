@@ -74,3 +74,52 @@ function calculateQuoteTotals() {
 
 window.splitPaymentSchedule = calculateInstallments;
 window.calculateQuoteTotals = calculateQuoteTotals;
+
+/**
+ * 六、新增供應商列
+ */
+window.addQuoteSupplierRow = function(data = {}) {
+    const container = document.getElementById('suppliers-rows-container');
+    if (!container) {
+        console.error("找不到 ID 為 'suppliers-rows-container' 的容器！");
+        return;
+    }
+
+    const rowId = 'supplier-row-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4);
+
+    const html = `
+        <div id="${rowId}" class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_32px] gap-3 items-center bg-stone-50 p-3 rounded-xl border border-stone-200">
+            <div>
+                <input type="text" value="${data.name || ''}" placeholder="供應商名稱" class="supplier-name w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63]">
+            </div>
+            <div>
+                <input type="text" value="${data.item || ''}" placeholder="施作項目" class="supplier-item w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63]">
+            </div>
+            <div>
+                <input type="number" value="${data.untaxed || ''}" placeholder="未稅價格" oninput="window.calculateQuoteTotals()" class="supplier-untaxed w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63] font-mono">
+            </div>
+            <div>
+                <input type="number" value="${data.amount || ''}" placeholder="報價金額" oninput="window.calculateQuoteTotals()" class="supplier-amount w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63] font-mono">
+            </div>
+            <div>
+                <input type="number" value="${data.contract || ''}" placeholder="簽約金額" oninput="window.calculateQuoteTotals()" class="supplier-contract w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63] font-mono text-rose-600 font-bold">
+            </div>
+            <div class="flex items-center space-x-1.5">
+                <input type="number" value="${data.tax !== undefined ? data.tax : 5}" oninput="window.calculateQuoteTotals()" class="supplier-tax w-14 bg-white border border-stone-300 rounded-xl px-2 py-1.5 text-xs text-center font-mono">
+                <span class="text-[10px] text-stone-500 font-bold">稅%</span>
+            </div>
+            <div class="flex justify-center">
+                <button type="button" onclick="document.getElementById('${rowId}').remove(); window.calculateQuoteTotals();" class="text-stone-400 hover:text-rose-600 cursor-pointer transition">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+        </div>
+    `;
+
+    container.insertAdjacentHTML('beforeend', html);
+    
+    // 新增後同步計算一次總金額
+    if (typeof window.calculateQuoteTotals === 'function') {
+        window.calculateQuoteTotals();
+    }
+};
