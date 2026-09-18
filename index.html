@@ -508,6 +508,25 @@
                         </button>
                     </div>
 
+                    <div id="suppliers-rows-container" class="space-y-3 min-w-[700px]">
+    <div id="supplier-row-default" class="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_32px] gap-3 items-center bg-stone-50 p-3 rounded-xl border border-stone-200">
+        <div><input type="text" placeholder="供應商名稱" class="supplier-name w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63]"></div>
+        <div><input type="text" placeholder="施作項目" class="supplier-item w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63]"></div>
+        <div><input type="number" placeholder="未稅價格" oninput="calculateQuoteTotals()" class="supplier-untaxed w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63] font-mono"></div>
+        <div><input type="number" placeholder="報價金額" oninput="calculateQuoteTotals()" class="supplier-amount w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63] font-mono"></div>
+        <div><input type="number" placeholder="簽約金額" oninput="calculateQuoteTotals()" class="supplier-contract w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63] font-mono text-rose-600 font-bold"></div>
+        <div class="flex items-center space-x-1.5">
+            <input type="number" value="5" oninput="calculateQuoteTotals()" class="supplier-tax w-14 bg-white border border-stone-300 rounded-xl px-2 py-1.5 text-xs text-center font-mono">
+            <span class="text-[10px] text-stone-500 font-bold">稅%</span>
+        </div>
+        <div class="flex justify-center">
+            <button type="button" onclick="document.getElementById('supplier-row-default').remove(); calculateQuoteTotals();" class="text-stone-400 hover:text-rose-600 cursor-pointer transition">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
                     <div class="overflow-x-auto w-full pb-2">
                         <div id="suppliers-rows-container" class="space-y-3 min-w-[700px]">
                             <div class="grid grid-cols-6 gap-3 items-center bg-stone-50 p-3 rounded-xl border border-stone-200">
