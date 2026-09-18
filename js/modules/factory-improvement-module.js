@@ -5,8 +5,12 @@ function renderFactoryImprovementModule() {
     const container = document.getElementById('app-container');
     if (!container) return;
 
-    // 強制讓外層容器滿版
-    container.className = "w-full min-h-screen px-4 sm:px-6 lg:px-8";
+    // 強制移除父層任何限制寬度的 class，改為滿版
+    container.className = "w-full min-h-screen px-2 sm:px-4 lg:px-6";
+    if (container.parentElement) {
+        container.parentElement.style.maxWidth = "none";
+        container.parentElement.style.width = "100%";
+    }
 
     container.innerHTML = `
         <div class="w-full space-y-6 pb-12">
@@ -27,12 +31,12 @@ function renderFactoryImprovementModule() {
             <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4 w-full">
                 <div class="flex flex-col md:flex-row gap-4 items-center justify-between w-full">
                     
-                    <!-- 1. 表格上傳按鈕 (支援 xlsx, xls, ods, csv) -->
+                    <!-- 1. 表格上傳按鈕 (不限格式，讓 Mac 可以任意點選所有檔案) -->
                     <div class="w-full md:w-auto shrink-0">
                         <label class="cursor-pointer inline-flex items-center justify-center space-x-2 px-5 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition shadow-sm w-full md:w-auto">
                             <i class="fa-solid fa-file-excel text-sm"></i>
                             <span>匯入 Excel / ODS 改善計畫表</span>
-                            <input type="file" id="factoryExcelInput" accept=".xlsx, .xls, .ods, .csv" class="hidden" onchange="handleFactoryExcelUpload(event)">
+                            <input type="file" id="factoryExcelInput" class="hidden" onchange="handleFactoryExcelUpload(event)">
                         </label>
                     </div>
 
@@ -63,8 +67,8 @@ function renderFactoryImprovementModule() {
                             <tr>
                                 <td colspan="3" class="py-20 text-center text-stone-400">
                                     <i class="fa-solid fa-file-circle-plus text-4xl mb-3 text-stone-300"></i>
-                                    <p class="text-sm font-medium">請點擊上方按鈕，或將 Excel / ODS 檔案拖曳至此區域</p>
-                                    <p class="text-xs text-stone-400 mt-1">支援 .xlsx / .xls / .ods / .csv 格式</p>
+                                    <p class="text-sm font-medium">請點擊上方按鈕選取檔案，或將 Excel / ODS 檔案拖曳至此區域</p>
+                                    <p class="text-xs text-stone-400 mt-1">支援 .ods / .xlsx / .xls / .csv 格式</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -136,7 +140,7 @@ function processExcelFile(file) {
                 return;
             }
 
-            // 彈性欄位比對
+            // 彈性欄位比對（包含常見的各種寫法）
             window.factoryRawData = jsonData.map(item => ({
                 city: item['縣市'] || item['縣市別'] || item['City'] || item['縣/市'] || '未填寫',
                 name: item['工廠名稱'] || item['廠名'] || item['FactoryName'] || item['事業名稱'] || '未填寫',
@@ -149,7 +153,7 @@ function processExcelFile(file) {
             if (searchInput) searchInput.value = '';
         } catch (error) {
             console.error('檔案解析失敗:', error);
-            alert('表格解析失敗，請確認檔案內容格式。');
+            alert('表格解析失敗，請確認檔案內容格式是否正確。');
         }
     };
     reader.readAsArrayBuffer(file);
