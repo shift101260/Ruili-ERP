@@ -97,7 +97,7 @@ function handleFactoryExcelUpload(e) {
     if (e.target.files?.[0]) processExcelFile(e.target.files[0]);
 }
 
-// 專門針對「含大標題 / 合併儲存格」的強效 Excel 解析演算法
+// 全欄位智慧辨識演算法 (解開合併儲存格與欄位偏移問題)
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 已載入 SheetJS！');
@@ -111,7 +111,7 @@ function processExcelFile(file) {
             const workbook = XLSX.read(data, { type: 'array' });
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             
-            // 轉為二維陣列 (header: 1 代表逐行逐欄讀取)
+            // 轉為二維陣列
             const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
             
             if (!rows || rows.length === 0) {
@@ -125,35 +125,44 @@ function processExcelFile(file) {
                 const row = rows[i];
                 if (!row || row.length === 0) continue;
 
-                // 轉為字串並移除前後空白
-                const raw0 = String(row[0] || '').trim(); // 可能為 編號 或 縣市
-                const raw1 = String(row[1] || '').trim(); // 可能為 縣市 或 工廠名稱
-                const raw2 = String(row[2] || '').trim(); // 可能為 工廠名稱 或 廠址
-                const raw3 = String(row[3] || '').trim(); // 可能為 廠址
+                // 過濾掉不相關的陣列項目（轉為乾淨字串陣列）
+                const cells = row.map(c => String(c || '').trim()).filter(c => c !== '');
+                
+                if (cells.length === 0) continue;
 
-                // 排除最頂部的「各縣市申請納管...」等大標題列或欄位名稱列
-                if (raw0.includes('名單') || raw0.includes('列表日期') || raw0 === '編號' || raw0 === '縣市' || raw1 === '縣市') {
+                // 跳過頂部標題列
+                const fullLine = cells.join('');
+                if (fullLine.includes('名單') || fullLine.includes('列表日期') || fullLine.includes('工廠改善計畫')) {
                     continue;
                 }
 
-                // 比對格式 (針對：A欄=編號, B欄=縣市, C欄=工廠名稱, D欄=廠址)
-                let city = '', name = '', address = '';
+                let city = '';
+                let name = '';
+                let address = '';
 
-                if (raw1 && raw2 && raw3) {
-                    // 4欄格式：[0]編號, [1]縣市, [2]工廠名稱, [3]廠址
-                    city = raw1;
-                    name = raw2;
-                    address = raw3;
-                } else if (raw0 && raw1 && raw2) {
-                    // 3欄格式：[0]縣市, [1]工廠名稱, [2]廠址
-                    city = raw0;
-                    name = raw1;
-                    address = raw2;
-                }
+                // 智慧分析這一列中的每個儲存格內容特徵
+                cells.forEach(cell => {
+                    // 1. 判斷縣市 (包含市/縣，且長度 <= 4)
+                    if (!city && (cell.endsWith('市') || cell.endsWith('縣')) && cell.length <= 4 && !cell.includes('公司')) {
+                        city = cell;
+                    }
+                    // 2. 判斷廠址 (長度較長，且包含路/街/巷/號/區)
+                    else if (!address && (cell.includes('號') || cell.includes('路') || cell.includes('街') || cell.includes('區')) && cell.length >= 6) {
+                        address = cell;
+                    }
+                    // 3. 判斷工廠名稱 (非數字編號、非縣市、非地址)
+                    else if (!name && isNaN(cell) && cell !== '編號' && cell !== '縣市' && cell !== '工廠名稱' && cell !== '廠址') {
+                        name = cell;
+                    }
+                });
 
-                // 只要這三個關鍵欄位有值，就存入結果
-                if (city && name && city !== '未填寫') {
-                    parsedData.push({ city, name, address });
+                // 只要有找到工廠名稱或縣市，就當作有效資料納入
+                if (name || (city && address)) {
+                    parsedData.push({
+                        city: city || '未填寫',
+                        name: name || '未填寫',
+                        address: address || '未填寫'
+                    });
                 }
             }
 
@@ -165,7 +174,7 @@ function processExcelFile(file) {
 
         } catch (error) {
             console.error('檔案解析失敗:', error);
-            alert('表格解析失敗，請確認檔案格式是否正確！');
+            alert('表格解析失敗，請確認檔案格式！');
         }
     };
     reader.readAsArrayBuffer(file);
