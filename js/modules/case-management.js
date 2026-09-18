@@ -117,109 +117,107 @@ function saveNewCase() {
     closeModal('editCaseModal');
 }
 
-// 渲染案件管理基礎頁面骨架 (當從工具專區切回案件管理時自動重構 HTML)
+// 渲染案件管理基礎頁面骨架 (強制重構 HTML 以確保切換順暢)
 function renderCaseManagementView(year = 2026) {
     const container = document.getElementById('app-container');
     if (!container) return;
 
-    // 若容器內沒有 5 大分區，重新寫入案件管理的主架構
-    if (!document.getElementById('container-EVALUATION')) {
-        container.innerHTML = `
-            <header class="card-frame p-4 sm:p-5 mb-5 flex justify-between items-center">
-                <div>
-                    <h2 id="page-title" class="text-base sm:text-lg font-bold text-stone-800 flex items-center gap-2 tracking-wide">
-                        <span id="current-year-display">${year}</span> 年度案件管理中心
-                    </h2>
-                    <p class="text-xs text-stone-500 mt-1">
-                        管理 <span id="current-year-sub" class="font-medium">${year}</span> 年度案件，支援關鍵字搜尋、勾選、刪除、恢復與狀態跨區塊拋轉。
-                    </p>
+    // 強制重寫案件管理的主架構
+    container.innerHTML = `
+        <header class="card-frame p-4 sm:p-5 mb-5 flex justify-between items-center">
+            <div>
+                <h2 id="page-title" class="text-base sm:text-lg font-bold text-stone-800 flex items-center gap-2 tracking-wide">
+                    <span id="current-year-display">${year}</span> 年度案件管理中心
+                </h2>
+                <p class="text-xs text-stone-500 mt-1">
+                    管理 <span id="current-year-sub" class="font-medium">${year}</span> 年度案件，支援關鍵字搜尋、勾選、刪除、恢復與狀態跨區塊拋轉。
+                </p>
+            </div>
+            
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="relative">
+                    <input type="text" id="case-search-input" oninput="filterCases()" placeholder="搜尋案件..." class="pl-3 pr-8 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] transition w-full sm:w-48">
+                    <i class="fa-solid fa-magnifying-glass absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
                 </div>
                 
-                <div class="flex items-center gap-2 sm:gap-3">
-                    <div class="relative">
-                        <input type="text" id="case-search-input" oninput="filterCases()" placeholder="搜尋案件..." class="pl-3 pr-8 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] transition w-full sm:w-48">
-                        <i class="fa-solid fa-magnifying-glass absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs"></i>
-                    </div>
-                    
-                    <select id="batch-action-select" onchange="batchTransferCases(this.value)" class="px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] text-stone-700">
-                        <option value="">-- 拋轉至 --</option>
-                        <option value="EVALUATION">案件評估</option>
-                        <option value="CONTRACTING">簽約案件</option>
-                        <option value="CLOSED">結案中心</option>
-                        <option value="JUNK">廢件專區</option>
-                        <option value="FAILED">案件失敗</option>
-                    </select>
+                <select id="batch-action-select" onchange="batchTransferCases(this.value)" class="px-2.5 py-1.5 text-xs bg-stone-50 border border-stone-200 rounded-md focus:outline-none focus:border-[#C59B63] text-stone-700">
+                    <option value="">-- 拋轉至 --</option>
+                    <option value="EVALUATION">案件評估</option>
+                    <option value="CONTRACTING">簽約案件</option>
+                    <option value="CLOSED">結案中心</option>
+                    <option value="JUNK">廢件專區</option>
+                    <option value="FAILED">案件失敗</option>
+                </select>
 
-                    <button onclick="batchDeleteCases()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-xs font-medium border border-stone-300 transition flex items-center gap-1 cursor-pointer">
-                        <i class="fa-solid fa-trash-can text-stone-500"></i>刪除
-                    </button>
-                    <button onclick="location.reload()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-xs font-medium border border-stone-300 transition flex items-center gap-1 cursor-pointer">
-                        <i class="fa-solid fa-rotate-left text-stone-500"></i>恢復
-                    </button>
-                    <button onclick="openAddCaseModal()" class="px-4 py-1.5 btn-gold rounded-md text-xs font-medium shadow-2xs transition flex items-center gap-1 cursor-pointer whitespace-nowrap">
-                        <i class="fa-solid fa-plus"></i>新增
-                    </button>
-                </div>
-            </header>
-
-            <div class="space-y-4">
-                <div class="card-frame overflow-hidden">
-                    <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                            <h3 class="text-xs font-bold text-stone-800">案件評估</h3>
-                        </div>
-                        <span id="count-EVALUATION" class="text-xs font-semibold bg-amber-50 text-amber-700 px-2.5 py-0.5 rounded-full border border-amber-200/60">0 件</span>
-                    </div>
-                    <div id="container-EVALUATION" class="p-4 text-xs text-stone-400 text-center py-6">目前無案件評估紀錄</div>
-                </div>
-
-                <div class="card-frame overflow-hidden">
-                    <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                            <h3 class="text-xs font-bold text-stone-800">簽約案件</h3>
-                        </div>
-                        <span id="count-CONTRACTING" class="text-xs font-semibold bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200/60">0 件</span>
-                    </div>
-                    <div id="container-CONTRACTING" class="p-4 text-xs text-stone-400 text-center py-6">目前無簽約案件記錄</div>
-                </div>
-
-                <div class="card-frame overflow-hidden">
-                    <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                            <h3 class="text-xs font-bold text-stone-800">結案中心</h3>
-                        </div>
-                        <span id="count-CLOSED" class="text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">0 件</span>
-                    </div>
-                    <div id="container-CLOSED" class="p-4 text-xs text-stone-400 text-center py-6">目前無結案紀錄</div>
-                </div>
-
-                <div class="card-frame overflow-hidden">
-                    <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-stone-400"></span>
-                            <h3 class="text-xs font-bold text-stone-800">廢件專區</h3>
-                        </div>
-                        <span id="count-JUNK" class="text-xs font-semibold bg-stone-100 text-stone-600 px-2.5 py-0.5 rounded-full border border-stone-200">0 件</span>
-                    </div>
-                    <div id="container-JUNK" class="p-4 text-xs text-stone-400 text-center py-6">目前無相關廢件紀錄</div>
-                </div>
-
-                <div class="card-frame overflow-hidden">
-                    <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                            <h3 class="text-xs font-bold text-stone-800">案件失敗</h3>
-                        </div>
-                        <span id="count-FAILED" class="text-xs font-semibold bg-rose-50 text-rose-700 px-2.5 py-0.5 rounded-full border border-rose-200/60">0 件</span>
-                    </div>
-                    <div id="container-FAILED" class="p-4 text-xs text-stone-400 text-center py-6">目前無相關失敗紀錄</div>
-                </div>
+                <button onclick="batchDeleteCases()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-xs font-medium border border-stone-300 transition flex items-center gap-1 cursor-pointer">
+                    <i class="fa-solid fa-trash-can text-stone-500"></i>刪除
+                </button>
+                <button onclick="location.reload()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-xs font-medium border border-stone-300 transition flex items-center gap-1 cursor-pointer">
+                    <i class="fa-solid fa-rotate-left text-stone-500"></i>恢復
+                </button>
+                <button onclick="openAddCaseModal()" class="px-4 py-1.5 btn-gold rounded-md text-xs font-medium shadow-2xs transition flex items-center gap-1 cursor-pointer whitespace-nowrap">
+                    <i class="fa-solid fa-plus"></i>新增
+                </button>
             </div>
-        `;
-    }
+        </header>
+
+        <div class="space-y-4">
+            <div class="card-frame overflow-hidden">
+                <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                        <h3 class="text-xs font-bold text-stone-800">案件評估</h3>
+                    </div>
+                    <span id="count-EVALUATION" class="text-xs font-semibold bg-amber-50 text-amber-700 px-2.5 py-0.5 rounded-full border border-amber-200/60">0 件</span>
+                </div>
+                <div id="container-EVALUATION" class="p-4 text-xs text-stone-400 text-center py-6">目前無案件評估紀錄</div>
+            </div>
+
+            <div class="card-frame overflow-hidden">
+                <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                        <h3 class="text-xs font-bold text-stone-800">簽約案件</h3>
+                    </div>
+                    <span id="count-CONTRACTING" class="text-xs font-semibold bg-blue-50 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200/60">0 件</span>
+                </div>
+                <div id="container-CONTRACTING" class="p-4 text-xs text-stone-400 text-center py-6">目前無簽約案件記錄</div>
+            </div>
+
+            <div class="card-frame overflow-hidden">
+                <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <h3 class="text-xs font-bold text-stone-800">結案中心</h3>
+                    </div>
+                    <span id="count-CLOSED" class="text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200/60">0 件</span>
+                </div>
+                <div id="container-CLOSED" class="p-4 text-xs text-stone-400 text-center py-6">目前無結案紀錄</div>
+            </div>
+
+            <div class="card-frame overflow-hidden">
+                <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-stone-400"></span>
+                        <h3 class="text-xs font-bold text-stone-800">廢件專區</h3>
+                    </div>
+                    <span id="count-JUNK" class="text-xs font-semibold bg-stone-100 text-stone-600 px-2.5 py-0.5 rounded-full border border-stone-200">0 件</span>
+                </div>
+                <div id="container-JUNK" class="p-4 text-xs text-stone-400 text-center py-6">目前無相關廢件紀錄</div>
+            </div>
+
+            <div class="card-frame overflow-hidden">
+                <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                        <h3 class="text-xs font-bold text-stone-800">案件失敗</h3>
+                    </div>
+                    <span id="count-FAILED" class="text-xs font-semibold bg-rose-50 text-rose-700 px-2.5 py-0.5 rounded-full border border-rose-200/60">0 件</span>
+                </div>
+                <div id="container-FAILED" class="p-4 text-xs text-stone-400 text-center py-6">目前無相關失敗紀錄</div>
+            </div>
+        </div>
+    `;
 }
 
 // 渲染所有分區表格
@@ -388,4 +386,3 @@ window.batchTransferCases = batchTransferCases;
 window.batchDeleteCases = batchDeleteCases;
 window.filterCases = filterCases;
 window.switchModule = switchModule;
-```<FollowUp>完成儲存後，請重新整理頁面並測試點擊「工具專區」與「2026 案件」，畫面是否能順暢切換了？</FollowUp>
