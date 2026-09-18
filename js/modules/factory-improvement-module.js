@@ -48,13 +48,14 @@ function renderFactoryImprovementModule() {
                 </div>
             </div>
 
-            <!-- 資料表格區 (具備固定表頭與內部滾動軸) -->
+            <!-- 資料表格區 (強制顯示右側滾動軸) -->
             <div id="factoryDropZone" 
                  ondragover="handleFactoryDragOver(event)" 
                  ondragleave="handleFactoryDragLeave(event)" 
                  ondrop="handleFactoryDrop(event)"
                  class="w-full bg-white rounded-2xl border-2 border-dashed border-stone-200 shadow-2xs overflow-hidden transition-colors duration-200">
-                <div class="overflow-x-auto overflow-y-auto max-h-[680px] w-full">
+                
+                <div class="overflow-x-auto overflow-y-scroll max-h-[70vh] w-full">
                     <table class="w-full text-left border-collapse">
                         <thead class="sticky top-0 z-10 bg-stone-100 shadow-xs">
                             <tr class="border-b border-stone-200 text-xs font-bold text-stone-600 uppercase tracking-wider">
@@ -98,7 +99,7 @@ function handleFactoryExcelUpload(e) {
     if (e.target.files?.[0]) processExcelFile(e.target.files[0]);
 }
 
-// ODS 格式精準解析演算法 (讀取所有列)
+// ODS 格式精準解析演算法
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 已載入 SheetJS！');
