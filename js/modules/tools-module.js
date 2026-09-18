@@ -147,7 +147,7 @@ function renderToolsModule() {
                 </div>
             </div>
 
-            <!-- 區塊三：不動產稅費試算專區 (已修改為橫向卡片款式) -->
+            <!-- 區塊三：不動產稅費試算專區 (已完全對齊基本資料查詢之扁平高寬樣式) -->
             <div class="space-y-3">
                 <div class="flex items-center space-x-2 px-1">
                     <i class="fa-solid fa-calculator text-indigo-500 text-sm"></i>
