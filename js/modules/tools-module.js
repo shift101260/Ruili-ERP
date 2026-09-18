@@ -16,7 +16,7 @@ function renderToolsModule() {
                     <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">基本資料查詢</h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                    <!-- 工廠改善計畫查詢 -->
+                    <!-- 工廠改善計畫名單查詢 -->
                     <div onclick="if(typeof renderFactoryImprovementModule === 'function') renderFactoryImprovementModule()" class="p-4 bg-white hover:bg-amber-50/50 border border-stone-200 hover:border-amber-300 rounded-2xl transition flex items-center space-x-3.5 shadow-2xs group cursor-pointer">
                         <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition">
                             <i class="fa-solid fa-file-pdf"></i>
