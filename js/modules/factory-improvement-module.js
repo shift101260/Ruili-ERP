@@ -1,8 +1,6 @@
-// 全域變數用來儲存資料與分頁狀態
+// 全域變數用來儲存資料與狀態
 window.factoryRawData = [];
 window.factoryFilteredData = [];
-window.factoryCurrentPage = 1;
-window.factoryRowsPerPage = 50;
 
 function renderFactoryImprovementModule() {
     const container = document.getElementById('app-container');
@@ -51,7 +49,7 @@ function renderFactoryImprovementModule() {
                 </div>
             </div>
 
-            <!-- 資料表格區 (滿版設計，支援拖曳上傳) -->
+            <!-- 資料表格區 -->
             <div id="factoryDropZone" 
                  ondragover="handleFactoryDragOver(event)" 
                  ondragleave="handleFactoryDragLeave(event)" 
@@ -79,13 +77,9 @@ function renderFactoryImprovementModule() {
                     </table>
                 </div>
                 
-                <!-- 底部統計與分頁控制按鈕區 -->
-                <div class="px-6 py-3.5 bg-stone-50/80 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-3">
+                <!-- 底部統計筆數區 -->
+                <div class="px-6 py-3.5 bg-stone-50/80 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500">
                     <span>總共查詢到 <strong id="factoryResultCount" class="text-stone-900 font-bold">0</strong> 筆資料</span>
-                    
-                    <div id="factoryPagination" class="flex items-center space-x-2">
-                        <!-- 動態插入分頁按鈕 -->
-                    </div>
                 </div>
             </div>
         </div>
@@ -105,7 +99,7 @@ function handleFactoryExcelUpload(e) {
     if (e.target.files?.[0]) processExcelFile(e.target.files[0]);
 }
 
-// 全強效 ODS/Excel 多層邏輯解析演算法
+// 深度解析 ODS/Excel 資料演算法
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 已載入 SheetJS！');
@@ -120,7 +114,6 @@ function processExcelFile(file) {
             
             let parsedData = [];
 
-            // 深度遍歷所有 Sheet，確保不漏抓資料
             for (let name of workbook.SheetNames) {
                 const sheet = workbook.Sheets[name];
                 const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
@@ -130,18 +123,15 @@ function processExcelFile(file) {
                     const row = rows[i];
                     if (!row || row.length === 0) continue;
 
-                    // 轉為字串
                     const col0 = String(row[0] || '').trim(); // 編號
                     const col1 = String(row[1] || '').trim(); // 縣市
                     const col2 = String(row[2] || '').trim(); // 工廠名稱
                     const col3 = String(row[3] || '').trim(); // 廠址
 
-                    // 跳過抬頭與欄位名稱
                     if (col0.includes('名單') || col0.includes('列表日期') || col0 === '編號' || col1 === '縣市') {
                         continue;
                     }
 
-                    // 只要「縣市」與「工廠名稱」有一項存在就納入
                     if (col1 || col2) {
                         parsedData.push({
                             id: col0 || (parsedData.length + 1),
@@ -152,7 +142,7 @@ function processExcelFile(file) {
                     }
                 }
 
-                if (parsedData.length > 0) break; // 已順利找到資料集即停止
+                if (parsedData.length > 0) break;
             }
 
             if (parsedData.length === 0) {
@@ -162,7 +152,6 @@ function processExcelFile(file) {
 
             window.factoryRawData = parsedData;
             window.factoryFilteredData = parsedData;
-            window.factoryCurrentPage = 1;
 
             renderFactoryTable();
 
@@ -192,22 +181,20 @@ function filterFactoryData() {
         });
     }
 
-    window.factoryCurrentPage = 1; // 重置回第一頁
     renderFactoryTable();
 }
 
-// 分頁渲染表格內容
+// 渲染表格內容
 function renderFactoryTable() {
     const tbody = document.getElementById('factoryTableBody');
     const countEl = document.getElementById('factoryResultCount');
-    const paginationEl = document.getElementById('factoryPagination');
     
     if (!tbody) return;
 
-    const total = window.factoryFilteredData.length;
-    countEl.innerText = total;
+    const data = window.factoryFilteredData;
+    countEl.innerText = data.length;
 
-    if (total === 0) {
+    if (data.length === 0) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="4" class="py-20 text-center text-stone-400">
@@ -216,19 +203,10 @@ function renderFactoryTable() {
                 </td>
             </tr>
         `;
-        if (paginationEl) paginationEl.innerHTML = '';
         return;
     }
 
-    // 計算當頁資料範圍
-    const totalPages = Math.ceil(total / window.factoryRowsPerPage);
-    if (window.factoryCurrentPage > totalPages) window.factoryCurrentPage = totalPages;
-
-    const startIdx = (window.factoryCurrentPage - 1) * window.factoryRowsPerPage;
-    const pageData = window.factoryFilteredData.slice(startIdx, startIdx + window.factoryRowsPerPage);
-
-    // 繪製表格
-    tbody.innerHTML = pageData.map(item => `
+    tbody.innerHTML = data.map(item => `
         <tr class="hover:bg-amber-50/30 transition">
             <td class="py-3.5 px-6 font-bold text-stone-400 whitespace-nowrap">${item.id}</td>
             <td class="py-3.5 px-6 font-bold text-stone-900 whitespace-nowrap">${item.city}</td>
@@ -236,25 +214,6 @@ function renderFactoryTable() {
             <td class="py-3.5 px-6 text-stone-600">${item.address}</td>
         </tr>
     `).join('');
-
-    // 繪製分頁控制按鈕
-    if (paginationEl) {
-        paginationEl.innerHTML = `
-            <button onclick="changeFactoryPage(-1)" ${window.factoryCurrentPage === 1 ? 'disabled class="px-3 py-1 bg-stone-100 text-stone-300 rounded-lg text-xs cursor-not-allowed"' : 'class="px-3 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-bold transition cursor-pointer"'}>
-                上一頁
-            </button>
-            <span class="text-stone-600 text-xs px-2">第 <strong>${window.factoryCurrentPage}</strong> / <strong>${totalPages}</strong> 頁</span>
-            <button onclick="changeFactoryPage(1)" ${window.factoryCurrentPage === totalPages ? 'disabled class="px-3 py-1 bg-stone-100 text-stone-300 rounded-lg text-xs cursor-not-allowed"' : 'class="px-3 py-1 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-lg text-xs font-bold transition cursor-pointer"'}>
-                下一頁
-            </button>
-        `;
-    }
-}
-
-// 換頁處理
-function changeFactoryPage(delta) {
-    window.factoryCurrentPage += delta;
-    renderFactoryTable();
 }
 
 // 掛載全域
@@ -264,4 +223,3 @@ window.handleFactoryDragOver = handleFactoryDragOver;
 window.handleFactoryDragLeave = handleFactoryDragLeave;
 window.handleFactoryDrop = handleFactoryDrop;
 window.filterFactoryData = filterFactoryData;
-window.changeFactoryPage = changeFactoryPage;
