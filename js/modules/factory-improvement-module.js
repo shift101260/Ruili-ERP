@@ -43,7 +43,7 @@ function renderFactoryImprovementModule() {
                     <!-- 2. 關鍵字搜尋框 -->
                     <div class="relative w-full md:w-1/2">
                         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-                        <input type="text" id="factorySearchInput" oninput="filterFactoryData()" placeholder="請輸入縣市、工廠名稱或廠址關鍵字搜尋..." class="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#c8a362] focus:bg-white transition">
+                        <input type="text" id="factorySearchInput" oninput="filterFactoryData()" placeholder="請輸入編號、縣市、工廠名稱或廠址關鍵字搜尋..." class="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#c8a362] focus:bg-white transition">
                     </div>
                 </div>
             </div>
@@ -58,6 +58,7 @@ function renderFactoryImprovementModule() {
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-stone-50/80 border-b border-stone-200 text-xs font-bold text-stone-500 uppercase tracking-wider">
+                                <th class="py-4 px-6 w-20 whitespace-nowrap">編號</th>
                                 <th class="py-4 px-6 w-32 whitespace-nowrap">縣市</th>
                                 <th class="py-4 px-6 w-1/3">工廠名稱</th>
                                 <th class="py-4 px-6">廠址</th>
@@ -65,7 +66,7 @@ function renderFactoryImprovementModule() {
                         </thead>
                         <tbody id="factoryTableBody" class="divide-y divide-stone-100 text-xs text-stone-700">
                             <tr>
-                                <td colspan="3" class="py-20 text-center text-stone-400">
+                                <td colspan="4" class="py-20 text-center text-stone-400">
                                     <i class="fa-solid fa-file-circle-plus text-4xl mb-3 text-stone-300"></i>
                                     <p class="text-sm font-medium">請點擊上方按鈕選取檔案，或將 Excel / ODS 檔案拖曳至此區域</p>
                                     <p class="text-xs text-stone-400 mt-1">支援 .ods / .xlsx / .xls / .csv 格式</p>
@@ -97,7 +98,7 @@ function handleFactoryExcelUpload(e) {
     if (e.target.files?.[0]) processExcelFile(e.target.files[0]);
 }
 
-// 專為您的 ODS 格式量身打造的解析演算法
+// 專為您的 ODS 格式量身打造的解析演算法 (包含編號)
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 已載入 SheetJS！');
@@ -128,13 +129,14 @@ function processExcelFile(file) {
             }
 
             let parsedData = [];
+            let autoId = 1;
 
             for (let i = 0; i < targetRows.length; i++) {
                 const row = targetRows[i];
                 if (!row || row.length < 3) continue;
 
                 // 轉為字串
-                const col0 = String(row[0] || '').trim(); // A欄：編號/大標題
+                const col0 = String(row[0] || '').trim(); // A欄：編號 / 大標題
                 const col1 = String(row[1] || '').trim(); // B欄：縣市
                 const col2 = String(row[2] || '').trim(); // C欄：工廠名稱
                 const col3 = String(row[3] || '').trim(); // D欄：廠址
@@ -144,9 +146,10 @@ function processExcelFile(file) {
                     continue;
                 }
 
-                // 精準讀取 B欄(縣市), C欄(工廠名稱), D欄(廠址)
+                // 精準讀取 A欄(編號), B欄(縣市), C欄(工廠名稱), D欄(廠址)
                 if (col1 && col2) {
                     parsedData.push({
+                        id: col0 || autoId++,
                         city: col1,
                         name: col2,
                         address: col3 || '未填寫'
@@ -168,7 +171,7 @@ function processExcelFile(file) {
     reader.readAsArrayBuffer(file);
 }
 
-// 關鍵字即時搜尋
+// 關鍵字即時搜尋 (包含編號搜尋)
 function filterFactoryData() {
     const keyword = document.getElementById('factorySearchInput').value.trim().toLowerCase();
     
@@ -178,7 +181,8 @@ function filterFactoryData() {
     }
 
     const filtered = window.factoryRawData.filter(item => {
-        return item.city.toLowerCase().includes(keyword) ||
+        return String(item.id).toLowerCase().includes(keyword) ||
+               item.city.toLowerCase().includes(keyword) ||
                item.name.toLowerCase().includes(keyword) ||
                item.address.toLowerCase().includes(keyword);
     });
@@ -186,7 +190,7 @@ function filterFactoryData() {
     renderFactoryTable(filtered);
 }
 
-// 繪製表格內容
+// 繪製表格內容 (增加編號欄位)
 function renderFactoryTable(data) {
     const tbody = document.getElementById('factoryTableBody');
     const countEl = document.getElementById('factoryResultCount');
@@ -198,7 +202,7 @@ function renderFactoryTable(data) {
     if (data.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="3" class="py-20 text-center text-stone-400">
+                <td colspan="4" class="py-20 text-center text-stone-400">
                     <i class="fa-solid fa-magnifying-glass text-3xl mb-3 text-stone-300"></i>
                     <p class="text-sm font-medium">未找到符合關鍵字的資料</p>
                 </td>
@@ -209,6 +213,7 @@ function renderFactoryTable(data) {
 
     tbody.innerHTML = data.map(item => `
         <tr class="hover:bg-amber-50/30 transition">
+            <td class="py-3.5 px-6 font-medium text-stone-500 whitespace-nowrap">${item.id}</td>
             <td class="py-3.5 px-6 font-bold text-stone-900 whitespace-nowrap">${item.city}</td>
             <td class="py-3.5 px-6 font-medium text-stone-800">${item.name}</td>
             <td class="py-3.5 px-6 text-stone-600">${item.address}</td>
