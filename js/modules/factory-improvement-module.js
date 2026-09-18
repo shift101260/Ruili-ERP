@@ -48,20 +48,20 @@ function renderFactoryImprovementModule() {
                 </div>
             </div>
 
-            <!-- 資料表格區 (滿版設計，支援拖曳上傳) -->
+            <!-- 資料表格區 (具備固定表頭與內部滾動軸) -->
             <div id="factoryDropZone" 
                  ondragover="handleFactoryDragOver(event)" 
                  ondragleave="handleFactoryDragLeave(event)" 
                  ondrop="handleFactoryDrop(event)"
                  class="w-full bg-white rounded-2xl border-2 border-dashed border-stone-200 shadow-2xs overflow-hidden transition-colors duration-200">
-                <div class="overflow-x-auto w-full">
+                <div class="overflow-x-auto overflow-y-auto max-h-[680px] w-full">
                     <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-stone-50/80 border-b border-stone-200 text-xs font-bold text-stone-500 uppercase tracking-wider">
-                                <th class="py-4 px-6 w-24 whitespace-nowrap">編號</th>
-                                <th class="py-4 px-6 w-32 whitespace-nowrap">縣市</th>
-                                <th class="py-4 px-6 w-1/3">工廠名稱</th>
-                                <th class="py-4 px-6">廠址</th>
+                        <thead class="sticky top-0 z-10 bg-stone-100 shadow-xs">
+                            <tr class="border-b border-stone-200 text-xs font-bold text-stone-600 uppercase tracking-wider">
+                                <th class="py-4 px-6 w-24 whitespace-nowrap bg-stone-100">編號</th>
+                                <th class="py-4 px-6 w-32 whitespace-nowrap bg-stone-100">縣市</th>
+                                <th class="py-4 px-6 w-1/3 bg-stone-100">工廠名稱</th>
+                                <th class="py-4 px-6 bg-stone-100">廠址</th>
                             </tr>
                         </thead>
                         <tbody id="factoryTableBody" class="divide-y divide-stone-100 text-xs text-stone-700">
@@ -77,7 +77,7 @@ function renderFactoryImprovementModule() {
                 </div>
                 
                 <!-- 底部統計筆數 -->
-                <div class="px-6 py-3.5 bg-stone-50/50 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500">
+                <div class="px-6 py-3.5 bg-stone-50/80 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500">
                     <span>總共查詢到 <strong id="factoryResultCount" class="text-stone-900 font-bold">0</strong> 筆資料</span>
                 </div>
             </div>
@@ -98,7 +98,7 @@ function handleFactoryExcelUpload(e) {
     if (e.target.files?.[0]) processExcelFile(e.target.files[0]);
 }
 
-// ODS 格式精準解析演算法 (對應 A欄=編號, B欄=縣市, C欄=工廠名稱, D欄=廠址)
+// ODS 格式精準解析演算法 (讀取所有列)
 function processExcelFile(file) {
     if (typeof XLSX === 'undefined') {
         alert('尚未載入 XLSX 解析庫，請確認 HTML 已載入 SheetJS！');
@@ -170,7 +170,7 @@ function processExcelFile(file) {
     reader.readAsArrayBuffer(file);
 }
 
-// 關鍵字即時搜尋 (包含編號)
+// 關鍵字即時搜尋
 function filterFactoryData() {
     const keyword = document.getElementById('factorySearchInput').value.trim().toLowerCase();
     
@@ -189,7 +189,7 @@ function filterFactoryData() {
     renderFactoryTable(filtered);
 }
 
-// 繪製表格內容 (4 欄精準對齊)
+// 繪製表格內容
 function renderFactoryTable(data) {
     const tbody = document.getElementById('factoryTableBody');
     const countEl = document.getElementById('factoryResultCount');
