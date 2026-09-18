@@ -1,6 +1,7 @@
-// 全域變數用來儲存資料與狀態
+// 全域變數用來儲存資料與防抖計時器
 window.factoryRawData = [];
 window.factoryFilteredData = [];
+window.factorySearchTimer = null;
 
 function renderFactoryImprovementModule() {
     const container = document.getElementById('app-container');
@@ -44,7 +45,7 @@ function renderFactoryImprovementModule() {
                     <!-- 2. 關鍵字搜尋框 -->
                     <div class="relative w-full md:w-1/2">
                         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-                        <input type="text" id="factorySearchInput" oninput="filterFactoryData()" placeholder="請輸入編號、縣市、工廠名稱或廠址關鍵字搜尋..." class="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#c8a362] focus:bg-white transition">
+                        <input type="text" id="factorySearchInput" oninput="handleFactorySearchInput()" placeholder="請輸入編號、縣市、工廠名稱或廠址關鍵字搜尋..." class="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:outline-none focus:border-[#c8a362] focus:bg-white transition">
                     </div>
                 </div>
             </div>
@@ -79,7 +80,7 @@ function renderFactoryImprovementModule() {
                 
                 <!-- 底部統計筆數區 -->
                 <div class="px-6 py-3.5 bg-stone-50/80 border-t border-stone-200 flex items-center justify-between text-xs text-stone-500">
-                    <span>總共查詢到 <strong id="factoryResultCount" class="text-stone-900 font-bold">0</strong> 筆資料</span>
+                    <span id="factoryResultCountText">總共查詢到 <strong id="factoryResultCount" class="text-stone-900 font-bold">0</strong> 筆資料</span>
                 </div>
             </div>
         </div>
@@ -166,6 +167,14 @@ function processExcelFile(file) {
     reader.readAsArrayBuffer(file);
 }
 
+// 防抖搜尋（避免輸入時頻繁重繪造成卡頓）
+function handleFactorySearchInput() {
+    if (window.factorySearchTimer) clearTimeout(window.factorySearchTimer);
+    window.factorySearchTimer = setTimeout(() => {
+        filterFactoryData();
+    }, 300); // 停頓 300ms 後才觸發搜尋
+}
+
 // 關鍵字即時搜尋
 function filterFactoryData() {
     const keyword = document.getElementById('factorySearchInput').value.trim().toLowerCase();
@@ -184,17 +193,19 @@ function filterFactoryData() {
     renderFactoryTable();
 }
 
-// 渲染表格內容
+// 高效效能優化渲染（最多只繪製 100 筆，確保瀏覽器極速運作）
 function renderFactoryTable() {
     const tbody = document.getElementById('factoryTableBody');
-    const countEl = document.getElementById('factoryResultCount');
+    const countTextEl = document.getElementById('factoryResultCountText');
     
     if (!tbody) return;
 
     const data = window.factoryFilteredData;
-    countEl.innerText = data.length;
+    const totalCount = data.length;
+    const displayLimit = 100;
+    const displayData = data.slice(0, displayLimit);
 
-    if (data.length === 0) {
+    if (totalCount === 0) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="4" class="py-20 text-center text-stone-400">
@@ -203,10 +214,20 @@ function renderFactoryTable() {
                 </td>
             </tr>
         `;
+        if (countTextEl) countTextEl.innerHTML = `總共查詢到 <strong class="text-stone-900 font-bold">0</strong> 筆資料`;
         return;
     }
 
-    tbody.innerHTML = data.map(item => `
+    // 更新底部筆數提示
+    if (countTextEl) {
+        if (totalCount > displayLimit) {
+            countTextEl.innerHTML = `符合條件共 <strong class="text-stone-900 font-bold">${totalCount}</strong> 筆（僅顯示前 <strong>${displayLimit}</strong> 筆，請輸入更精準的關鍵字）`;
+        } else {
+            countTextEl.innerHTML = `總共查詢到 <strong class="text-stone-900 font-bold">${totalCount}</strong> 筆資料`;
+        }
+    }
+
+    tbody.innerHTML = displayData.map(item => `
         <tr class="hover:bg-amber-50/30 transition">
             <td class="py-3.5 px-6 font-bold text-stone-400 whitespace-nowrap">${item.id}</td>
             <td class="py-3.5 px-6 font-bold text-stone-900 whitespace-nowrap">${item.city}</td>
@@ -222,4 +243,5 @@ window.handleFactoryExcelUpload = handleFactoryExcelUpload;
 window.handleFactoryDragOver = handleFactoryDragOver;
 window.handleFactoryDragLeave = handleFactoryDragLeave;
 window.handleFactoryDrop = handleFactoryDrop;
+window.handleFactorySearchInput = handleFactorySearchInput;
 window.filterFactoryData = filterFactoryData;
