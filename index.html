@@ -93,8 +93,8 @@
                     <i class="fa-solid fa-list-check w-4 text-amber-400"></i><span>工作看板</span>
                 </button>
 
-                <button onclick="switchModule('all-cases', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition">
-                    <i class="fa-solid fa-layer-group w-4 text-amber-500"></i><span>全集團案件總覽</span>
+                <button onclick="switchModule('all-cases', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-[#C59B63] text-white font-medium transition">
+                    <i class="fa-solid fa-layer-group w-4 text-white"></i><span>全集團案件總覽</span>
                 </button>
 
                 <!-- 年度案件分類 -->
@@ -105,20 +105,19 @@
                     </button>
                     
                     <div id="year-list-container" class="space-y-0.5 mt-1 pl-2 border-l border-stone-700/50 ml-3 overflow-hidden transition-all duration-300">
+                        <button onclick="switchModule('evaluation-cases', this, '案件評估')" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                            <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>案件評估</span>
                         </button>
-                        <button onclick="switchModule('year-2024', this, 案件評估)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
-                            <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>案件管理</span>
-                        </button>
-                        <button onclick="switchModule('year-2023', this, 簽約案件)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                        <button onclick="switchModule('contract-cases', this, '簽約案件')" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
                             <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>簽約案件</span>
                         </button>
-                        <button onclick="switchModule('year-2022', this, 結案中心)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                        <button onclick="switchModule('closed-center', this, '結案中心')" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
                             <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>結案中心</span>
                         </button>
-                        <button onclick="switchModule('year-2021', this, 案件失敗)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                        <button onclick="switchModule('failed-cases', this, '案件失敗')" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
                             <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>案件失敗</span>
                         </button>
-                        <button onclick="switchModule('year-2021', this, 廢件中心)" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
+                        <button onclick="switchModule('junk-center', this, '廢件中心')" class="nav-btn w-full flex items-center space-x-2 px-2.5 py-1.5 rounded-md hover:bg-stone-800/80 text-stone-400 transition text-xs">
                             <i class="fa-solid fa-folder w-3.5 text-stone-500"></i><span>廢件中心</span>
                         </button>
                     </div>
@@ -127,9 +126,9 @@
                 <div class="border-t border-stone-800 my-2"></div>
 
                 <button onclick="switchModule('tools-module', this, null)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition cursor-pointer">
-    <i class="fa-solid fa-toolbox w-4 text-sky-400"></i>
-    <span>工具專區</span>
-</button>
+                    <i class="fa-solid fa-toolbox w-4 text-sky-400"></i>
+                    <span>工具專區</span>
+                </button>
 
                 <button onclick="switchModule('closing', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition">
                     <i class="fa-solid fa-flag-checkered w-4 text-emerald-400"></i><span>結案中心</span>
@@ -151,7 +150,7 @@
         </div>
     </aside>
 
-    <!-- 2. 主畫面內容 -->
+    <!-- 2. 主畫面內容 (全集團案件總覽：包含 5 大狀態區塊) -->
     <main id="app-container" class="ruili-main flex-1 flex flex-col overflow-y-auto bg-[#F5F4F0] p-4 sm:p-6">
         <!-- 頂部卡片容器 -->
         <header class="card-frame p-4 sm:p-5 mb-5 flex justify-between items-center">
@@ -495,40 +494,39 @@
                 </div>
 
                 <!-- 區塊六：供應商報價利潤工具 -->
-<div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
-    <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
-        <h4 class="font-bold text-stone-900 flex items-center text-xs">
-            <i class="fa-solid fa-file-invoice-dollar text-[#C59B63] mr-1.5"></i> 六、供應商報價利潤工具
-        </h4>
-        <button type="button" onclick="addQuoteSupplierRow()" class="px-3 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
-            <i class="fa-solid fa-plus text-[10px]"></i><span>新增供應商</span>
-        </button>
-    </div>
+                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                    <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
+                        <h4 class="font-bold text-stone-900 flex items-center text-xs">
+                            <i class="fa-solid fa-file-invoice-dollar text-[#C59B63] mr-1.5"></i> 六、供應商報價利潤工具
+                        </h4>
+                        <button type="button" onclick="addQuoteSupplierRow()" class="px-3 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                            <i class="fa-solid fa-plus text-[10px]"></i><span>新增供應商</span>
+                        </button>
+                    </div>
 
-    <!-- 💡 留空容器，由 JS 開啟 Modal 時自動產生帶有垃圾桶的第一列 -->
-    <div class="overflow-x-auto w-full pb-2">
-        <div id="suppliers-rows-container" class="space-y-3 min-w-[700px]"></div>
-    </div>
+                    <div class="overflow-x-auto w-full pb-2">
+                        <div id="suppliers-rows-container" class="space-y-3 min-w-[700px]"></div>
+                    </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
-        <div>
-            <label class="font-bold block mb-1 text-stone-700 text-[11px]">總報價金額 (自動)</label>
-            <input type="text" id="calc-total-quote" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
-        </div>
-        <div>
-            <label class="font-bold block mb-1 text-stone-700 text-[11px]">稅後總金額 (自動)</label>
-            <input type="text" id="calc-tax-after" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
-        </div>
-        <div>
-            <label class="font-bold block mb-1 text-stone-700 text-[11px]">簽約總金額 (自動)</label>
-            <input type="text" id="calc-total-contract" class="w-full bg-rose-50 border border-rose-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-rose-700" readonly value="NT$ 0">
-        </div>
-        <div>
-            <label class="font-bold block mb-1 text-stone-700 text-[11px]">案件總利潤 (自動)</label>
-            <input type="text" id="calc-total-profit" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-emerald-700" readonly value="NT$ 0">
-        </div>
-    </div>
-</div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+                        <div>
+                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">總報價金額 (自動)</label>
+                            <input type="text" id="calc-total-quote" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">稅後總金額 (自動)</label>
+                            <input type="text" id="calc-tax-after" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">簽約總金額 (自動)</label>
+                            <input type="text" id="calc-total-contract" class="w-full bg-rose-50 border border-rose-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-rose-700" readonly value="NT$ 0">
+                        </div>
+                        <div>
+                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">案件總利潤 (自動)</label>
+                            <input type="text" id="calc-total-profit" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-emerald-700" readonly value="NT$ 0">
+                        </div>
+                    </div>
+                </div>
 
                 <!-- 區塊七：案件介紹人與佣金機制 -->
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
@@ -1240,14 +1238,14 @@
     </div>
 
     <!-- 5. 核心邏輯與模組引用 -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="./js/modules/factory-improvement-module.js"></script>
-<script src="./js/api/data-sync.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="./js/modules/factory-improvement-module.js"></script>
+    <script src="./js/api/data-sync.js"></script>
     <script src="./js/api/mock-data.js"></script>
     <script src="./js/modules/case-management.js"></script>
     <script src="./js/modules/case-edit.js"></script>
     <script src="./js/modules/payment-calc.js"></script>
-   <script src="./js/modules/tools-module.js?v=999"></script>
+    <script src="./js/modules/tools-module.js?v=999"></script>
     <!-- 案件評估工具模組 -->
     <script src="./js/modules/land-basic.js"></script>
     <script src="./js/modules/registered-building.js"></script>
