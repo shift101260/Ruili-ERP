@@ -87,7 +87,8 @@ function renderExpensesModule() {
     });
 
     container.innerHTML = `
-        <div class="space-y-6 max-w-7xl mx-auto pb-12 w-full overflow-x-hidden">
+        <!-- 外層加上 px-3 sm:px-6 與內部 padding，拉開與滾輪/視窗邊緣的距離 -->
+        <div class="space-y-6 max-w-7xl mx-auto px-2 sm:px-6 pb-12 w-full box-border">
             
             <!-- 1. 頂部控制列：年度切換與成員切換 -->
             <div class="card-frame p-4 sm:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4 w-full">
@@ -110,7 +111,7 @@ function renderExpensesModule() {
                 </div>
             </div>
 
-            <!-- 2. 主要填寫與明細列表 (第一優先區域，手機操作最順手) -->
+            <!-- 2. 主要填寫與明細列表 -->
             <div class="card-frame p-4 sm:p-5 space-y-5 w-full">
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3 w-full">
                     <div class="flex items-center space-x-2">
@@ -118,7 +119,7 @@ function renderExpensesModule() {
                         <h3 class="text-xs sm:text-sm font-bold text-stone-800">支出填寫與紀錄列表 (${currentExpenseYear} 年)</h3>
                     </div>
 
-                    <!-- 人員頁籤切換按鈕（手機版可滑動且自動置中選取） -->
+                    <!-- 人員頁籤切換按鈕 -->
                     <div class="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
                         <div class="flex items-center space-x-1 bg-stone-100 p-1 rounded-xl w-max">
                             ${EXPENSE_MEMBERS.map(m => `
@@ -130,7 +131,7 @@ function renderExpensesModule() {
                     </div>
                 </div>
 
-                <!-- 新增支出輸入框 (完整防護手機版 date input 溢出) -->
+                <!-- 新增支出輸入框 -->
                 <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3 w-full box-border">
                     <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 w-full">
@@ -163,9 +164,9 @@ function renderExpensesModule() {
                     </div>
                 </form>
 
-                <!-- 明細表格 (兼顧電腦版與手機版，支援雙重相容刪除) -->
+                <!-- 明細表格：加入 pr-2 確保點擊按鈕不被捲軸覆蓋 -->
                 <div class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
-                    <table class="w-full text-left text-xs border-collapse min-w-[520px]">
+                    <table class="w-full text-left text-xs border-collapse min-w-[560px]">
                         <thead>
                             <tr class="bg-stone-100/90 text-stone-600 border-b border-stone-200">
                                 <th class="p-3 font-bold w-12 text-center whitespace-nowrap">對帳</th>
@@ -173,7 +174,7 @@ function renderExpensesModule() {
                                 <th class="p-3 font-bold w-32 whitespace-nowrap">項目分類</th>
                                 <th class="p-3 font-bold w-28 whitespace-nowrap">金額</th>
                                 <th class="p-3 font-bold whitespace-nowrap">備註</th>
-                                <th class="p-3 font-bold w-14 text-center whitespace-nowrap">操作</th>
+                                <th class="p-3 font-bold w-16 text-center whitespace-nowrap pr-4">操作</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-stone-100 text-stone-700 bg-white">
@@ -190,9 +191,10 @@ function renderExpensesModule() {
                                     <td class="p-3 whitespace-nowrap"><span class="px-2.5 py-1 bg-stone-100 text-stone-800 rounded-md font-bold border border-stone-200 inline-block">${item.category}</span></td>
                                     <td class="p-3 font-mono font-bold text-emerald-700 whitespace-nowrap">NT$ ${Number(item.amount).toLocaleString()}</td>
                                     <td class="p-3 text-stone-600 min-w-[120px]">${item.note || '-'}</td>
-                                    <td class="p-3 text-center whitespace-nowrap">
-                                        <button type="button" onclick="deleteExpenseItemById('${item.id}',${idx})" class="text-stone-400 hover:text-rose-600 p-2 cursor-pointer transition inline-flex items-center justify-center" title="刪除">
-                                            <i class="fa-solid fa-trash-can text-sm"></i>
+                                    <td class="p-3 text-center whitespace-nowrap pr-4">
+                                        <!-- 加上 relative z-10 與強效點擊事件 -->
+                                        <button type="button" onclick="deleteExpenseItemById(event, '${item.id}',${idx})" class="relative z-10 text-stone-400 hover:text-rose-600 p-2 cursor-pointer transition inline-flex items-center justify-center rounded-lg hover:bg-rose-50" title="刪除">
+                                            <i class="fa-solid fa-trash-can text-sm pointer-events-none"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -329,7 +331,7 @@ function addExpenseItem(event) {
     renderExpensesModule();
 }
 
-// 切換核取對帳狀態 (兼顧 ID 與 Index)
+// 切換核取對帳狀態
 function toggleExpenseCheck(id, index) {
     const data = getExpenseData(currentExpenseYear);
     const list = data[currentExpenseMember] || [];
@@ -344,8 +346,12 @@ function toggleExpenseCheck(id, index) {
     }
 }
 
-// 雙重保障刪除函式 (修復電腦版刪除無反應問題)
-function deleteExpenseItemById(id, index) {
+// 電腦版/手機版通用相容刪除函式 (防止事件冒泡與阻擋)
+function deleteExpenseItemById(event, id, index) {
+    if (event && event.stopPropagation) {
+        event.stopPropagation();
+    }
+
     if (!confirm('確定要刪除此筆支出紀錄嗎？')) return;
 
     const data = getExpenseData(currentExpenseYear);
@@ -353,10 +359,10 @@ function deleteExpenseItemById(id, index) {
         const list = data[currentExpenseMember];
         const initialLength = list.length;
         
-        // 優先以 ID 進行比對過濾
+        // 1. 優先以 ID 比對刪除
         data[currentExpenseMember] = list.filter(item => item.id && String(item.id) !== String(id));
         
-        // 若舊資料沒有 ID 導致長度沒變，改以傳入的索引刪除
+        // 2. 若舊資料無 ID，改以索引刪除
         if (data[currentExpenseMember].length === initialLength && typeof index === 'number') {
             data[currentExpenseMember].splice(index, 1);
         }
@@ -366,7 +372,7 @@ function deleteExpenseItemById(id, index) {
     }
 }
 
-// 掛載至全域 window (新舊函式名稱雙重註冊)
+// 掛載至全域 window
 window.renderExpensesModule = renderExpensesModule;
 window.switchExpenseYear = switchExpenseYear;
 window.switchExpenseMember = switchExpenseMember;
