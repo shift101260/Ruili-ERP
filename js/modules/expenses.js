@@ -111,7 +111,7 @@ function renderExpensesModule() {
                 </div>
             </div>
 
-            <!-- 2. 主要填寫與明細列表 (第一優先區塊，手機版只允許內部表格左右滾動) -->
+            <!-- 2. 主要填寫與明細列表 -->
             <div class="card-frame p-4 sm:p-5 space-y-5 w-full">
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3 w-full">
                     <div class="flex items-center space-x-2">
@@ -131,40 +131,48 @@ function renderExpensesModule() {
                     </div>
                 </div>
 
-                <!-- 新增支出輸入框 -->
+                <!-- 新增支出輸入框：把「日期」與「項目分類」設為完全等寬 -->
                 <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3 w-full">
                     <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
-                        <div>
-                            <label class="block text-[11px] font-bold text-stone-600 mb-1">日期</label>
-                            <input type="date" id="exp-input-date" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63]">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                        
+                        <!-- 手機版：「日期」與「項目分類」併排 50%/50% 等寬 -->
+                        <div class="grid grid-cols-2 gap-3 md:contents md:col-span-2">
+                            <div class="w-full">
+                                <label class="block text-[11px] font-bold text-stone-600 mb-1">日期</label>
+                                <input type="date" id="exp-input-date" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63]">
+                            </div>
+
+                            <div class="w-full">
+                                <label class="block text-[11px] font-bold text-stone-600 mb-1">項目分類</label>
+                                <select id="exp-input-category" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-bold text-stone-700 focus:outline-none focus:border-[#C59B63]">
+                                    ${EXPENSE_CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
+                                </select>
+                            </div>
                         </div>
 
-                        <div>
-                            <label class="block text-[11px] font-bold text-stone-600 mb-1">項目分類</label>
-                            <select id="exp-input-category" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-bold text-stone-700 focus:outline-none focus:border-[#C59B63]">
-                                ${EXPENSE_CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
-                            </select>
-                        </div>
-
-                        <div>
+                        <!-- 金額欄位 -->
+                        <div class="w-full md:col-span-1">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">金額 (NT$)</label>
-                            <input type="number" id="exp-input-amount" min="1" placeholder="例如: 1500" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#C59B63]">
+                            <input type="number" id="exp-input-amount" min="1" placeholder="例如: 1500" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#C59B63]">
                         </div>
 
-                        <div class="md:col-span-2">
+                        <!-- 秘書備註說明與按鈕 -->
+                        <div class="w-full md:col-span-2">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">秘書備註說明</label>
                             <div class="flex items-center space-x-2">
-                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
+                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
                                 <button type="submit" class="px-4 py-2 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap cursor-pointer shrink-0">
                                     <i class="fa-solid fa-plus mr-1"></i>新增
                                 </button>
                             </div>
                         </div>
+
                     </div>
                 </form>
 
-                <!-- 僅此表格區域允許水平滾動 -->
+                <!-- 明細表格區域 (允許內部水平滾動) -->
                 <div class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
                     <table class="w-full text-left text-xs border-collapse min-w-[520px]">
                         <thead>
@@ -344,7 +352,7 @@ function deleteExpenseItem(index) {
     }
 }
 
-// 掛載至全域 window，確保左側導覽列 switchModule 可以直接呼叫
+// 掛載至全域 window
 window.renderExpensesModule = renderExpensesModule;
 window.switchExpenseYear = switchExpenseYear;
 window.switchExpenseMember = switchExpenseMember;
