@@ -86,11 +86,12 @@ function renderExpensesModule() {
         });
     });
 
+    // 關鍵修改：外層容器標籤完全對齊 tools-module.js
     container.innerHTML = `
-        <div class="space-y-6 max-w-7xl mx-auto pb-12 w-full overflow-x-hidden">
+        <div class="space-y-8 max-w-7xl mx-auto pb-12">
             
             <!-- 1. 頂部控制列：年度切換與成員切換 -->
-            <div class="card-frame p-4 sm:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4 w-full">
+            <div class="card-frame p-4 sm:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-lg font-bold shrink-0">
                         <i class="fa-solid fa-receipt"></i>
@@ -112,8 +113,8 @@ function renderExpensesModule() {
             </div>
 
             <!-- 2. 主要填寫與明細列表 -->
-            <div class="card-frame p-4 sm:p-5 space-y-5 w-full">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3 w-full">
+            <div class="card-frame p-4 sm:p-5 space-y-5">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3">
                     <div class="flex items-center space-x-2">
                         <span class="px-2.5 py-1 bg-[#C59B63] text-white rounded-lg text-xs font-bold whitespace-nowrap">${currentExpenseMember}</span>
                         <h3 class="text-xs sm:text-sm font-bold text-stone-800">支出填寫與紀錄列表 (${currentExpenseYear} 年)</h3>
@@ -132,10 +133,10 @@ function renderExpensesModule() {
                 </div>
 
                 <!-- 新增支出輸入框 -->
-                <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3 w-full">
+                <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3">
                     <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3 w-full">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
                         
                         <!-- 1. 日期欄位 -->
                         <div class="w-full min-w-0 md:col-span-1">
@@ -171,7 +172,7 @@ function renderExpensesModule() {
                     </div>
                 </form>
 
-                <!-- 明細表格區域 -->
+                <!-- 明細表格區域 (表格獨立橫向滑動) -->
                 <div id="expense-table-wrapper" class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
                     <table class="w-full text-left text-xs border-collapse min-w-[520px]">
                         <thead>
@@ -211,7 +212,7 @@ function renderExpensesModule() {
             </div>
 
             <!-- 3. 當年度個人零用金總額統計 -->
-            <div class="w-full">
+            <div>
                 <div class="flex items-center space-x-2 mb-3 px-1">
                     <i class="fa-solid fa-chart-pie text-[#C59B63] text-sm"></i>
                     <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">${currentExpenseYear} 年度個人零用金總額統計</h3>
@@ -243,7 +244,7 @@ function renderExpensesModule() {
             </div>
 
             <!-- 4. 全體項目比例與金額分析看板 -->
-            <div class="card-frame p-4 sm:p-5 space-y-4 w-full">
+            <div class="card-frame p-4 sm:p-5 space-y-4">
                 <div class="flex items-center justify-between border-b border-stone-100 pb-3">
                     <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-chart-bar text-sky-600"></i>
@@ -286,16 +287,6 @@ function renderExpensesModule() {
     if (dateInput) {
         dateInput.value = new Date().toISOString().split('T')[0];
     }
-
-    // 強力確保捲軸 100% 捲到最右邊（防異步佈局延遲）
-    requestAnimationFrame(() => {
-        setTimeout(() => {
-            const tableWrapper = document.getElementById('expense-table-wrapper');
-            if (tableWrapper) {
-                tableWrapper.scrollLeft = 9999;
-            }
-        }, 100);
-    });
 }
 
 // 切換年度
