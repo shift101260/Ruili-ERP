@@ -86,7 +86,6 @@ function renderExpensesModule() {
         });
     });
 
-    // 關鍵修改：外層容器標籤完全對齊 tools-module.js
     container.innerHTML = `
         <div class="space-y-8 max-w-7xl mx-auto pb-12">
             
@@ -172,17 +171,17 @@ function renderExpensesModule() {
                     </div>
                 </form>
 
-                <!-- 明細表格區域 (表格獨立橫向滑動) -->
-                <div id="expense-table-wrapper" class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
+                <!-- 明細表格區域：手機版加上 -mx-4 負外邊距，打破卡片邊界直達手機最右邊 -->
+                <div id="expense-table-wrapper" class="-mx-4 sm:mx-0 w-[calc(100%+2rem)] sm:w-full overflow-x-auto border-y sm:border border-stone-200/80 sm:rounded-xl">
                     <table class="w-full text-left text-xs border-collapse min-w-[520px]">
                         <thead>
                             <tr class="bg-stone-100/90 text-stone-600 border-b border-stone-200">
-                                <th class="p-3 font-bold w-12 text-center whitespace-nowrap">對帳</th>
+                                <th class="p-3 font-bold w-12 text-center whitespace-nowrap pl-4 sm:pl-3">對帳</th>
                                 <th class="p-3 font-bold w-28 whitespace-nowrap">日期</th>
                                 <th class="p-3 font-bold w-32 whitespace-nowrap">項目分類</th>
                                 <th class="p-3 font-bold w-28 whitespace-nowrap">金額</th>
                                 <th class="p-3 font-bold whitespace-nowrap">備註</th>
-                                <th class="p-3 font-bold w-14 text-center whitespace-nowrap">操作</th>
+                                <th class="p-3 font-bold w-14 text-center whitespace-nowrap pr-4 sm:pr-3">操作</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-stone-100 text-stone-700 bg-white">
@@ -192,14 +191,14 @@ function renderExpensesModule() {
                                 </tr>
                             ` : (data[currentExpenseMember] || []).map((item, idx) => `
                                 <tr class="hover:bg-stone-50 transition ${item.checked ? 'bg-amber-50/40' : ''}">
-                                    <td class="p-3 text-center whitespace-nowrap">
+                                    <td class="p-3 text-center whitespace-nowrap pl-4 sm:pl-3">
                                         <input type="checkbox" onchange="toggleExpenseCheck(${idx})" ${item.checked ? 'checked' : ''} class="w-4 h-4 rounded border-stone-300 text-[#C59B63] focus:ring-[#C59B63] cursor-pointer">
                                     </td>
                                     <td class="p-3 font-mono whitespace-nowrap ${item.checked ? 'line-through text-stone-400' : ''}">${item.date}</td>
                                     <td class="p-3 whitespace-nowrap"><span class="px-2.5 py-1 bg-stone-100 text-stone-800 rounded-md font-bold border border-stone-200 inline-block">${item.category}</span></td>
                                     <td class="p-3 font-mono font-bold text-emerald-700 whitespace-nowrap">NT$ ${Number(item.amount).toLocaleString()}</td>
                                     <td class="p-3 text-stone-600 min-w-[120px]">${item.note || '-'}</td>
-                                    <td class="p-3 text-center whitespace-nowrap">
+                                    <td class="p-3 text-center whitespace-nowrap pr-4 sm:pr-3">
                                         <button onclick="deleteExpenseItem(${idx})" class="text-stone-400 hover:text-rose-600 p-1 cursor-pointer transition" title="刪除">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
