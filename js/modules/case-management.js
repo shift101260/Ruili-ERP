@@ -24,7 +24,7 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// 展開 / 折疊側邊欄年度選單
+// 展開 / 折疊側邊欄案件分類選單
 function toggleYearList() {
     const container = document.getElementById('year-list-container');
     const chevron = document.getElementById('year-chevron');
@@ -118,20 +118,19 @@ function saveNewCase() {
     closeModal('editCaseModal');
 }
 
-// 渲染案件管理基礎頁面骨架 (強制重構 HTML 以確保切換順暢，並加入 id 與識別 Class)
-function renderCaseManagementView(year = 2026) {
+// 渲染案件管理基礎頁面骨架（無年份顯示）
+function renderCaseManagementView() {
     const container = document.getElementById('app-container');
     if (!container) return;
 
-    // 重寫案件管理的主架構，加入單一卡片顯示控制需要的 id 與 class
     container.innerHTML = `
         <header class="card-frame p-4 sm:p-5 mb-5 flex justify-between items-center">
             <div>
                 <h2 id="page-title" class="text-base sm:text-lg font-bold text-stone-800 flex items-center gap-2 tracking-wide">
-                    <span id="current-year-display">${year}</span> 年度案件管理中心
+                    案件管理中心
                 </h2>
                 <p class="text-xs text-stone-500 mt-1">
-                    管理 <span id="current-year-sub" class="font-medium">${year}</span> 年度案件，支援關鍵字搜尋、勾選、刪除、恢復與狀態跨區塊拋轉。
+                    管理全集團案件，支援關鍵字搜尋、勾選、刪除、恢復與狀態跨區塊拋轉。
                 </p>
             </div>
             
@@ -357,7 +356,7 @@ const moduleToStatusMap = {
 };
 
 // 頁面與模組切換主控制邏輯
-function switchModule(moduleName, btnElement, titleText, year) {
+function switchModule(moduleName, btnElement, titleText) {
     // 1. 切換選單按鈕高亮樣式
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('btn-gold', 'bg-[#C59B63]', 'text-white', 'font-medium');
@@ -379,31 +378,26 @@ function switchModule(moduleName, btnElement, titleText, year) {
     }
 
     // 3. 確保案件管理框架存在
-    const currentYear = year || 2026;
     const pageTitle = document.getElementById('page-title');
     if (!pageTitle) {
-        renderCaseManagementView(currentYear);
+        renderCaseManagementView();
     }
 
-    // 4. 更新標題名稱
+    // 4. 更新標題名稱（已無年份字樣）
     const updatedPageTitle = document.getElementById('page-title');
-    const yearDisplay = document.getElementById('current-year-display');
-    const yearSub = document.getElementById('current-year-sub');
-    if (yearDisplay) yearDisplay.innerText = currentYear;
-    if (yearSub) yearSub.innerText = currentYear;
 
     if (updatedPageTitle) {
         if (titleText) {
-            updatedPageTitle.innerHTML = `<span id="current-year-display">${currentYear}</span> ${titleText} 年度案件管理中心`;
+            updatedPageTitle.innerHTML = `${titleText} 管理中心`;
         } else if (moduleName === 'all-cases') {
-            updatedPageTitle.innerHTML = `<span id="current-year-display">${currentYear}</span> 年度案件管理中心`;
+            updatedPageTitle.innerHTML = `全集團案件管理中心`;
         }
     }
 
     // 5. 渲染表格資料
     renderAllSections();
 
-    // 6. 控制右側卡片區塊顯示/隱藏 (關鍵修改)
+    // 6. 控制右側卡片區塊顯示/隱藏
     const targetStatus = moduleToStatusMap[moduleName] || 'ALL';
     const allSections = document.querySelectorAll('.case-status-section');
 
