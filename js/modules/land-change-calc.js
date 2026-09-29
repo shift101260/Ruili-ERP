@@ -30,45 +30,46 @@ window.calcPing = function(inputEl, outputId) {
     if (target) target.value = `${(val * 0.3025).toFixed(2)} 坪`;
 };
 
-// 三、回饋金動態新增列 (已優化手機版卡住與擠壓問題)
+// 三、回饋金動態新增列 (已徹底修復手機版欄位遮擋與遺失問題)
 window.addFeedbackRow = function() {
     const container = document.getElementById('feedback-rows-container');
     if (!container) return;
     
-    // 手機版 (單欄/雙欄自適應) vs 電腦版 (6欄單橫列)
     const html = `
-        <div class="feedback-row p-3 bg-white rounded-xl border border-stone-200 shadow-2xs space-y-2 md:space-y-0 md:grid md:grid-cols-[1.5fr_1fr_1fr_1.2fr_1.2fr_32px] md:gap-2 md:items-center">
+        <div class="feedback-row p-3 bg-white rounded-xl border border-stone-200 shadow-2xs space-y-2.5 md:space-y-0 md:grid md:grid-cols-[1.5fr_1fr_1fr_1.2fr_1.2fr_32px] md:gap-2 md:items-center">
             
-            <!-- 地號輸入框 -->
+            <!-- 1. 地號輸入框 -->
             <div class="w-full">
-                <label class="block md:hidden text-[10px] font-bold text-stone-500 mb-0.5">地號</label>
+                <label class="block md:hidden text-[10px] font-bold text-stone-500 mb-1">地號</label>
                 <input type="text" placeholder="例：頂番段123地號" class="w-full box-border px-2.5 py-1.5 border border-stone-300 rounded-lg text-xs focus:outline-none focus:border-[#C59B63]">
             </div>
 
-            <!-- 面積與現值 (手機版排成 2 欄，電腦版拆回單欄) -->
-            <div class="grid grid-cols-2 md:contents gap-2">
-                <div>
-                    <label class="block md:hidden text-[10px] font-bold text-stone-500 mb-0.5">面積 (㎡)</label>
+            <!-- 2. 面積與公告現值（手機版併排 50%/50%，絕不漏掉） -->
+            <div class="flex items-center gap-2 md:col-span-2">
+                <div class="w-1/2 md:w-full">
+                    <label class="block md:hidden text-[10px] font-bold text-stone-500 mb-1">面積 (㎡)</label>
                     <input type="number" step="0.01" placeholder="面積(㎡)" oninput="window.calcFeedbackTotal()" class="fb-area w-full box-border px-2.5 py-1.5 border border-stone-300 rounded-lg text-xs font-mono focus:outline-none focus:border-[#C59B63]">
                 </div>
-                <div>
-                    <label class="block md:hidden text-[10px] font-bold text-stone-500 mb-0.5">公告現值</label>
+                <div class="w-1/2 md:w-full">
+                    <label class="block md:hidden text-[10px] font-bold text-stone-500 mb-1">公告現值</label>
                     <input type="number" step="0.01" placeholder="公告現值" oninput="window.calcFeedbackTotal()" class="fb-price w-full box-border px-2.5 py-1.5 border border-stone-300 rounded-lg text-xs font-mono focus:outline-none focus:border-[#C59B63]">
                 </div>
             </div>
 
-            <!-- 分類選單、試算結果與刪除按鈕 (手機版底部橫排) -->
-            <div class="flex items-center justify-between gap-2 md:contents pt-1 md:pt-0 border-t md:border-t-0 border-stone-100">
-                <div class="w-1/2 md:w-full">
-                    <label class="block md:hidden text-[10px] font-bold text-stone-500 mb-0.5">類別</label>
-                    <select onchange="window.calcFeedbackTotal()" class="fb-zone w-full box-border px-2 py-1.5 border border-stone-300 rounded-lg text-xs bg-white font-bold text-stone-700 focus:outline-none focus:border-[#C59B63]">
-                        <option value="都內">都內 (×0.1)</option>
-                        <option value="非都">非都 (×0.5)</option>
-                    </select>
-                </div>
+            <!-- 3. 類別選單 -->
+            <div class="w-full">
+                <label class="block md:hidden text-[10px] font-bold text-stone-500 mb-1">類別</label>
+                <select onchange="window.calcFeedbackTotal()" class="fb-zone w-full box-border px-2 py-1.5 border border-stone-300 rounded-lg text-xs bg-white font-bold text-stone-700 focus:outline-none focus:border-[#C59B63]">
+                    <option value="都內">都內 (×0.1)</option>
+                    <option value="非都">非都 (×0.5)</option>
+                </select>
+            </div>
 
-                <div class="flex items-center justify-end space-x-2 md:contents w-1/2 md:w-auto">
-                    <span class="fb-result font-bold text-emerald-700 text-xs font-mono text-right md:text-center shrink-0">NT$ 0</span>
+            <!-- 4. 試算結果與刪除按鈕 -->
+            <div class="flex items-center justify-between pt-1.5 border-t md:border-t-0 border-stone-100 md:pt-0 md:col-span-2 md:justify-end md:space-x-2">
+                <span class="block md:hidden text-[10px] font-bold text-stone-500">試算小計：</span>
+                <div class="flex items-center space-x-2">
+                    <span class="fb-result font-bold text-emerald-700 text-xs font-mono shrink-0">NT$ 0</span>
                     <button type="button" onclick="this.closest('.feedback-row').remove(); window.calcFeedbackTotal();" class="text-stone-400 hover:text-rose-600 cursor-pointer p-1.5 hover:bg-rose-50 rounded-lg transition shrink-0" title="刪除">
                         <i class="fa-solid fa-trash-can text-sm"></i>
                     </button>
