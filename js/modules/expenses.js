@@ -131,38 +131,37 @@ function renderExpensesModule() {
                     </div>
                 </div>
 
-                <!-- 新增支出輸入框：把「日期」與「項目分類」設為完全等寬 -->
+                <!-- 新增支出輸入框：嚴格對齊日期、項目分類與金額欄位寬度 -->
                 <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3 w-full">
                     <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3 w-full">
                         
-                        <!-- 手機版：「日期」與「項目分類」併排 50%/50% 等寬 -->
-                        <div class="grid grid-cols-2 gap-3 md:contents md:col-span-2">
-                            <div class="w-full">
-                                <label class="block text-[11px] font-bold text-stone-600 mb-1">日期</label>
-                                <input type="date" id="exp-input-date" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63]">
-                            </div>
-
-                            <div class="w-full">
-                                <label class="block text-[11px] font-bold text-stone-600 mb-1">項目分類</label>
-                                <select id="exp-input-category" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-bold text-stone-700 focus:outline-none focus:border-[#C59B63]">
-                                    ${EXPENSE_CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
-                                </select>
-                            </div>
+                        <!-- 1. 日期欄位 (嚴格限制最大寬度與重置原生溢出) -->
+                        <div class="w-full min-w-0 md:col-span-1">
+                            <label class="block text-[11px] font-bold text-stone-600 mb-1">日期</label>
+                            <input type="date" id="exp-input-date" required class="w-full max-w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63] appearance-none block">
                         </div>
 
-                        <!-- 金額欄位 -->
-                        <div class="w-full md:col-span-1">
+                        <!-- 2. 項目分類欄位 -->
+                        <div class="w-full min-w-0 md:col-span-1">
+                            <label class="block text-[11px] font-bold text-stone-600 mb-1">項目分類</label>
+                            <select id="exp-input-category" required class="w-full max-w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-bold text-stone-700 focus:outline-none focus:border-[#C59B63] block">
+                                ${EXPENSE_CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
+                            </select>
+                        </div>
+
+                        <!-- 3. 金額欄位 -->
+                        <div class="w-full min-w-0 md:col-span-1">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">金額 (NT$)</label>
-                            <input type="number" id="exp-input-amount" min="1" placeholder="例如: 1500" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#C59B63]">
+                            <input type="number" id="exp-input-amount" min="1" placeholder="例如: 1500" required class="w-full max-w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#C59B63] block">
                         </div>
 
-                        <!-- 秘書備註說明與按鈕 -->
-                        <div class="w-full md:col-span-2">
+                        <!-- 4. 秘書備註說明與按鈕 -->
+                        <div class="w-full min-w-0 md:col-span-2">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">秘書備註說明</label>
                             <div class="flex items-center space-x-2">
-                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
+                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="flex-1 min-w-0 box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
                                 <button type="submit" class="px-4 py-2 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap cursor-pointer shrink-0">
                                     <i class="fa-solid fa-plus mr-1"></i>新增
                                 </button>
