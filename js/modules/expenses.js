@@ -82,9 +82,8 @@ function renderExpensesModule() {
         });
     });
 
-    // 外層容器完全對齊 tools-module.js（space-y-8 max-w-7xl mx-auto pb-12）
     container.innerHTML = `
-        <div class="space-y-8 max-w-7xl mx-auto pb-12">
+        <div class="space-y-6 max-w-7xl mx-auto pb-12 w-full">
             
             <!-- 1. 頂部控制列：年度切換與成員切換 -->
             <div class="card-frame p-4 sm:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
@@ -128,9 +127,10 @@ function renderExpensesModule() {
                     </div>
                 </div>
 
-                <!-- 新增支出輸入框 -->
+                <!-- 新增支出輸入框：徹底修正手機版按鈕切掉問題 -->
                 <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3">
                     <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
+                    
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
                         <div>
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">日期</label>
@@ -149,21 +149,24 @@ function renderExpensesModule() {
                             <input type="number" id="exp-input-amount" min="1" placeholder="例如: 1500" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#C59B63]">
                         </div>
 
-                        <div class="md:col-span-2">
+                        <div class="md:col-span-2 space-y-2">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">秘書備註說明</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="flex-1 box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
-                                <button type="submit" class="px-4 py-2 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap cursor-pointer shrink-0">
-                                    <i class="fa-solid fa-plus mr-1"></i>新增
+                            <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
+                            
+                            <!-- 按鈕在手機版獨立整列顯示，電腦版靠右靠下 -->
+                            <div class="flex justify-end pt-1">
+                                <button type="submit" class="w-full sm:w-auto px-5 py-2.5 bg-[#C59B63] hover:opacity-90 text-white rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap cursor-pointer flex items-center justify-center space-x-1">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                    <span>新增紀錄</span>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </form>
 
-                <!-- 明細表格（內部獨立橫向滑動，不影響全頁滾輪） -->
+                <!-- 明細表格（獨立包裹橫速滑動，確保滑動順暢） -->
                 <div class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
-                    <table class="w-full text-left text-xs border-collapse min-w-[540px]">
+                    <table class="w-full text-left text-xs border-collapse min-w-[520px]">
                         <thead>
                             <tr class="bg-stone-100/90 text-stone-600 border-b border-stone-200">
                                 <th class="p-3 font-bold w-12 text-center whitespace-nowrap">對帳</th>
