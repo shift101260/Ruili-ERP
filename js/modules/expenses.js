@@ -82,9 +82,9 @@ function renderExpensesModule() {
         });
     });
 
-    // 加入 overflow-x-hidden 與 w-full 確保整體頁面絕不橫向滑動
+    // 外層容器完全對齊 tools-module.js（space-y-8 max-w-7xl mx-auto pb-12）
     container.innerHTML = `
-        <div class="space-y-6 max-w-7xl mx-auto pb-12 w-full overflow-x-hidden">
+        <div class="space-y-8 max-w-7xl mx-auto pb-12">
             
             <!-- 1. 頂部控制列：年度切換與成員切換 -->
             <div class="card-frame p-4 sm:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
@@ -109,14 +109,14 @@ function renderExpensesModule() {
             </div>
 
             <!-- 2. 主要填寫與明細列表 -->
-            <div class="card-frame p-4 sm:p-5 space-y-5 overflow-hidden">
+            <div class="card-frame p-4 sm:p-5 space-y-5">
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3">
                     <div class="flex items-center space-x-2">
                         <span class="px-2.5 py-1 bg-[#C59B63] text-white rounded-lg text-xs font-bold whitespace-nowrap">${currentExpenseMember}</span>
                         <h3 class="text-xs sm:text-sm font-bold text-stone-800">支出填寫與紀錄列表 (${currentExpenseYear} 年)</h3>
                     </div>
 
-                    <!-- 人員頁籤切換按鈕 (僅限此橫列可左右滑動) -->
+                    <!-- 人員頁籤切換按鈕 (橫向滾動) -->
                     <div class="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
                         <div class="flex items-center space-x-1 bg-stone-100 p-1 rounded-xl w-max">
                             ${EXPENSE_MEMBERS.map(m => `
@@ -161,7 +161,7 @@ function renderExpensesModule() {
                     </div>
                 </form>
 
-                <!-- 明細表格（包覆橫向滑動，不影響全頁） -->
+                <!-- 明細表格（內部獨立橫向滑動，不影響全頁滾輪） -->
                 <div class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
                     <table class="w-full text-left text-xs border-collapse min-w-[540px]">
                         <thead>
