@@ -131,13 +131,13 @@ function renderExpensesModule() {
                     </div>
                 </div>
 
-                <!-- 新增支出輸入框：嚴格對齊日期、項目分類與金額欄位寬度 -->
+                <!-- 新增支出輸入框 -->
                 <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3 w-full">
                     <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-5 gap-3 w-full">
                         
-                        <!-- 1. 日期欄位 (嚴格限制最大寬度與重置原生溢出) -->
+                        <!-- 1. 日期欄位 -->
                         <div class="w-full min-w-0 md:col-span-1">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">日期</label>
                             <input type="date" id="exp-input-date" required class="w-full max-w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63] appearance-none block">
@@ -171,8 +171,8 @@ function renderExpensesModule() {
                     </div>
                 </form>
 
-                <!-- 明細表格區域 (允許內部水平滾動) -->
-                <div class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
+                <!-- 明細表格區域 (可自動向右滾動) -->
+                <div id="expense-table-wrapper" class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
                     <table class="w-full text-left text-xs border-collapse min-w-[520px]">
                         <thead>
                             <tr class="bg-stone-100/90 text-stone-600 border-b border-stone-200">
@@ -286,6 +286,14 @@ function renderExpensesModule() {
     if (dateInput) {
         dateInput.value = new Date().toISOString().split('T')[0];
     }
+
+    // 自動把橫向捲軸捲動到最右邊
+    setTimeout(() => {
+        const tableWrapper = document.getElementById('expense-table-wrapper');
+        if (tableWrapper) {
+            tableWrapper.scrollLeft = tableWrapper.scrollWidth;
+        }
+    }, 50);
 }
 
 // 切換年度
