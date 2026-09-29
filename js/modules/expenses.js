@@ -171,7 +171,7 @@ function renderExpensesModule() {
                     </div>
                 </form>
 
-                <!-- 明細表格區域 (可自動向右滾動) -->
+                <!-- 明細表格區域 -->
                 <div id="expense-table-wrapper" class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
                     <table class="w-full text-left text-xs border-collapse min-w-[520px]">
                         <thead>
@@ -287,13 +287,15 @@ function renderExpensesModule() {
         dateInput.value = new Date().toISOString().split('T')[0];
     }
 
-    // 自動把橫向捲軸捲動到最右邊
-    setTimeout(() => {
-        const tableWrapper = document.getElementById('expense-table-wrapper');
-        if (tableWrapper) {
-            tableWrapper.scrollLeft = tableWrapper.scrollWidth;
-        }
-    }, 50);
+    // 強力確保捲軸 100% 捲到最右邊（防異步佈局延遲）
+    requestAnimationFrame(() => {
+        setTimeout(() => {
+            const tableWrapper = document.getElementById('expense-table-wrapper');
+            if (tableWrapper) {
+                tableWrapper.scrollLeft = 9999;
+            }
+        }, 100);
+    });
 }
 
 // 切換年度
