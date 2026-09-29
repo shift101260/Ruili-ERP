@@ -106,12 +106,11 @@ function renderExpensesModule() {
                     <select id="expense-year-select" onchange="switchExpenseYear(this.value)" class="px-3 py-1.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63]">
                         <option value="2027" ${currentExpenseYear == 2027 ? 'selected' : ''}>2027 年度檔案</option>
                         <option value="2026" ${currentExpenseYear == 2026 ? 'selected' : ''}>2026 年度檔案</option>
-                        <option value="2025" ${currentExpenseYear == 2025 ? 'selected' : ''}>2025 年度檔案</option>
                     </select>
                 </div>
             </div>
 
-            <!-- 2. 主要填寫與明細列表 (第一優先區塊，手機版完美對齊) -->
+            <!-- 2. 主要填寫與明細列表 (優化手機版日期輸入與刪除) -->
             <div class="card-frame p-4 sm:p-5 space-y-5 w-full">
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3 w-full">
                     <div class="flex items-center space-x-2">
@@ -119,7 +118,7 @@ function renderExpensesModule() {
                         <h3 class="text-xs sm:text-sm font-bold text-stone-800">支出填寫與紀錄列表 (${currentExpenseYear} 年)</h3>
                     </div>
 
-                    <!-- 人員頁籤切換按鈕（手機版可滑動且自動置中選取） -->
+                    <!-- 人員頁籤切換按鈕 -->
                     <div class="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
                         <div class="flex items-center space-x-1 bg-stone-100 p-1 rounded-xl w-max">
                             ${EXPENSE_MEMBERS.map(m => `
@@ -131,31 +130,31 @@ function renderExpensesModule() {
                     </div>
                 </div>
 
-                <!-- 新增支出輸入框 (完美修復日期右側卡線) -->
+                <!-- 新增支出輸入框 (徹底防護手機版 date input 溢出) -->
                 <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3 w-full box-border">
                     <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 w-full">
-                        <div class="w-full">
+                        <div class="w-full min-w-0">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">日期</label>
-                            <input type="date" id="exp-input-date" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63]">
+                            <input type="date" id="exp-input-date" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63] min-w-0 max-w-full block appearance-none">
                         </div>
 
-                        <div class="w-full">
+                        <div class="w-full min-w-0">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">項目分類</label>
                             <select id="exp-input-category" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-bold text-stone-700 focus:outline-none focus:border-[#C59B63]">
                                 ${EXPENSE_CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
                             </select>
                         </div>
 
-                        <div class="w-full">
+                        <div class="w-full min-w-0">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">金額 (NT$)</label>
                             <input type="number" id="exp-input-amount" min="1" placeholder="例如: 1500" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#C59B63]">
                         </div>
 
-                        <div class="md:col-span-2 w-full">
+                        <div class="md:col-span-2 w-full min-w-0">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">秘書備註說明</label>
                             <div class="flex items-center space-x-2 w-full">
-                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="flex-1 box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
+                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="flex-1 box-border min-w-0 px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
                                 <button type="submit" class="px-4 py-2 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap cursor-pointer shrink-0">
                                     <i class="fa-solid fa-plus mr-1"></i>新增
                                 </button>
@@ -164,7 +163,7 @@ function renderExpensesModule() {
                     </div>
                 </form>
 
-                <!-- 僅此表格區域允許水平滾動 -->
+                <!-- 明細表格 (採用唯一 ID 進行精確對帳與刪除) -->
                 <div class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
                     <table class="w-full text-left text-xs border-collapse min-w-[520px]">
                         <thead>
@@ -182,18 +181,18 @@ function renderExpensesModule() {
                                 <tr>
                                     <td colspan="6" class="p-8 text-center text-stone-400">目前 ${currentExpenseMember} 在 ${currentExpenseYear} 年無支出紀錄</td>
                                 </tr>
-                            ` : (data[currentExpenseMember] || []).map((item, idx) => `
+                            ` : (data[currentExpenseMember] || []).map((item) => `
                                 <tr class="hover:bg-stone-50 transition ${item.checked ? 'bg-amber-50/40' : ''}">
                                     <td class="p-3 text-center whitespace-nowrap">
-                                        <input type="checkbox" onchange="toggleExpenseCheck(${idx})" ${item.checked ? 'checked' : ''} class="w-4 h-4 rounded border-stone-300 text-[#C59B63] focus:ring-[#C59B63] cursor-pointer">
+                                        <input type="checkbox" onchange="toggleExpenseCheck('${item.id}')" ${item.checked ? 'checked' : ''} class="w-4 h-4 rounded border-stone-300 text-[#C59B63] focus:ring-[#C59B63] cursor-pointer">
                                     </td>
                                     <td class="p-3 font-mono whitespace-nowrap ${item.checked ? 'line-through text-stone-400' : ''}">${item.date}</td>
                                     <td class="p-3 whitespace-nowrap"><span class="px-2.5 py-1 bg-stone-100 text-stone-800 rounded-md font-bold border border-stone-200 inline-block">${item.category}</span></td>
                                     <td class="p-3 font-mono font-bold text-emerald-700 whitespace-nowrap">NT$ ${Number(item.amount).toLocaleString()}</td>
                                     <td class="p-3 text-stone-600 min-w-[120px]">${item.note || '-'}</td>
                                     <td class="p-3 text-center whitespace-nowrap">
-                                        <button onclick="deleteExpenseItem(${idx})" class="text-stone-400 hover:text-rose-600 p-1 cursor-pointer transition" title="刪除">
-                                            <i class="fa-solid fa-trash-can"></i>
+                                        <button onclick="deleteExpenseItemById('${item.id}')" class="text-stone-400 hover:text-rose-600 p-2 cursor-pointer transition inline-flex items-center justify-center" title="刪除">
+                                            <i class="fa-solid fa-trash-can text-sm"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -318,7 +317,7 @@ function addExpenseItem(event) {
     }
 
     data[currentExpenseMember].unshift({
-        id: Date.now(),
+        id: 'exp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
         date,
         category,
         amount,
@@ -330,32 +329,34 @@ function addExpenseItem(event) {
     renderExpensesModule();
 }
 
-// 切換核取對帳狀態
-function toggleExpenseCheck(index) {
+// 切換核取對帳狀態 (使用唯一 ID 尋找)
+function toggleExpenseCheck(id) {
     const data = getExpenseData(currentExpenseYear);
-    if (data[currentExpenseMember] && data[currentExpenseMember][index]) {
-        data[currentExpenseMember][index].checked = !data[currentExpenseMember][index].checked;
+    const list = data[currentExpenseMember] || [];
+    const target = list.find(item => String(item.id) === String(id));
+    if (target) {
+        target.checked = !target.checked;
         saveExpenseData(currentExpenseYear, data);
         renderExpensesModule();
     }
 }
 
-// 刪除單筆支出
-function deleteExpenseItem(index) {
+// 根據 ID 刪除單筆支出 (精確修復刪除失敗)
+function deleteExpenseItemById(id) {
     if (!confirm('確定要刪除此筆支出紀錄嗎？')) return;
 
     const data = getExpenseData(currentExpenseYear);
     if (data[currentExpenseMember]) {
-        data[currentExpenseMember].splice(index, 1);
+        data[currentExpenseMember] = data[currentExpenseMember].filter(item => String(item.id) !== String(id));
         saveExpenseData(currentExpenseYear, data);
         renderExpensesModule();
     }
 }
 
-// 掛載至全域 window，確保左側導覽列 switchModule 可以直接呼叫
+// 掛載至全域 window
 window.renderExpensesModule = renderExpensesModule;
 window.switchExpenseYear = switchExpenseYear;
 window.switchExpenseMember = switchExpenseMember;
 window.addExpenseItem = addExpenseItem;
 window.toggleExpenseCheck = toggleExpenseCheck;
-window.deleteExpenseItem = deleteExpenseItem;
+window.deleteExpenseItemById = deleteExpenseItemById;
