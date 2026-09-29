@@ -91,9 +91,10 @@ function saveNewCase() {
     }
 
     let sectionStatus = 'EVALUATION';
-    if (progressStatus === '簽約中') sectionStatus = 'CONTRACTING';
-    else if (progressStatus === '結案中') sectionStatus = 'CLOSED';
+    if (progressStatus === '準備簽約' || progressStatus === '案件簽約') sectionStatus = 'CONTRACTING';
+    else if (progressStatus === '結案') sectionStatus = 'CLOSED';
     else if (progressStatus === '廢件') sectionStatus = 'JUNK';
+    else if (progressStatus === '失敗') sectionStatus = 'FAILED';
 
     const existingIndex = allCasesStore.findIndex(c => c.id === id);
     const caseData = {
@@ -117,12 +118,12 @@ function saveNewCase() {
     closeModal('editCaseModal');
 }
 
-// 渲染案件管理基礎頁面骨架 (強制重構 HTML 以確保切換順暢)
+// 渲染案件管理基礎頁面骨架 (強制重構 HTML 以確保切換順暢，並加入 id 與識別 Class)
 function renderCaseManagementView(year = 2026) {
     const container = document.getElementById('app-container');
     if (!container) return;
 
-    // 強制重寫案件管理的主架構
+    // 重寫案件管理的主架構，加入單一卡片顯示控制需要的 id 與 class
     container.innerHTML = `
         <header class="card-frame p-4 sm:p-5 mb-5 flex justify-between items-center">
             <div>
@@ -162,7 +163,8 @@ function renderCaseManagementView(year = 2026) {
         </header>
 
         <div class="space-y-4">
-            <div class="card-frame overflow-hidden">
+            <!-- 區塊 1：案件評估 -->
+            <div id="section-EVALUATION" class="card-frame overflow-hidden case-status-section">
                 <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
@@ -173,7 +175,8 @@ function renderCaseManagementView(year = 2026) {
                 <div id="container-EVALUATION" class="p-4 text-xs text-stone-400 text-center py-6">目前無案件評估紀錄</div>
             </div>
 
-            <div class="card-frame overflow-hidden">
+            <!-- 區塊 2：簽約案件 -->
+            <div id="section-CONTRACTING" class="card-frame overflow-hidden case-status-section">
                 <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
@@ -184,7 +187,8 @@ function renderCaseManagementView(year = 2026) {
                 <div id="container-CONTRACTING" class="p-4 text-xs text-stone-400 text-center py-6">目前無簽約案件記錄</div>
             </div>
 
-            <div class="card-frame overflow-hidden">
+            <!-- 區塊 3：結案中心 -->
+            <div id="section-CLOSED" class="card-frame overflow-hidden case-status-section">
                 <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
@@ -195,7 +199,8 @@ function renderCaseManagementView(year = 2026) {
                 <div id="container-CLOSED" class="p-4 text-xs text-stone-400 text-center py-6">目前無結案紀錄</div>
             </div>
 
-            <div class="card-frame overflow-hidden">
+            <!-- 區塊 4：廢件專區 -->
+            <div id="section-JUNK" class="card-frame overflow-hidden case-status-section">
                 <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-stone-400"></span>
@@ -206,7 +211,8 @@ function renderCaseManagementView(year = 2026) {
                 <div id="container-JUNK" class="p-4 text-xs text-stone-400 text-center py-6">目前無相關廢件紀錄</div>
             </div>
 
-            <div class="card-frame overflow-hidden">
+            <!-- 區塊 5：案件失敗 -->
+            <div id="section-FAILED" class="card-frame overflow-hidden case-status-section">
                 <div class="px-5 py-3 border-b border-stone-100 flex items-center justify-between bg-white">
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
@@ -340,15 +346,26 @@ function filterCases() {
     });
 }
 
+// 模組名稱與分區 key 對應表
+const moduleToStatusMap = {
+    'all-cases': 'ALL',
+    'evaluation-cases': 'EVALUATION',
+    'contract-cases': 'CONTRACTING',
+    'closed-center': 'CLOSED',
+    'junk-center': 'JUNK',
+    'failed-cases': 'FAILED'
+};
+
 // 頁面與模組切換主控制邏輯
-function switchModule(moduleName, btnElement, year) {
+function switchModule(moduleName, btnElement, titleText, year) {
     // 1. 切換選單按鈕高亮樣式
     document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('btn-gold', 'text-white', 'font-medium');
+        btn.classList.remove('btn-gold', 'bg-[#C59B63]', 'text-white', 'font-medium');
         btn.classList.add('hover:bg-stone-800/80', 'text-stone-300');
     });
     if (btnElement) {
-        btnElement.classList.add('btn-gold', 'text-white', 'font-medium');
+        btnElement.classList.add('bg-[#C59B63]', 'text-white', 'font-medium');
+        btnElement.classList.remove('hover:bg-stone-800/80', 'text-stone-300');
     }
 
     // 2. 切換至「工具專區」
@@ -361,16 +378,48 @@ function switchModule(moduleName, btnElement, year) {
         return;
     }
 
-    // 3. 切換至「案件管理」或「年度切換」
+    // 3. 確保案件管理框架存在
     const currentYear = year || 2026;
-    renderCaseManagementView(currentYear);
+    const pageTitle = document.getElementById('page-title');
+    if (!pageTitle) {
+        renderCaseManagementView(currentYear);
+    }
 
+    // 4. 更新標題名稱
+    const updatedPageTitle = document.getElementById('page-title');
     const yearDisplay = document.getElementById('current-year-display');
     const yearSub = document.getElementById('current-year-sub');
     if (yearDisplay) yearDisplay.innerText = currentYear;
     if (yearSub) yearSub.innerText = currentYear;
 
+    if (updatedPageTitle) {
+        if (titleText) {
+            updatedPageTitle.innerHTML = `<span id="current-year-display">${currentYear}</span> ${titleText} 年度案件管理中心`;
+        } else if (moduleName === 'all-cases') {
+            updatedPageTitle.innerHTML = `<span id="current-year-display">${currentYear}</span> 年度案件管理中心`;
+        }
+    }
+
+    // 5. 渲染表格資料
     renderAllSections();
+
+    // 6. 控制右側卡片區塊顯示/隱藏 (關鍵修改)
+    const targetStatus = moduleToStatusMap[moduleName] || 'ALL';
+    const allSections = document.querySelectorAll('.case-status-section');
+
+    allSections.forEach(section => {
+        if (targetStatus === 'ALL') {
+            // 全集團案件總覽：顯示所有 5 大卡片
+            section.style.display = 'block';
+        } else {
+            // 單一分類：僅顯示目標卡片
+            if (section.id === `section-${targetStatus}`) {
+                section.style.display = 'block';
+            } else {
+                section.style.display = 'none';
+            }
+        }
+    });
 }
 
 // 掛載所有函數至全域 window，確保 HTML onclick 能無縫調用
