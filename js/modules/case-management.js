@@ -155,7 +155,7 @@ function renderCaseManagementView() {
                 <button onclick="location.reload()" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-md text-xs font-medium border border-stone-300 transition flex items-center gap-1 cursor-pointer">
                     <i class="fa-solid fa-rotate-left text-stone-500"></i>恢復
                 </button>
-                <button onclick="openAddCaseModal()" class="px-4 py-1.5 btn-gold rounded-md text-xs font-medium shadow-2xs transition flex items-center gap-1 cursor-pointer whitespace-nowrap">
+                <button id="btn-add-case" onclick="openAddCaseModal()" class="px-4 py-1.5 btn-gold rounded-md text-xs font-medium shadow-2xs transition flex items-center gap-1 cursor-pointer whitespace-nowrap">
                     <i class="fa-solid fa-plus"></i>新增
                 </button>
             </div>
@@ -414,6 +414,16 @@ function switchModule(moduleName, btnElement, titleText) {
             }
         }
     });
+
+    // 7. 控制「+新增」按鈕顯隱：僅在「案件評估」時顯示，其餘情況隱藏
+    const addBtn = document.getElementById('btn-add-case');
+    if (addBtn) {
+        if (moduleName === 'evaluation-cases' || titleText === '案件評估') {
+            addBtn.classList.remove('hidden');
+        } else {
+            addBtn.classList.add('hidden');
+        }
+    }
 }
 
 // 掛載所有函數至全域 window，確保 HTML onclick 能無縫調用
