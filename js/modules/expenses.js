@@ -111,7 +111,7 @@ function renderExpensesModule() {
                 </div>
             </div>
 
-            <!-- 2. 主要填寫與明細列表 (第一優先區塊，手機版只允許內部表格左右滾動) -->
+            <!-- 2. 主要填寫與明細列表 (第一優先區塊，手機版完美對齊) -->
             <div class="card-frame p-4 sm:p-5 space-y-5 w-full">
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3 w-full">
                     <div class="flex items-center space-x-2">
@@ -119,11 +119,11 @@ function renderExpensesModule() {
                         <h3 class="text-xs sm:text-sm font-bold text-stone-800">支出填寫與紀錄列表 (${currentExpenseYear} 年)</h3>
                     </div>
 
-                    <!-- 人員頁籤切換按鈕 -->
-                    <div class="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+                    <!-- 人員頁籤切換按鈕（手機版可滑動且自動置中選取） -->
+                    <div class="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
                         <div class="flex items-center space-x-1 bg-stone-100 p-1 rounded-xl w-max">
                             ${EXPENSE_MEMBERS.map(m => `
-                                <button onclick="switchExpenseMember('${m}')" class="px-3 py-1 text-xs font-bold rounded-lg transition whitespace-nowrap ${currentExpenseMember === m ? 'bg-white text-stone-800 shadow-2xs' : 'text-stone-500 hover:text-stone-800'}">
+                                <button id="member-btn-${m}" onclick="switchExpenseMember('${m}')" class="px-3.5 py-1.5 text-xs font-bold rounded-lg transition whitespace-nowrap shrink-0 ${currentExpenseMember === m ? 'bg-white text-stone-800 shadow-2xs font-extrabold' : 'text-stone-500 hover:text-stone-800'}">
                                     ${m}
                                 </button>
                             `).join('')}
@@ -131,31 +131,31 @@ function renderExpensesModule() {
                     </div>
                 </div>
 
-                <!-- 新增支出輸入框 -->
-                <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3 w-full">
+                <!-- 新增支出輸入框 (完美修復日期右側卡線) -->
+                <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3 w-full box-border">
                     <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
-                        <div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 w-full">
+                        <div class="w-full">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">日期</label>
-                            <input type="date" id="exp-input-date" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63]">
+                            <input type="date" id="exp-input-date" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63]">
                         </div>
 
-                        <div>
+                        <div class="w-full">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">項目分類</label>
-                            <select id="exp-input-category" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-bold text-stone-700 focus:outline-none focus:border-[#C59B63]">
+                            <select id="exp-input-category" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-bold text-stone-700 focus:outline-none focus:border-[#C59B63]">
                                 ${EXPENSE_CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
                             </select>
                         </div>
 
-                        <div>
+                        <div class="w-full">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">金額 (NT$)</label>
-                            <input type="number" id="exp-input-amount" min="1" placeholder="例如: 1500" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#C59B63]">
+                            <input type="number" id="exp-input-amount" min="1" placeholder="例如: 1500" required class="w-full box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#C59B63]">
                         </div>
 
-                        <div class="md:col-span-2">
+                        <div class="md:col-span-2 w-full">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">秘書備註說明</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
+                            <div class="flex items-center space-x-2 w-full">
+                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="flex-1 box-border px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
                                 <button type="submit" class="px-4 py-2 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap cursor-pointer shrink-0">
                                     <i class="fa-solid fa-plus mr-1"></i>新增
                                 </button>
@@ -211,7 +211,7 @@ function renderExpensesModule() {
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                     ${EXPENSE_MEMBERS.map(m => `
-                        <div onclick="switchExpenseMember('${m}')" class="p-3.5 rounded-2xl border transition cursor-pointer ${currentExpenseMember === m ? 'bg-amber-50/80 border-[#C59B63] shadow-xs' : 'bg-white border-stone-200 hover:border-stone-300'}">
+                        <div id="member-card-${m}" onclick="switchExpenseMember('${m}')" class="p-3.5 rounded-2xl border transition cursor-pointer ${currentExpenseMember === m ? 'bg-amber-50/80 border-[#C59B63] shadow-xs' : 'bg-white border-stone-200 hover:border-stone-300'}">
                             <div class="flex items-center justify-between text-xs text-stone-500 mb-1">
                                 <span class="font-bold ${currentExpenseMember === m ? 'text-[#B38952]' : 'text-stone-700'}">${m}</span>
                                 <i class="fa-solid fa-user text-[10px]"></i>
@@ -279,6 +279,14 @@ function renderExpensesModule() {
     if (dateInput) {
         dateInput.value = new Date().toISOString().split('T')[0];
     }
+
+    // 自動拉近滾動聚焦到被選取的成員按鈕
+    setTimeout(() => {
+        const activeBtn = document.getElementById(`member-btn-${currentExpenseMember}`);
+        if (activeBtn && activeBtn.scrollIntoView) {
+            activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    }, 100);
 }
 
 // 切換年度
