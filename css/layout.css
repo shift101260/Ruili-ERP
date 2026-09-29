@@ -1,7 +1,12 @@
 /**
  * 睿立集團系統｜全域排版與 RWD 響應式架構 (layout.css)
- * 專為桌機與手機直式操作設計之骨架規範
+ * 專為桌機與手機直式操作設計之骨架規範（已修正手機版 Modal 與欄位擠壓問題）
  */
+
+/* 全域盒模型修復：確保 padding 不會把容器尺寸撐爆 */
+*, ::before, ::after {
+    box-sizing: border-box;
+}
 
 /* 1. 基礎畫面配置：禁止全頁面亂滾，強制上下分層 */
 body {
@@ -9,6 +14,7 @@ body {
     color: var(--ruili-dark);
     display: flex;
     height: 100vh;
+    width: 100vw;
     overflow: hidden;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -38,13 +44,16 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
     overflow-y: auto;
+    overflow-x: hidden; /* 防止主畫面左右晃動 */
     position: relative;
     background-color: var(--ruili-bg);
+    -webkit-overflow-scrolling: touch;
 }
 
 .ruili-container {
-    padding: 2rem;
+    padding: 1.5rem;
     max-width: 96%;
     margin: 0 auto;
     width: 100%;
@@ -84,9 +93,12 @@ body {
         z-index: 40;
     }
 
+    /* 📱 手機版容器與邊距修復：避免欄位被切掉 */
     .ruili-container {
-        padding: 1rem;
+        padding: 0.75rem; /* 縮減內邊距，釋放更多可顯示寬度 */
         max-width: 100%;
+        width: 100%;
+        overflow-x: hidden;
     }
 
     /* 📱 手機版頂部管理中心卡片優化 */
