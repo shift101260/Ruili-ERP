@@ -16,18 +16,6 @@ function renderToolsModule() {
                     <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">基本資料查詢</h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                    <!-- 工廠改善計畫名單查詢 -->
-                    <div onclick="if(typeof renderFactoryImprovementModule === 'function') renderFactoryImprovementModule()" class="p-4 bg-white hover:bg-amber-50/50 border border-stone-200 hover:border-amber-300 rounded-2xl transition flex items-center space-x-3.5 shadow-2xs group cursor-pointer">
-                        <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition">
-                            <i class="fa-solid fa-file-pdf"></i>
-                        </div>
-                        <div class="overflow-hidden flex-1">
-                            <div class="font-bold text-xs text-stone-900 truncate">工廠改善計畫查詢</div>
-                            <div class="text-[10px] text-stone-400 truncate mt-0.5">PDF 名單與智慧篩選管理</div>
-                        </div>
-                        <i class="fa-solid fa-arrow-right text-xs text-stone-300 group-hover:text-amber-600"></i>
-                    </div>
-
                     <!-- 測繪雲 -->
                     <a href="https://maps.nlsc.gov.tw/T09/mobilemap.action" target="_blank" rel="noopener noreferrer" class="p-4 bg-white hover:bg-emerald-50/50 border border-stone-200 hover:border-emerald-300 rounded-2xl transition flex items-center space-x-3.5 shadow-2xs group">
                         <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition">
@@ -63,6 +51,18 @@ function renderToolsModule() {
                         </div>
                         <i class="fa-solid fa-arrow-up-right-from-square text-xs text-stone-300 group-hover:text-amber-600"></i>
                     </a>
+
+                    <!-- 工廠改善計畫名單查詢 -->
+                    <div onclick="if(typeof renderFactoryImprovementModule === 'function') renderFactoryImprovementModule()" class="p-4 bg-white hover:bg-amber-50/50 border border-stone-200 hover:border-amber-300 rounded-2xl transition flex items-center space-x-3.5 shadow-2xs group cursor-pointer">
+                        <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </div>
+                        <div class="overflow-hidden flex-1">
+                            <div class="font-bold text-xs text-stone-900 truncate">工廠改善計畫查詢</div>
+                            <div class="text-[10px] text-stone-400 truncate mt-0.5">PDF 名單與智慧篩選管理</div>
+                        </div>
+                        <i class="fa-solid fa-arrow-right text-xs text-stone-300 group-hover:text-amber-600"></i>
+                    </div>
 
                     <!-- 謄本調閱 -->
                     <a href="https://ep1.land.nat.gov.tw/Home/EpaperManual1" target="_blank" rel="noopener noreferrer" class="p-4 bg-white hover:bg-purple-50/50 border border-stone-200 hover:border-purple-300 rounded-2xl transition flex items-center space-x-3.5 shadow-2xs group">
