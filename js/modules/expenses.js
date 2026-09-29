@@ -22,7 +22,7 @@ const EXPENSE_MEMBERS = ['楊裕憲', '陳宥騰', '鄭家承', '樊靖畇', '�
 let currentExpenseYear = new Date().getFullYear();
 let currentExpenseMember = '楊裕憲';
 
-// 記憶體暫存資料（不永久寫入 LocalStorage，重新整理頁面後會自動清空洗掉）
+// 記憶體暫存資料（不寫入 LocalStorage，重新整理頁面後會自動清空洗掉）
 let inMemoryExpenseData = {
     '2027': { '楊裕憲': [], '陳宥騰': [], '鄭家承': [], '樊靖畇': [], '楊淯淳': [] },
     '2026': { '楊裕憲': [], '陳宥騰': [], '鄭家承': [], '樊靖畇': [], '楊淯淳': [] },
@@ -82,7 +82,7 @@ function renderExpensesModule() {
         });
     });
 
-    // 容器 Class 保持與工具專區 (tools-module.js) 完全一致：space-y-6 max-w-7xl mx-auto pb-12
+    // 外層容器結構完全對齊 tools-module.js
     container.innerHTML = `
         <div class="space-y-6 max-w-7xl mx-auto pb-12">
             
@@ -161,7 +161,7 @@ function renderExpensesModule() {
                     </div>
                 </form>
 
-                <!-- 明細表格 (僅表格本體內部允許 X 軸左右滾動) -->
+                <!-- 明細表格（橫向溢出僅限表格本體） -->
                 <div class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
                     <table class="w-full text-left text-xs border-collapse min-w-[540px]">
                         <thead>
