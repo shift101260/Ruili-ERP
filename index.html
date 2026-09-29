@@ -1249,5 +1249,22 @@
     <!-- 服務項目試算模組 -->
     <script src="./js/modules/solar-calc.js"></script>
     <script src="./js/modules/land-change-calc.js"></script>
+    <!-- 補強 switchModule 支援自填支出頁面 -->
+    <script>
+        const originalSwitchModule = window.switchModule;
+        window.switchModule = function(moduleName, element) {
+            // 執行原有的樣式切換與預設模組 logic
+            if (typeof originalSwitchModule === 'function') {
+                originalSwitchModule(moduleName, element);
+            }
+            
+            // 當點擊自填支出時，觸發自填支出模組渲染
+            if (moduleName === 'expenses' || moduleName === '自填支出') {
+                if (typeof renderExpensesModule === 'function') {
+                    renderExpensesModule();
+                }
+            }
+        };
+    </script>
 </body>
 </html>
