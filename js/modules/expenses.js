@@ -88,9 +88,9 @@ function renderExpensesModule() {
         <div class="space-y-6 max-w-7xl mx-auto pb-12">
             
             <!-- 1. 頂部控制列：年度切換與成員切換 -->
-            <div class="card-frame p-4 sm:p-5 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="card-frame p-4 sm:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-lg font-bold">
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-lg font-bold shrink-0">
                         <i class="fa-solid fa-receipt"></i>
                     </div>
                     <div>
@@ -99,7 +99,7 @@ function renderExpensesModule() {
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
+                <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
                     <label class="text-xs font-bold text-stone-600 whitespace-nowrap">選擇年度檔案：</label>
                     <select id="expense-year-select" onchange="switchExpenseYear(this.value)" class="px-3 py-1.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63]">
                         <option value="2026" ${currentExpenseYear == 2026 ? 'selected' : ''}>2026 年度檔案</option>
@@ -109,7 +109,95 @@ function renderExpensesModule() {
                 </div>
             </div>
 
-            <!-- 2. 當年度 A B C D E 零用金卡片 + 總支出卡片 -->
+            <!-- 2. 主要填寫與明細列表 (第一優先區域) -->
+            <div class="card-frame p-4 sm:p-5 space-y-5">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 bg-[#C59B63] text-white rounded-lg text-xs font-bold whitespace-nowrap">${currentExpenseMember}</span>
+                        <h3 class="text-xs sm:text-sm font-bold text-stone-800">支出填寫與紀錄列表 (${currentExpenseYear} 年)</h3>
+                    </div>
+
+                    <!-- 人員頁籤切換按鈕（手機版可水平滑動） -->
+                    <div class="overflow-x-auto pb-1 sm:pb-0 -mx-1 px-1">
+                        <div class="flex items-center space-x-1 bg-stone-100 p-1 rounded-xl w-max">
+                            ${EXPENSE_MEMBERS.map(m => `
+                                <button onclick="switchExpenseMember('${m}')" class="px-3 py-1 text-xs font-bold rounded-lg transition whitespace-nowrap ${currentExpenseMember === m ? 'bg-white text-stone-800 shadow-2xs' : 'text-stone-500 hover:text-stone-800'}">
+                                    ${m}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 新增支出輸入框 -->
+                <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3">
+                    <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-bold text-stone-600 mb-1">日期</label>
+                            <input type="date" id="exp-input-date" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63]">
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold text-stone-600 mb-1">項目分類</label>
+                            <select id="exp-input-category" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-bold text-stone-700 focus:outline-none focus:border-[#C59B63]">
+                                ${EXPENSE_CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-bold text-stone-600 mb-1">金額 (NT$)</label>
+                            <input type="number" id="exp-input-amount" min="1" placeholder="例如: 1500" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#C59B63]">
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-[11px] font-bold text-stone-600 mb-1">備註說明</label>
+                            <div class="flex items-center space-x-2">
+                                <input type="text" id="exp-input-note" placeholder="例：與客戶餐敘、高鐵票..." class="flex-1 px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
+                                <button type="submit" class="px-4 py-2 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap cursor-pointer shrink-0">
+                                    <i class="fa-solid fa-plus mr-1"></i>新增
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- 個人支出明細表格 (加強手機版滾動與字體放擠壓) -->
+                <div class="overflow-x-auto -mx-2 sm:mx-0 px-2 sm:px-0">
+                    <table class="w-full text-left text-xs border-collapse min-w-[500px]">
+                        <thead>
+                            <tr class="bg-stone-100/80 text-stone-600 border-b border-stone-200">
+                                <th class="p-3 font-bold w-32 whitespace-nowrap">日期</th>
+                                <th class="p-3 font-bold w-36 whitespace-nowrap">項目分類</th>
+                                <th class="p-3 font-bold w-32 whitespace-nowrap">金額</th>
+                                <th class="p-3 font-bold whitespace-nowrap">備註</th>
+                                <th class="p-3 font-bold w-16 text-center whitespace-nowrap">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100 text-stone-700">
+                            ${(data[currentExpenseMember] || []).length === 0 ? `
+                                <tr>
+                                    <td colspan="5" class="p-8 text-center text-stone-400">目前 ${currentExpenseMember} 在 ${currentExpenseYear} 年無支出紀錄</td>
+                                </tr>
+                            ` : (data[currentExpenseMember] || []).map((item, idx) => `
+                                <tr class="hover:bg-stone-50 transition">
+                                    <td class="p-3 font-mono whitespace-nowrap">${item.date}</td>
+                                    <td class="p-3 whitespace-nowrap"><span class="px-2.5 py-1 bg-stone-100 text-stone-800 rounded-md font-bold border border-stone-200 inline-block">${item.category}</span></td>
+                                    <td class="p-3 font-mono font-bold text-emerald-700 whitespace-nowrap">NT$ ${Number(item.amount).toLocaleString()}</td>
+                                    <td class="p-3 text-stone-600 min-w-[150px]">${item.note || '-'}</td>
+                                    <td class="p-3 text-center whitespace-nowrap">
+                                        <button onclick="deleteExpenseItem(${idx})" class="text-stone-400 hover:text-rose-600 p-1 cursor-pointer transition" title="刪除">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 3. 當年度 A B C D E 零用金卡片 + 總支出卡片 (移動至下方) -->
             <div>
                 <div class="flex items-center space-x-2 mb-3 px-1">
                     <i class="fa-solid fa-chart-pie text-[#C59B63] text-sm"></i>
@@ -141,14 +229,14 @@ function renderExpensesModule() {
                 </div>
             </div>
 
-            <!-- 3. 全體項目比例與金額分析看板 -->
-            <div class="card-frame p-5 space-y-4">
+            <!-- 4. 全體項目比例與金額分析看板 (移動至最下方) -->
+            <div class="card-frame p-4 sm:p-5 space-y-4">
                 <div class="flex items-center justify-between border-b border-stone-100 pb-3">
                     <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-chart-bar text-sky-600"></i>
-                        <h3 class="text-xs font-bold text-stone-800">${currentExpenseYear} 年度全體支出項目與金額佔比分析</h3>
+                        <h3 class="text-xs sm:text-sm font-bold text-stone-800">${currentExpenseYear} 年度全體支出項目與金額佔比分析</h3>
                     </div>
-                    <span class="text-[11px] text-stone-400 font-mono">總筆數：${totalItemsCount} 筆</span>
+                    <span class="text-[11px] text-stone-400 font-mono whitespace-nowrap">總筆數：${totalItemsCount} 筆</span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -174,92 +262,6 @@ function renderExpensesModule() {
                             </div>
                         `;
                     }).join('')}
-                </div>
-            </div>
-
-            <!-- 4. 明細錄入與個人表單區 -->
-            <div class="card-frame p-5 space-y-5">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3">
-                    <div class="flex items-center space-x-2">
-                        <span class="px-2.5 py-1 bg-[#C59B63] text-white rounded-lg text-xs font-bold">${currentExpenseMember}</span>
-                        <h3 class="text-xs font-bold text-stone-800">支出填寫與紀錄列表 (${currentExpenseYear} 年)</h3>
-                    </div>
-
-                    <!-- 人員頁籤切換按鈕 -->
-                    <div class="flex items-center space-x-1 bg-stone-100 p-1 rounded-xl">
-                        ${EXPENSE_MEMBERS.map(m => `
-                            <button onclick="switchExpenseMember('${m}')" class="px-3 py-1 text-xs font-bold rounded-lg transition ${currentExpenseMember === m ? 'bg-white text-stone-800 shadow-2xs' : 'text-stone-500 hover:text-stone-800'}">
-                                ${m}
-                            </button>
-                        `).join('')}
-                    </div>
-                </div>
-
-                <!-- 新增支出輸入框 -->
-                <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-4 rounded-2xl border border-stone-200 space-y-3">
-                    <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
-                        <div>
-                            <label class="block text-[11px] font-bold text-stone-600 mb-1">日期</label>
-                            <input type="date" id="exp-input-date" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono focus:outline-none focus:border-[#C59B63]">
-                        </div>
-
-                        <div>
-                            <label class="block text-[11px] font-bold text-stone-600 mb-1">項目分類</label>
-                            <select id="exp-input-category" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-bold text-stone-700 focus:outline-none focus:border-[#C59B63]">
-                                ${EXPENSE_CATEGORIES.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-[11px] font-bold text-stone-600 mb-1">金額 (NT$)</label>
-                            <input type="number" id="exp-input-amount" min="1" placeholder="例如: 1500" required class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs font-mono font-bold focus:outline-none focus:border-[#C59B63]">
-                        </div>
-
-                        <div class="md:col-span-2">
-                            <label class="block text-[11px] font-bold text-stone-600 mb-1">備註說明</label>
-                            <div class="flex items-center space-x-2">
-                                <input type="text" id="exp-input-note" placeholder="例：與客戶餐敘、高鐵票..." class="flex-1 px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
-                                <button type="submit" class="px-4 py-2 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap cursor-pointer">
-                                    <i class="fa-solid fa-plus mr-1"></i>新增
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- 個人支出明細表格 -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs border-collapse">
-                        <thead>
-                            <tr class="bg-stone-100/80 text-stone-600 border-b border-stone-200">
-                                <th class="p-3 font-bold w-32">日期</th>
-                                <th class="p-3 font-bold w-36">項目分類</th>
-                                <th class="p-3 font-bold w-36">金額</th>
-                                <th class="p-3 font-bold">備註</th>
-                                <th class="p-3 font-bold w-20 text-center">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-stone-100 text-stone-700">
-                            ${(data[currentExpenseMember] || []).length === 0 ? `
-                                <tr>
-                                    <td colspan="5" class="p-8 text-center text-stone-400">目前 ${currentExpenseMember} 在 ${currentExpenseYear} 年無支出紀錄</td>
-                                </tr>
-                            ` : (data[currentExpenseMember] || []).map((item, idx) => `
-                                <tr class="hover:bg-stone-50 transition">
-                                    <td class="p-3 font-mono">${item.date}</td>
-                                    <td class="p-3"><span class="px-2 py-0.5 bg-stone-100 text-stone-800 rounded-md font-bold border border-stone-200">${item.category}</span></td>
-                                    <td class="p-3 font-mono font-bold text-emerald-700">NT$ ${Number(item.amount).toLocaleString()}</td>
-                                    <td class="p-3 text-stone-600">${item.note || '-'}</td>
-                                    <td class="p-3 text-center">
-                                        <button onclick="deleteExpenseItem(${idx})" class="text-stone-400 hover:text-rose-600 p-1 cursor-pointer transition" title="刪除">
-                                            <i class="fa-solid fa-trash-can"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
                 </div>
             </div>
 
