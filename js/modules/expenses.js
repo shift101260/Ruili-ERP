@@ -87,10 +87,10 @@ function renderExpensesModule() {
     });
 
     container.innerHTML = `
-        <div class="space-y-6 max-w-7xl mx-auto pb-12">
+        <div class="space-y-6 max-w-7xl mx-auto pb-12 w-full overflow-x-hidden">
             
             <!-- 1. 頂部控制列：年度切換與成員切換 -->
-            <div class="card-frame p-4 sm:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+            <div class="card-frame p-4 sm:p-5 flex flex-col sm:flex-row justify-between sm:items-center gap-4 w-full">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-lg font-bold shrink-0">
                         <i class="fa-solid fa-receipt"></i>
@@ -101,7 +101,7 @@ function renderExpensesModule() {
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
+                <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
                     <label class="text-xs font-bold text-stone-600 whitespace-nowrap">選擇年度檔案：</label>
                     <select id="expense-year-select" onchange="switchExpenseYear(this.value)" class="px-3 py-1.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63]">
                         <option value="2027" ${currentExpenseYear == 2027 ? 'selected' : ''}>2027 年度檔案</option>
@@ -111,16 +111,16 @@ function renderExpensesModule() {
                 </div>
             </div>
 
-            <!-- 2. 主要填寫與明細列表 (放置最上方，手機操作最順手) -->
-            <div class="card-frame p-4 sm:p-5 space-y-5">
-                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3">
+            <!-- 2. 主要填寫與明細列表 (第一優先區塊，手機版只允許內部表格左右滾動) -->
+            <div class="card-frame p-4 sm:p-5 space-y-5 w-full">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-stone-100 pb-3 w-full">
                     <div class="flex items-center space-x-2">
                         <span class="px-2.5 py-1 bg-[#C59B63] text-white rounded-lg text-xs font-bold whitespace-nowrap">${currentExpenseMember}</span>
                         <h3 class="text-xs sm:text-sm font-bold text-stone-800">支出填寫與紀錄列表 (${currentExpenseYear} 年)</h3>
                     </div>
 
-                    <!-- 人員頁籤切換按鈕（手機版可水平滑動） -->
-                    <div class="overflow-x-auto pb-1 sm:pb-0 -mx-1 px-1">
+                    <!-- 人員頁籤切換按鈕 -->
+                    <div class="w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
                         <div class="flex items-center space-x-1 bg-stone-100 p-1 rounded-xl w-max">
                             ${EXPENSE_MEMBERS.map(m => `
                                 <button onclick="switchExpenseMember('${m}')" class="px-3 py-1 text-xs font-bold rounded-lg transition whitespace-nowrap ${currentExpenseMember === m ? 'bg-white text-stone-800 shadow-2xs' : 'text-stone-500 hover:text-stone-800'}">
@@ -132,7 +132,7 @@ function renderExpensesModule() {
                 </div>
 
                 <!-- 新增支出輸入框 -->
-                <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3">
+                <form onsubmit="addExpenseItem(event)" class="bg-stone-50 p-3.5 sm:p-4 rounded-2xl border border-stone-200 space-y-3 w-full">
                     <div class="font-bold text-xs text-stone-700">＋ 新增 ${currentExpenseMember} 支出紀錄</div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
                         <div>
@@ -155,7 +155,7 @@ function renderExpensesModule() {
                         <div class="md:col-span-2">
                             <label class="block text-[11px] font-bold text-stone-600 mb-1">秘書備註說明</label>
                             <div class="flex items-center space-x-2">
-                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="flex-1 px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
+                                <input type="text" id="exp-input-note" placeholder="例：是否有發票..." class="w-full px-3 py-2 bg-white border border-stone-300 rounded-xl text-xs focus:outline-none focus:border-[#C59B63]">
                                 <button type="submit" class="px-4 py-2 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap cursor-pointer shrink-0">
                                     <i class="fa-solid fa-plus mr-1"></i>新增
                                 </button>
@@ -164,20 +164,20 @@ function renderExpensesModule() {
                     </div>
                 </form>
 
-                <!-- 個人支出明細表格 (日期左側增加核取框) -->
-                <div class="overflow-x-auto -mx-2 sm:mx-0 px-2 sm:px-0">
-                    <table class="w-full text-left text-xs border-collapse min-w-[550px]">
+                <!-- 僅此表格區域允許水平滾動 -->
+                <div class="w-full overflow-x-auto border border-stone-200/80 rounded-xl">
+                    <table class="w-full text-left text-xs border-collapse min-w-[520px]">
                         <thead>
-                            <tr class="bg-stone-100/80 text-stone-600 border-b border-stone-200">
-                                <th class="p-3 font-bold w-10 text-center whitespace-nowrap">對帳</th>
-                                <th class="p-3 font-bold w-32 whitespace-nowrap">日期</th>
-                                <th class="p-3 font-bold w-36 whitespace-nowrap">項目分類</th>
-                                <th class="p-3 font-bold w-32 whitespace-nowrap">金額</th>
+                            <tr class="bg-stone-100/90 text-stone-600 border-b border-stone-200">
+                                <th class="p-3 font-bold w-12 text-center whitespace-nowrap">對帳</th>
+                                <th class="p-3 font-bold w-28 whitespace-nowrap">日期</th>
+                                <th class="p-3 font-bold w-32 whitespace-nowrap">項目分類</th>
+                                <th class="p-3 font-bold w-28 whitespace-nowrap">金額</th>
                                 <th class="p-3 font-bold whitespace-nowrap">備註</th>
-                                <th class="p-3 font-bold w-16 text-center whitespace-nowrap">操作</th>
+                                <th class="p-3 font-bold w-14 text-center whitespace-nowrap">操作</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-stone-100 text-stone-700">
+                        <tbody class="divide-y divide-stone-100 text-stone-700 bg-white">
                             ${(data[currentExpenseMember] || []).length === 0 ? `
                                 <tr>
                                     <td colspan="6" class="p-8 text-center text-stone-400">目前 ${currentExpenseMember} 在 ${currentExpenseYear} 年無支出紀錄</td>
@@ -190,7 +190,7 @@ function renderExpensesModule() {
                                     <td class="p-3 font-mono whitespace-nowrap ${item.checked ? 'line-through text-stone-400' : ''}">${item.date}</td>
                                     <td class="p-3 whitespace-nowrap"><span class="px-2.5 py-1 bg-stone-100 text-stone-800 rounded-md font-bold border border-stone-200 inline-block">${item.category}</span></td>
                                     <td class="p-3 font-mono font-bold text-emerald-700 whitespace-nowrap">NT$ ${Number(item.amount).toLocaleString()}</td>
-                                    <td class="p-3 text-stone-600 min-w-[150px]">${item.note || '-'}</td>
+                                    <td class="p-3 text-stone-600 min-w-[120px]">${item.note || '-'}</td>
                                     <td class="p-3 text-center whitespace-nowrap">
                                         <button onclick="deleteExpenseItem(${idx})" class="text-stone-400 hover:text-rose-600 p-1 cursor-pointer transition" title="刪除">
                                             <i class="fa-solid fa-trash-can"></i>
@@ -203,8 +203,8 @@ function renderExpensesModule() {
                 </div>
             </div>
 
-            <!-- 3. 當年度個人零用金總額統計 (移動至下方) -->
-            <div>
+            <!-- 3. 當年度個人零用金總額統計 -->
+            <div class="w-full">
                 <div class="flex items-center space-x-2 mb-3 px-1">
                     <i class="fa-solid fa-chart-pie text-[#C59B63] text-sm"></i>
                     <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">${currentExpenseYear} 年度個人零用金總額統計</h3>
@@ -235,8 +235,8 @@ function renderExpensesModule() {
                 </div>
             </div>
 
-            <!-- 4. 全體項目比例與金額分析看板 (移動至最下方) -->
-            <div class="card-frame p-4 sm:p-5 space-y-4">
+            <!-- 4. 全體項目比例與金額分析看板 -->
+            <div class="card-frame p-4 sm:p-5 space-y-4 w-full">
                 <div class="flex items-center justify-between border-b border-stone-100 pb-3">
                     <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-chart-bar text-sky-600"></i>
