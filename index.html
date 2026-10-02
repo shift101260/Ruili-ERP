@@ -532,18 +532,13 @@
             <div class="space-y-1.5">
                 <span class="text-[11px] text-stone-600 font-bold block">報價金額</span>
                 <div class="grid grid-cols-1 gap-2">
-                    <!-- 1. 改為 text 型態，可輸入文字與數字 -->
                     <input type="text" id="quote-price-amount" placeholder="例：100,000 或 核准金額三成" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] bg-white">
                 </div>
             </div>
             <div class="space-y-1.5">
-                <span class="text-[11px] text-stone-600 font-bold block">簽約金額(期程參考基準)</span>
+                <span class="text-[11px] text-stone-600 font-bold block">簽約金額(收款期程參考基準)</span>
                 <div class="grid grid-cols-1 gap-2">
                     <input type="number" id="contract-amount" oninput="calculateQuoteTotals()" placeholder="簽約金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-rose-600 focus:outline-none focus:border-[#C59B63] bg-white">
-                </div>
-                <!-- 簽約金額備註 -->
-                <div class="pt-1">
-                    <input type="text" id="contract-amount-note" placeholder="例：核准金額30%" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 focus:outline-none focus:border-[#C59B63] bg-white font-medium">
                 </div>
             </div>
         </div>
@@ -566,8 +561,8 @@
                     <span class="text-[10px] text-stone-500">應收金額：</span>
                     <span id="quote-inst-1-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
                 </div>
-                <div>
-                    <input type="date" id="quote-inst-1-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
+                <div class="w-full min-w-0">
+                    <input type="date" id="quote-inst-1-date" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs [color-scheme:light] appearance-none max-w-full">
                 </div>
                 <div>
                     <input type="text" id="quote-inst-1-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
@@ -583,8 +578,8 @@
                     <span class="text-[10px] text-stone-500">應收金額：</span>
                     <span id="quote-inst-2-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
                 </div>
-                <div>
-                    <input type="date" id="quote-inst-2-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
+                <div class="w-full min-w-0">
+                    <input type="date" id="quote-inst-2-date" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs [color-scheme:light] appearance-none max-w-full">
                 </div>
                 <div>
                     <input type="text" id="quote-inst-2-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
@@ -600,8 +595,8 @@
                     <span class="text-[10px] text-stone-500">應收金額：</span>
                     <span id="quote-inst-3-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
                 </div>
-                <div>
-                    <input type="date" id="quote-inst-3-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
+                <div class="w-full min-w-0">
+                    <input type="date" id="quote-inst-3-date" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs [color-scheme:light] appearance-none max-w-full">
                 </div>
                 <div>
                     <input type="text" id="quote-inst-3-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
@@ -617,8 +612,8 @@
                     <span class="text-[10px] text-stone-500">應收金額：</span>
                     <span id="quote-inst-4-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
                 </div>
-                <div>
-                    <input type="date" id="quote-inst-4-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
+                <div class="w-full min-w-0">
+                    <input type="date" id="quote-inst-4-date" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs [color-scheme:light] appearance-none max-w-full">
                 </div>
                 <div>
                     <input type="text" id="quote-inst-4-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
@@ -693,25 +688,25 @@
             <i class="fa-solid fa-file-contract text-[#C59B63] mr-1.5"></i> 五、合約備註
         </h4>
 
-        <!-- 簽約日期、結案日期 -->
+        <!-- 簽約日期、結案日期（全面套用極佳尺寸樣式） -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pb-2 border-b border-stone-100">
-            <div>
+            <div class="w-full min-w-0">
                 <label class="font-bold block mb-1 text-stone-700 text-[11px]">簽約日期</label>
-                <input type="date" id="contract-date" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63]">
+                <input type="date" id="contract-date" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs [color-scheme:light] appearance-none max-w-full">
             </div>
-            <div>
+            <div class="w-full min-w-0">
                 <label class="font-bold block mb-1 text-stone-700 text-[11px]">結案日期</label>
-                <input type="date" id="completion-date" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63]">
+                <input type="date" id="completion-date" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs [color-scheme:light] appearance-none max-w-full">
             </div>
         </div>
 
-        <!-- 2. 特別約定事項（移至含稅選項上方） -->
+        <!-- 特別約定事項 -->
         <div>
             <label class="font-bold block mb-1 text-stone-700 text-[11px]">特別約定事項</label>
             <textarea id="contract-business-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-20 text-xs focus:outline-none focus:border-[#C59B63] font-medium" placeholder="請輸入合約相關的特殊條件、付款期程或業務備註..."></textarea>
         </div>
 
-        <!-- 3. 簽約金額是否含稅選項（文字調為 text-[11px] 保持統一） -->
+        <!-- 簽約金額是否含稅選項 -->
         <div class="flex items-center space-x-4 py-1">
             <span class="font-bold text-stone-700 text-[11px]">簽約金額是否含稅選項：</span>
             <label class="flex items-center space-x-1.5 cursor-pointer text-xs">
