@@ -274,7 +274,7 @@
         <div class="p-6 text-xs text-stone-700 flex-1 overflow-y-auto bg-stone-50/50">
             <input type="hidden" id="edit-case-id" value="">
 
-           <!-- ================= 分頁一：基本資料 ================= -->
+          <!-- ================= 分頁一：基本資料 ================= -->
 <div id="modal-tab-basic" class="space-y-6">
     
     <!-- 區塊一：基本資訊 -->
@@ -284,30 +284,18 @@
         </h4>
         
         <!-- 1. 案件名稱 & 日期時間 (強制 100% 等寬對齊) -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-    <div class="w-full min-w-0">
-        <label class="font-bold block mb-1 text-stone-900">案件名稱 <span class="text-rose-500">*</span></label>
-        <input type="text" id="edit-case-name" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold shadow-2xs" placeholder="睿立資產管理顧問有限公司">
-    </div>
-    <div class="w-full min-w-0">
-        <label class="font-bold block mb-1 text-stone-900">日期時間</label>
-        <input type="datetime-local" id="edit-case-datetime" class="w-full min-w-0 box-border bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs [color-scheme:light] appearance-none max-w-full">
-    </div>
-</div>
-
-        <!-- 2. 客戶名稱 & 聯絡電話 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-            <div class="w-full">
-                <label class="font-bold block mb-1 text-stone-900">客戶名稱</label>
-                <input type="text" id="edit-case-client-name" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="陳宥騰 / 經理">
+            <div class="w-full min-w-0">
+                <label class="font-bold block mb-1 text-stone-900">案件名稱 <span class="text-rose-500">*</span></label>
+                <input type="text" id="edit-case-name" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold shadow-2xs" placeholder="睿立資產管理顧問有限公司">
             </div>
-            <div class="w-full">
-                <label class="font-bold block mb-1 text-stone-900">聯絡電話</label>
-                <input type="tel" id="edit-case-client-phone" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63] shadow-2xs" placeholder="例：0988-888888 / 07-2225595">
+            <div class="w-full min-w-0">
+                <label class="font-bold block mb-1 text-stone-900">日期時間</label>
+                <input type="datetime-local" id="edit-case-datetime" class="w-full min-w-0 box-border bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs [color-scheme:light] appearance-none max-w-full">
             </div>
         </div>
 
-        <!-- 3. 產業類別 & 服務細項 -->
+        <!-- 2. 產業類別 & 服務細項 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">產業類別</label>
@@ -319,7 +307,7 @@
             </div>
         </div>
 
-        <!-- 4. 服務項目 & 工作進度 -->
+        <!-- 3. 服務項目 & 工作進度 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">服務項目</label>
@@ -356,7 +344,7 @@
             </div>
         </div>
 
-        <!-- 5. 案件型態 & 案件來源 -->
+        <!-- 4. 案件型態 & 案件來源 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">案件型態</label>
@@ -388,6 +376,18 @@
             </div>
         </div>
 
+        <!-- 5. 客戶名稱 & 聯絡電話 (已移至案件地址上方) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div class="w-full">
+                <label class="font-bold block mb-1 text-stone-900">客戶名稱</label>
+                <input type="text" id="edit-case-client-name" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="陳宥騰 / 經理">
+            </div>
+            <div class="w-full">
+                <label class="font-bold block mb-1 text-stone-900">聯絡電話</label>
+                <input type="tel" id="edit-case-client-phone" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63] shadow-2xs" placeholder="例：0988-888888 / 07-2225595">
+            </div>
+        </div>
+
         <!-- 6. 案件地址 -->
         <div class="w-full">
             <label class="font-bold block mb-1 text-stone-900">案件地址</label>
@@ -398,6 +398,9 @@
                 </button>
             </div>
         </div>
+
+    </div>
+</div>
 
         <!-- 7. 地段地號 -->
         <div class="w-full">
