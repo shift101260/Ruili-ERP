@@ -283,47 +283,47 @@
             <i class="fa-solid fa-info-circle text-[#C59B63] mr-1.5"></i> 一、基本資訊
         </h4>
         
-        <!-- 1. 案件名稱 & 日期時間 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+        <!-- 1. 案件名稱 & 日期時間 (1:1 等寬對齊) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">案件名稱 <span class="text-rose-500">*</span></label>
-                <input type="text" id="edit-case-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold shadow-2xs" placeholder="例：睿立資產管理顧問有限公司">
+                <input type="text" id="edit-case-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold shadow-2xs box-border" placeholder="例：睿立資產管理顧問有限公司">
             </div>
-            <div>
+            <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">日期時間</label>
-                <input type="datetime-local" id="edit-case-datetime" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs">
+                <input type="datetime-local" id="edit-case-datetime" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs box-border appearance-none">
             </div>
         </div>
 
         <!-- 2. 客戶名稱 & 聯絡電話 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">客戶名稱</label>
-                <input type="text" id="edit-case-client-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：張董事長 / 陳經理">
+                <input type="text" id="edit-case-client-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs box-border" placeholder="例：張董事長 / 陳經理">
             </div>
-            <div>
+            <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">聯絡電話</label>
-                <input type="tel" id="edit-case-client-phone" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63] shadow-2xs" placeholder="例：0912-345678 / 07-1234567">
+                <input type="tel" id="edit-case-client-phone" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63] shadow-2xs box-border" placeholder="例：0912-345678 / 07-1234567">
             </div>
         </div>
 
         <!-- 3. 產業類別 & 服務細項 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">產業類別</label>
-                <input type="text" id="edit-case-industry-type" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：金屬加工業 / 塑膠製品業">
+                <input type="text" id="edit-case-industry-type" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs box-border" placeholder="例：金屬加工業 / 塑膠製品業">
             </div>
-            <div>
-                <label class="font-bold block mb-1 text-stone-900">服務細項 <span class="text-rose-500">*</span></label>
-                <input type="text" id="edit-case-service-detail" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：特定工廠專用區">
+            <div class="w-full">
+                <label class="font-bold block mb-1 text-stone-900">服務細項</label>
+                <input type="text" id="edit-case-service-detail" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs box-border" placeholder="例：特定工廠專用區">
             </div>
         </div>
 
         <!-- 4. 服務項目 & 工作進度 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="font-bold block mb-1 text-stone-900">服務項目 <span class="text-rose-500">*</span></label>
-                <select id="edit-case-service" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div class="w-full">
+                <label class="font-bold block mb-1 text-stone-900">服務項目</label>
+                <select id="edit-case-service" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer box-border">
                     <option value="容許">容許</option>
                     <option value="補照">補照</option>
                     <option value="地政士">地政士</option>
@@ -340,9 +340,9 @@
                     <option value="其他">其他</option>
                 </select>
             </div>
-            <div>
+            <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">工作進度</label>
-                <select id="edit-case-progress-status" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer">
+                <select id="edit-case-progress-status" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer box-border">
                     <option value="潛在">潛在</option>
                     <option value="現勘">現勘</option>
                     <option value="報價">報價</option>
@@ -357,10 +357,10 @@
         </div>
 
         <!-- 5. 案件型態 & 案件來源 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">案件型態</label>
-                <select id="edit-case-type" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer">
+                <select id="edit-case-type" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer box-border">
                     <option value="特登工廠">特登工廠</option>
                     <option value="一般工廠">一般工廠</option>
                     <option value="農地">農地</option>
@@ -370,9 +370,9 @@
                     <option value="其他">其他</option>
                 </select>
             </div>
-            <div>
+            <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">案件來源</label>
-                <select id="edit-case-source" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer">
+                <select id="edit-case-source" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer box-border">
                     <option value="GPT">GPT</option>
                     <option value="臉書">臉書</option>
                     <option value="網站">網站</option>
@@ -392,7 +392,7 @@
         <div>
             <label class="font-bold block mb-1 text-stone-900">案件地址</label>
             <div class="flex items-center space-x-2">
-                <input type="text" id="edit-case-address" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：高雄市仁武區...">
+                <input type="text" id="edit-case-address" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs box-border" placeholder="例：高雄市仁武區...">
                 <button type="button" onclick="openGoogleMapDrawer()" class="px-3 py-2 bg-stone-100 hover:bg-[#C59B63] hover:text-white text-stone-700 border border-stone-300 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap flex items-center space-x-1 cursor-pointer" title="Google地圖 街景與導航">
                     <i class="fa-solid fa-map-location-dot"></i><span>地圖</span>
                 </button>
@@ -403,37 +403,37 @@
         <div>
             <label class="font-bold block mb-1 text-stone-900">地段地號</label>
             <div class="flex items-center space-x-2">
-                <input type="text" id="edit-case-land-number" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：仁武段 123-4地號">
+                <input type="text" id="edit-case-land-number" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs box-border" placeholder="例：仁武段 123-4地號">
                 <a href="https://maps.nlsc.gov.tw" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-stone-100 hover:bg-[#C59B63] hover:text-white text-stone-700 border border-stone-300 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap flex items-center space-x-1" title="國土測繪圖資服務雲">
                     <i class="fa-solid fa-map-location-dot"></i><span>地籍圖</span>
                 </a>
             </div>
         </div>
 
-        <!-- 8. 案件說明 & 專業人士評估結果 (無捲軸，自動延伸高度) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+        <!-- 8. 案件說明 & 專業人士評估結果 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">案件說明</label>
-                <textarea id="edit-case-desc" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none" placeholder="此案件已被代辦收取65%頭期便消失3年..."></textarea>
+                <textarea id="edit-case-desc" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none box-border" placeholder="此案件已被代辦收取65%頭期便消失3年..."></textarea>
             </div>
-            <div>
+            <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">專業人士評估結果</label>
-                <textarea id="edit-case-expert-eval" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none" placeholder="此案件可承接，目前估價100萬，需注意..."></textarea>
+                <textarea id="edit-case-expert-eval" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none box-border" placeholder="此案件可承接，目前估價100萬，需注意..."></textarea>
             </div>
         </div>
 
-        <!-- 9. 案件即時資訊 (無捲軸，自動延伸高度) -->
+        <!-- 9. 案件即時資訊 -->
         <div>
             <label class="font-bold block mb-1 text-stone-900">案件即時資訊</label>
-            <textarea id="edit-case-realtime-info" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none" placeholder="輸入內部即時動態、交辦事項或進度更新..."></textarea>
+            <textarea id="edit-case-realtime-info" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none box-border" placeholder="輸入內部即時動態、交辦事項或進度更新..."></textarea>
         </div>
 
-        <!-- 10. 應備文件 (可新增、可勾選、可刪除) -->
+        <!-- 10. 應備文件清單 -->
         <div class="space-y-2 pt-2 border-t border-stone-100">
             <label class="font-bold block text-stone-900">應備文件清單</label>
             
             <div class="flex items-center space-x-2">
-                <input type="text" id="new-doc-input" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="輸入應備文件名稱 (例如：土地謄本、建物測量圖)...">
+                <input type="text" id="new-doc-input" class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-[#C59B63] box-border" placeholder="輸入應備文件名稱...">
                 <button type="button" onclick="addCaseRequiredDoc()" class="px-3.5 py-1.5 btn-gold hover:opacity-90 text-white rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap cursor-pointer">
                     <i class="fa-solid fa-plus mr-1"></i>新增文件
                 </button>
@@ -441,11 +441,10 @@
 
             <!-- 動態文件項目容器 -->
             <div id="required-docs-list" class="space-y-1.5 pt-1">
-                <!-- 預設範例項目 -->
                 <div class="flex items-center justify-between p-2 bg-stone-50 border border-stone-200 rounded-xl">
                     <label class="flex items-center space-x-2 cursor-pointer text-xs flex-1">
                         <input type="checkbox" onchange="toggleDocStatus(this)" class="w-4 h-4 rounded border-stone-300 text-[#C59B63] focus:ring-[#C59B63]">
-                        <span class="font-bold text-stone-700">土地土地登記謄本（第一類）</span>
+                        <span class="font-bold text-stone-700">土地登記謄本（第一類）</span>
                     </label>
                     <button type="button" onclick="this.closest('div').remove()" class="text-stone-400 hover:text-rose-600 p-1 cursor-pointer transition" title="刪除項目">
                         <i class="fa-solid fa-trash-can"></i>
@@ -455,6 +454,7 @@
         </div>
 
     </div>
+</div>
 
     <!-- 區塊二：案件評估工具 -->
     <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-3">
