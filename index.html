@@ -521,192 +521,213 @@
 </div>
 
             <!-- ================= 分頁二：財務會計 ================= -->
-            <div id="modal-tab-finance" class="space-y-6 hidden">
-                
-                <!-- 區塊四：財務會計（報價、佣金與合約） -->
-                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
-                    <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-calculator text-[#C59B63] mr-1.5"></i> 一、報價與簽約金額
-                    </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div class="space-y-1.5">
-                            <span class="text-[11px] text-stone-600 font-bold block">依照案件結案條件填寫</span>
-                            <div class="grid grid-cols-2 gap-2">
-                                <input type="number" id="quote-price-amount" placeholder="報價金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] bg-white">
-                            </div>
-                        </div>
-                        <div class="space-y-1.5">
-                            <span class="text-[11px] text-stone-600 font-bold block">依照案件結案條件填寫 (期程參考基準)</span>
-                            <div class="grid grid-cols-2 gap-2">
-                                <input type="number" id="contract-amount" oninput="calculateQuoteTotals()" placeholder="簽約金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-rose-600 focus:outline-none focus:border-[#C59B63] bg-white">
-                            </div>
-                        </div>
-                    </div>
+<div id="modal-tab-finance" class="space-y-6 hidden">
+    
+    <!-- 區塊四：財務會計（報價、佣金與合約） -->
+    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+        <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
+            <i class="fa-solid fa-calculator text-[#C59B63] mr-1.5"></i> 一、報價與簽約金額
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="space-y-1.5">
+                <span class="text-[11px] text-stone-600 font-bold block">報價金額</span>
+                <div class="grid grid-cols-1 gap-2">
+                    <input type="number" id="quote-price-amount" placeholder="報價金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] bg-white">
                 </div>
-
-                <!-- 區塊五：收款期程配置 -->
-                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
-                    <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-calendar-days text-[#C59B63] mr-1.5"></i> 二、收款期程配置
-                    </h4>
-                    <span class="text-[11px] text-stone-500 block">依上方簽約金額按各期 % 自動換算</span>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <!-- 第一期款 -->
-                        <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[11px] text-stone-700 font-bold">第一期款 (%)</span>
-                                <input type="number" id="quote-inst-1-pct" value="20" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
-                            </div>
-                            <div class="flex items-center justify-between pt-1 border-t border-stone-200">
-                                <span class="text-[10px] text-stone-500">應收金額：</span>
-                                <span id="quote-inst-1-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
-                            </div>
-                            <div>
-                                <input type="date" id="quote-inst-1-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
-                            </div>
-                            <div>
-                                <input type="text" id="quote-inst-1-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
-                            </div>
-                        </div>
-                        <!-- 第二期款 -->
-                        <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[11px] text-stone-700 font-bold">第二期款 (%)</span>
-                                <input type="number" id="quote-inst-2-pct" value="20" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
-                            </div>
-                            <div class="flex items-center justify-between pt-1 border-t border-stone-200">
-                                <span class="text-[10px] text-stone-500">應收金額：</span>
-                                <span id="quote-inst-2-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
-                            </div>
-                            <div>
-                                <input type="date" id="quote-inst-2-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
-                            </div>
-                            <div>
-                                <input type="text" id="quote-inst-2-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
-                            </div>
-                        </div>
-                        <!-- 第三期款 -->
-                        <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[11px] text-stone-700 font-bold">第三期款 (%)</span>
-                                <input type="number" id="quote-inst-3-pct" value="50" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
-                            </div>
-                            <div class="flex items-center justify-between pt-1 border-t border-stone-200">
-                                <span class="text-[10px] text-stone-500">應收金額：</span>
-                                <span id="quote-inst-3-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
-                            </div>
-                            <div>
-                                <input type="date" id="quote-inst-3-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
-                            </div>
-                            <div>
-                                <input type="text" id="quote-inst-3-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
-                            </div>
-                        </div>
-                        <!-- 第四期款 -->
-                        <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[11px] text-stone-700 font-bold">第四期款 (%)</span>
-                                <input type="number" id="quote-inst-4-pct" value="10" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
-                            </div>
-                            <div class="flex items-center justify-between pt-1 border-t border-stone-200">
-                                <span class="text-[10px] text-stone-500">應收金額：</span>
-                                <span id="quote-inst-4-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
-                            </div>
-                            <div>
-                                <input type="date" id="quote-inst-4-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
-                            </div>
-                            <div>
-                                <input type="text" id="quote-inst-4-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
-                            </div>
-                        </div>
-                    </div>
+            </div>
+            <div class="space-y-1.5">
+                <span class="text-[11px] text-stone-600 font-bold block">簽約金額(期程參考基準)</span>
+                <div class="grid grid-cols-1 gap-2">
+                    <input type="number" id="contract-amount" oninput="calculateQuoteTotals()" placeholder="簽約金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-rose-600 focus:outline-none focus:border-[#C59B63] bg-white">
                 </div>
-
-                <!-- 區塊六：供應商報價利潤工具 -->
-                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
-                    <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
-                        <h4 class="font-bold text-stone-900 flex items-center text-xs">
-                            <i class="fa-solid fa-file-invoice-dollar text-[#C59B63] mr-1.5"></i> 三、供應商案件成本
-                        </h4>
-                        <button type="button" onclick="addQuoteSupplierRow()" class="px-3 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
-                            <i class="fa-solid fa-plus text-[10px]"></i><span>新增供應商</span>
-                        </button>
-                    </div>
-
-                    <div class="overflow-x-auto w-full pb-2">
-                        <div id="suppliers-rows-container" class="space-y-3 min-w-[700px]"></div>
-                    </div>
-
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">總報價金額 (自動)</label>
-                            <input type="text" id="calc-total-quote" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">稅後總金額 (自動)</label>
-                            <input type="text" id="calc-tax-after" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">簽約總金額 (自動)</label>
-                            <input type="text" id="calc-total-contract" class="w-full bg-rose-50 border border-rose-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-rose-700" readonly value="NT$ 0">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">案件總利潤 (自動)</label>
-                            <input type="text" id="calc-total-profit" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-emerald-700" readonly value="NT$ 0">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 區塊七：案件介紹人與佣金機制 -->
-                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
-                    <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-user-tie text-[#C59B63] mr-1.5"></i> 四、案件介紹人與佣金機制
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">介紹人姓名</label>
-                            <input type="text" id="referral-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例：陳總監">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">佣金金額</label>
-                            <input type="number" id="referral-commission" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-mono" placeholder="0">
-                        </div>
-                        <div>
-                            <label class="font-bold block mb-1 text-stone-700 text-[11px]">退佣機制說明</label>
-                            <input type="text" id="referral-mechanism" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例：陳經理 / 10% / 匯款退佣">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 區塊八：合約備註 -->
-                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
-                    <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-file-contract text-[#C59B63] mr-1.5"></i> 五、合約備註
-                    </h4>
-                    <div class="flex items-center space-x-4 py-1">
-                        <span class="font-bold text-stone-700 text-xs">簽約金額是否含稅選項：</span>
-                        <label class="flex items-center space-x-1.5 cursor-pointer text-xs">
-                            <input type="radio" name="tax-option" value="none" class="text-[#C59B63] focus:ring-[#C59B63]">
-                            <span class="font-bold text-stone-600">不含稅</span>
-                        </label>
-                        <label class="flex items-center space-x-1.5 cursor-pointer text-xs">
-                            <input type="radio" name="tax-option" value="included" checked class="text-[#C59B63] focus:ring-[#C59B63]">
-                            <span class="font-bold text-stone-600">含稅</span>
-                        </label>
-                    </div>
-                    <div>
-                        <label class="font-bold block mb-1 text-stone-700 text-[11px]">特別約定事項</label>
-                        <textarea id="contract-business-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-20 text-xs focus:outline-none focus:border-[#C59B63] font-medium" placeholder="請輸入合約相關的特殊條件、付款期程或業務備註..."></textarea>
-                    </div>
-                    <div class="pt-2 flex justify-end">
-                        <button type="button" onclick="openQuotationGeneratorModal()" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
-                            <i class="fa-solid fa-file-invoice"></i><span>匯出PDF</span>
-                        </button>
-                    </div>
+                <!-- 1. 簽約金額下方新增：備註 -->
+                <div class="pt-1">
+                    <input type="text" id="contract-amount-note" placeholder="例：核准金額30%" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 focus:outline-none focus:border-[#C59B63] bg-white font-medium">
                 </div>
             </div>
         </div>
+    </div>
 
+    <!-- 區塊五：收款期程配置 -->
+    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+        <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
+            <i class="fa-solid fa-calendar-days text-[#C59B63] mr-1.5"></i> 二、收款期程
+        </h4>
+        <span class="text-[11px] text-stone-500 block">依上方簽約金額按各期 % 自動換算</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- 第一期款 -->
+            <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] text-stone-700 font-bold">第一期款 (%)</span>
+                    <input type="number" id="quote-inst-1-pct" value="20" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-stone-200">
+                    <span class="text-[10px] text-stone-500">應收金額：</span>
+                    <span id="quote-inst-1-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
+                </div>
+                <div>
+                    <input type="date" id="quote-inst-1-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
+                </div>
+                <div>
+                    <input type="text" id="quote-inst-1-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
+                </div>
+            </div>
+            <!-- 第二期款 -->
+            <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] text-stone-700 font-bold">第二期款 (%)</span>
+                    <input type="number" id="quote-inst-2-pct" value="20" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-stone-200">
+                    <span class="text-[10px] text-stone-500">應收金額：</span>
+                    <span id="quote-inst-2-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
+                </div>
+                <div>
+                    <input type="date" id="quote-inst-2-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
+                </div>
+                <div>
+                    <input type="text" id="quote-inst-2-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
+                </div>
+            </div>
+            <!-- 第三期款 -->
+            <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] text-stone-700 font-bold">第三期款 (%)</span>
+                    <input type="number" id="quote-inst-3-pct" value="50" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-stone-200">
+                    <span class="text-[10px] text-stone-500">應收金額：</span>
+                    <span id="quote-inst-3-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
+                </div>
+                <div>
+                    <input type="date" id="quote-inst-3-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
+                </div>
+                <div>
+                    <input type="text" id="quote-inst-3-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
+                </div>
+            </div>
+            <!-- 第四期款 -->
+            <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] text-stone-700 font-bold">第四期款 (%)</span>
+                    <input type="number" id="quote-inst-4-pct" value="10" oninput="calculateQuoteTotals()" class="w-16 text-xs border border-stone-300 rounded-lg px-2 py-1 text-center font-mono focus:outline-none focus:border-[#C59B63] bg-white">
+                </div>
+                <div class="flex items-center justify-between pt-1 border-t border-stone-200">
+                    <span class="text-[10px] text-stone-500">應收金額：</span>
+                    <span id="quote-inst-4-val" class="text-xs text-emerald-700 font-bold font-mono">NT$ 0</span>
+                </div>
+                <div>
+                    <input type="date" id="quote-inst-4-date" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 font-mono text-stone-600 focus:outline-none focus:border-[#C59B63] bg-white">
+                </div>
+                <div>
+                    <input type="text" id="quote-inst-4-note" class="w-full text-xs border border-stone-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-[#C59B63] bg-white" placeholder="期程備註...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 區塊六：供應商報價利潤工具 -->
+    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+        <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
+            <h4 class="font-bold text-stone-900 flex items-center text-xs">
+                <i class="fa-solid fa-file-invoice-dollar text-[#C59B63] mr-1.5"></i> 三、供應商案件成本
+            </h4>
+            <button type="button" onclick="addQuoteSupplierRow()" class="px-3 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                <i class="fa-solid fa-plus text-[10px]"></i><span>新增供應商</span>
+            </button>
+        </div>
+
+        <div class="overflow-x-auto w-full pb-2">
+            <div id="suppliers-rows-container" class="space-y-3 min-w-[700px]"></div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+            <div>
+                <label class="font-bold block mb-1 text-stone-700 text-[11px]">總報價金額 (自動)</label>
+                <input type="text" id="calc-total-quote" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
+            </div>
+            <div>
+                <label class="font-bold block mb-1 text-stone-700 text-[11px]">稅後總金額 (自動)</label>
+                <input type="text" id="calc-tax-after" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800" readonly value="NT$ 0">
+            </div>
+            <div>
+                <label class="font-bold block mb-1 text-stone-700 text-[11px]">簽約總金額 (自動)</label>
+                <input type="text" id="calc-total-contract" class="w-full bg-rose-50 border border-rose-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-rose-700" readonly value="NT$ 0">
+            </div>
+            <div>
+                <label class="font-bold block mb-1 text-stone-700 text-[11px]">案件總利潤 (自動)</label>
+                <input type="text" id="calc-total-profit" class="w-full bg-emerald-50 border border-emerald-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-emerald-700" readonly value="NT$ 0">
+            </div>
+        </div>
+    </div>
+
+    <!-- 區塊七：案件介紹人與佣金機制 -->
+    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+        <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
+            <i class="fa-solid fa-user-tie text-[#C59B63] mr-1.5"></i> 四、案件介紹人與佣金機制
+        </h4>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+                <label class="font-bold block mb-1 text-stone-700 text-[11px]">介紹人姓名</label>
+                <input type="text" id="referral-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例：陳總監">
+            </div>
+            <div>
+                <label class="font-bold block mb-1 text-stone-700 text-[11px]">佣金金額</label>
+                <input type="number" id="referral-commission" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-mono" placeholder="0">
+            </div>
+            <div>
+                <label class="font-bold block mb-1 text-stone-700 text-[11px]">退佣機制說明</label>
+                <input type="text" id="referral-mechanism" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例：陳經理 / 10% / 匯款退佣">
+            </div>
+        </div>
+        <!-- 2. 退佣機制說明下方新增：退佣期程與備註 -->
+        <div>
+            <label class="font-bold block mb-1 text-stone-700 text-[11px]">已於1/15與8/10給付佣金</label>
+            <input type="text" id="referral-note" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="輸入案件介紹人或退佣補充備註...">
+        </div>
+    </div>
+
+    <!-- 區塊八：合約備註 -->
+    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+        <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
+            <i class="fa-solid fa-file-contract text-[#C59B63] mr-1.5"></i> 五、合約備註
+        </h4>
+
+        <!-- 3. 簽約金額是否含稅選項上方新增：簽約日期、結案日期 (兩格網格) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pb-2 border-b border-stone-100">
+            <div>
+                <label class="font-bold block mb-1 text-stone-700 text-[11px]">簽約日期</label>
+                <input type="date" id="contract-date" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63]">
+            </div>
+            <div>
+                <label class="font-bold block mb-1 text-stone-700 text-[11px]">結案日期</label>
+                <input type="date" id="completion-date" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63]">
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4 py-1">
+            <span class="font-bold text-stone-700 text-xs">簽約金額是否含稅選項：</span>
+            <label class="flex items-center space-x-1.5 cursor-pointer text-xs">
+                <input type="radio" name="tax-option" value="none" class="text-[#C59B63] focus:ring-[#C59B63]">
+                <span class="font-bold text-stone-600">不含稅</span>
+            </label>
+            <label class="flex items-center space-x-1.5 cursor-pointer text-xs">
+                <input type="radio" name="tax-option" value="included" checked class="text-[#C59B63] focus:ring-[#C59B63]">
+                <span class="font-bold text-stone-600">含稅</span>
+            </label>
+        </div>
+        <div>
+            <label class="font-bold block mb-1 text-stone-700 text-[11px]">特別約定事項</label>
+            <textarea id="contract-business-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-20 text-xs focus:outline-none focus:border-[#C59B63] font-medium" placeholder="請輸入合約相關的特殊條件、付款期程或業務備註..."></textarea>
+        </div>
+        <div class="pt-2 flex justify-end">
+            <button type="button" onclick="openQuotationGeneratorModal()" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                <i class="fa-solid fa-file-invoice"></i><span>匯出PDF</span>
+            </button>
+        </div>
+    </div>
+
+</div>
         <!-- 底端按鈕列 -->
         <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex flex-wrap justify-between items-center gap-2.5 sticky bottom-0 z-10 shrink-0">
             <div>
