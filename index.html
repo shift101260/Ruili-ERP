@@ -283,27 +283,27 @@
             <i class="fa-solid fa-info-circle text-[#C59B63] mr-1.5"></i> 一、基本資訊
         </h4>
         
-        <!-- 1. 案件名稱 & 日期時間 (1:1 強制等寬對齊) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-            <div class="w-full">
-                <label class="font-bold block mb-1 text-stone-900">案件名稱 <span class="text-rose-500">*</span></label>
-                <input type="text" id="edit-case-name" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold shadow-2xs" placeholder="例：睿立資產管理顧問有限公司">
-            </div>
-            <div class="w-full">
-                <label class="font-bold block mb-1 text-stone-900">日期時間</label>
-                <input type="datetime-local" id="edit-case-datetime" class="w-full block box-border bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs m-0">
-            </div>
-        </div>
+        <!-- 1. 案件名稱 & 日期時間 (強制 100% 等寬對齊) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+    <div class="w-full min-w-0">
+        <label class="font-bold block mb-1 text-stone-900">案件名稱 <span class="text-rose-500">*</span></label>
+        <input type="text" id="edit-case-name" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold shadow-2xs" placeholder="例：睿立資產管理顧問有限公司">
+    </div>
+    <div class="w-full min-w-0">
+        <label class="font-bold block mb-1 text-stone-900">日期時間</label>
+        <input type="datetime-local" id="edit-case-datetime" class="w-full min-w-0 box-border bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] shadow-2xs [color-scheme:light] appearance-none max-w-full">
+    </div>
+</div>
 
         <!-- 2. 客戶名稱 & 聯絡電話 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">客戶名稱</label>
-                <input type="text" id="edit-case-client-name" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：張董事長 / 陳經理">
+                <input type="text" id="edit-case-client-name" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：陳宥騰/經理">
             </div>
             <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">聯絡電話</label>
-                <input type="tel" id="edit-case-client-phone" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63] shadow-2xs" placeholder="例：0912-345678 / 07-1234567">
+                <input type="tel" id="edit-case-client-phone" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63] shadow-2xs" placeholder="例：0912-345678/07-1234567">
             </div>
         </div>
 
