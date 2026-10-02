@@ -287,7 +287,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
     <div class="w-full min-w-0">
         <label class="font-bold block mb-1 text-stone-900">案件名稱 <span class="text-rose-500">*</span></label>
-        <input type="text" id="edit-case-name" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold shadow-2xs" placeholder="例：睿立資產管理顧問有限公司">
+        <input type="text" id="edit-case-name" class="w-full min-w-0 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold shadow-2xs" placeholder="睿立資產管理顧問有限公司">
     </div>
     <div class="w-full min-w-0">
         <label class="font-bold block mb-1 text-stone-900">日期時間</label>
@@ -299,11 +299,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">客戶名稱</label>
-                <input type="text" id="edit-case-client-name" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：陳宥騰/經理">
+                <input type="text" id="edit-case-client-name" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="陳宥騰 / 經理">
             </div>
             <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">聯絡電話</label>
-                <input type="tel" id="edit-case-client-phone" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63] shadow-2xs" placeholder="例：0912-345678/07-1234567">
+                <input type="tel" id="edit-case-client-phone" class="w-full box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#C59B63] shadow-2xs" placeholder="例：0988-888888 / 07-2225595">
             </div>
         </div>
 
@@ -392,7 +392,7 @@
         <div class="w-full">
             <label class="font-bold block mb-1 text-stone-900">案件地址</label>
             <div class="flex items-center space-x-2 w-full">
-                <input type="text" id="edit-case-address" class="flex-1 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：高雄市仁武區...">
+                <input type="text" id="edit-case-address" class="flex-1 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：高雄市苓雅區新光路38號30樓之2">
                 <button type="button" onclick="openGoogleMapDrawer()" class="px-3 py-2 bg-stone-100 hover:bg-[#C59B63] hover:text-white text-stone-700 border border-stone-300 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap flex items-center space-x-1 cursor-pointer" title="Google地圖 街景與導航">
                     <i class="fa-solid fa-map-location-dot"></i><span>地圖</span>
                 </button>
@@ -403,7 +403,7 @@
         <div class="w-full">
             <label class="font-bold block mb-1 text-stone-900">地段地號</label>
             <div class="flex items-center space-x-2 w-full">
-                <input type="text" id="edit-case-land-number" class="flex-1 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：仁武段 123-4地號">
+                <input type="text" id="edit-case-land-number" class="flex-1 box-border bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="例：發財段 888地號">
                 <a href="https://maps.nlsc.gov.tw" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-stone-100 hover:bg-[#C59B63] hover:text-white text-stone-700 border border-stone-300 rounded-xl text-xs font-bold transition shadow-2xs whitespace-nowrap flex items-center space-x-1">
                     <i class="fa-solid fa-map-location-dot"></i><span>地籍圖</span>
                 </a>
@@ -414,18 +414,18 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">案件說明</label>
-                <textarea id="edit-case-desc" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full box-border min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none" placeholder="此案件已被代辦收取65%頭期便消失3年..."></textarea>
+                <textarea id="edit-case-desc" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full box-border min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none" placeholder="此案件已被代辦收取65%頭期後已消失3年"></textarea>
             </div>
             <div class="w-full">
                 <label class="font-bold block mb-1 text-stone-900">專業人士評估結果</label>
-                <textarea id="edit-case-expert-eval" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full box-border min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none" placeholder="此案件可承接，目前估價100萬，需注意..."></textarea>
+                <textarea id="edit-case-expert-eval" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full box-border min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none" placeholder="此案件可承接，目前估價100萬，其他注意事項"></textarea>
             </div>
         </div>
 
         <!-- 9. 案件即時資訊 -->
         <div class="w-full">
             <label class="font-bold block mb-1 text-stone-900">案件即時資訊</label>
-            <textarea id="edit-case-realtime-info" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full box-border min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none" placeholder="9/5已會同技師現勘..."></textarea>
+            <textarea id="edit-case-realtime-info" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" class="w-full box-border min-h-[64px] overflow-hidden bg-white border border-stone-300 rounded-xl p-2.5 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs resize-none" placeholder="9/5已會同技師現勘"></textarea>
         </div>
 
         <!-- 10. 應備文件清單 -->
@@ -520,7 +520,7 @@
     </div>
 </div>
 
-            <!-- ================= 分頁二：財務會計 ================= -->
+           <!-- ================= 分頁二：財務會計 ================= -->
 <div id="modal-tab-finance" class="space-y-6 hidden">
     
     <!-- 區塊四：財務會計（報價、佣金與合約） -->
@@ -532,7 +532,8 @@
             <div class="space-y-1.5">
                 <span class="text-[11px] text-stone-600 font-bold block">報價金額</span>
                 <div class="grid grid-cols-1 gap-2">
-                    <input type="number" id="quote-price-amount" placeholder="報價金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] bg-white">
+                    <!-- 1. 改為 text 型態，可輸入文字與數字 -->
+                    <input type="text" id="quote-price-amount" placeholder="例：100,000 或 核准金額三成" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] bg-white">
                 </div>
             </div>
             <div class="space-y-1.5">
@@ -540,7 +541,7 @@
                 <div class="grid grid-cols-1 gap-2">
                     <input type="number" id="contract-amount" oninput="calculateQuoteTotals()" placeholder="簽約金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-rose-600 focus:outline-none focus:border-[#C59B63] bg-white">
                 </div>
-                <!-- 1. 簽約金額下方新增：備註 -->
+                <!-- 簽約金額備註 -->
                 <div class="pt-1">
                     <input type="text" id="contract-amount-note" placeholder="例：核准金額30%" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 focus:outline-none focus:border-[#C59B63] bg-white font-medium">
                 </div>
@@ -669,7 +670,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
                 <label class="font-bold block mb-1 text-stone-700 text-[11px]">介紹人姓名</label>
-                <input type="text" id="referral-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例：陳總監">
+                <input type="text" id="referral-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="陳總監">
             </div>
             <div>
                 <label class="font-bold block mb-1 text-stone-700 text-[11px]">佣金金額</label>
@@ -677,13 +678,12 @@
             </div>
             <div>
                 <label class="font-bold block mb-1 text-stone-700 text-[11px]">退佣機制說明</label>
-                <input type="text" id="referral-mechanism" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="例：陳經理 / 10% / 匯款退佣">
+                <input type="text" id="referral-mechanism" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="約金為簽約金額30%，跟著合約收款期程給付佣金">
             </div>
         </div>
-        <!-- 2. 退佣機制說明下方新增：退佣期程與備註 -->
         <div>
-            <label class="font-bold block mb-1 text-stone-700 text-[11px]">已於1/15與8/10給付佣金</label>
-            <input type="text" id="referral-note" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="輸入案件介紹人或退佣補充備註...">
+            <label class="font-bold block mb-1 text-stone-700 text-[11px]">佣金付款期程</label>
+            <input type="text" id="referral-note" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="已於1/15與8/10給付佣金">
         </div>
     </div>
 
@@ -693,7 +693,7 @@
             <i class="fa-solid fa-file-contract text-[#C59B63] mr-1.5"></i> 五、合約備註
         </h4>
 
-        <!-- 3. 簽約金額是否含稅選項上方新增：簽約日期、結案日期 (兩格網格) -->
+        <!-- 簽約日期、結案日期 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pb-2 border-b border-stone-100">
             <div>
                 <label class="font-bold block mb-1 text-stone-700 text-[11px]">簽約日期</label>
@@ -705,8 +705,15 @@
             </div>
         </div>
 
+        <!-- 2. 特別約定事項（移至含稅選項上方） -->
+        <div>
+            <label class="font-bold block mb-1 text-stone-700 text-[11px]">特別約定事項</label>
+            <textarea id="contract-business-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-20 text-xs focus:outline-none focus:border-[#C59B63] font-medium" placeholder="請輸入合約相關的特殊條件、付款期程或業務備註..."></textarea>
+        </div>
+
+        <!-- 3. 簽約金額是否含稅選項（文字調為 text-[11px] 保持統一） -->
         <div class="flex items-center space-x-4 py-1">
-            <span class="font-bold text-stone-700 text-xs">簽約金額是否含稅選項：</span>
+            <span class="font-bold text-stone-700 text-[11px]">簽約金額是否含稅選項：</span>
             <label class="flex items-center space-x-1.5 cursor-pointer text-xs">
                 <input type="radio" name="tax-option" value="none" class="text-[#C59B63] focus:ring-[#C59B63]">
                 <span class="font-bold text-stone-600">不含稅</span>
@@ -716,10 +723,7 @@
                 <span class="font-bold text-stone-600">含稅</span>
             </label>
         </div>
-        <div>
-            <label class="font-bold block mb-1 text-stone-700 text-[11px]">特別約定事項</label>
-            <textarea id="contract-business-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-20 text-xs focus:outline-none focus:border-[#C59B63] font-medium" placeholder="請輸入合約相關的特殊條件、付款期程或業務備註..."></textarea>
-        </div>
+
         <div class="pt-2 flex justify-end">
             <button type="button" onclick="openQuotationGeneratorModal()" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
                 <i class="fa-solid fa-file-invoice"></i><span>匯出PDF</span>
