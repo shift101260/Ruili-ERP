@@ -275,10 +275,10 @@
             <input type="hidden" id="edit-case-id" value="">
 
           
-        <<!-- 彈出視窗主遮罩 -->
+        <!-- 彈出視窗主遮罩 -->
 <div id="editCaseModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-3 sm:p-4 hidden">
     
-    <!-- 彈出視窗主體：設定 h-[90vh] 確保高度固定且可滾動 -->
+    <!-- 彈出視窗主體 -->
     <div class="bg-white rounded-3xl shadow-2xl w-[95vw] max-w-4xl h-[90vh] max-h-[90vh] flex flex-col overflow-hidden border border-stone-100">
         
         <!-- Header 頂部欄 -->
@@ -292,7 +292,7 @@
             </button>
         </div>
 
-        <!-- 頁籤按鈕 (基本資料 / 財務會計) -->
+        <!-- 頁籤按鈕 -->
         <div class="flex border-b border-stone-200 bg-stone-50/80 px-4 pt-2 shrink-0 space-x-2 overflow-x-auto">
             <button type="button" id="tab-btn-basic" onclick="switchModalTab('basic')" class="px-4 py-2 text-xs font-bold border-b-2 border-[#C59B63] text-[#C59B63] transition flex items-center space-x-1.5 whitespace-nowrap">
                 <i class="fa-solid fa-address-card"></i><span>基本資料</span>
@@ -302,7 +302,7 @@
             </button>
         </div>
 
-        <!-- 主內容滾動區 (修正關鍵：加入 h-full min-h-0，確保表單內容展現並可獨立滾動) -->
+        <!-- 主內容滾動區 -->
         <div class="p-4 sm:p-6 overflow-y-auto flex-1 min-h-0 space-y-6">
 
             <!-- ================= 分頁一：基本資料 ================= -->
@@ -725,7 +725,7 @@
 
         </div>
 
-        <!-- 底部按鈕列 (固底控制) -->
+        <!-- 底部按鈕列 -->
         <div class="px-4 sm:px-6 py-3.5 bg-stone-100 border-t border-stone-200 flex flex-wrap justify-between items-center gap-2.5 shrink-0">
             <div>
                 <button type="button" onclick="handleCaseSignOff(document.getElementById('edit-case-id')?.value)" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
@@ -743,10 +743,9 @@
                 </button>
             </div>
         </div>
-
     </div>
 </div>
-
+            
 <!-- 切換分頁的 JS 邏輯 (請加入您的 JavaScript 檔案或 script 標籤中) -->
 <script>
 function switchModalTab(tabName) {
