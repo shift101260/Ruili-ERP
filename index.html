@@ -658,29 +658,35 @@
     </div>
 
     <!-- 區塊七：案件介紹人與佣金機制 -->
-    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
-        <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-            <i class="fa-solid fa-user-tie text-[#C59B63] mr-1.5"></i> 四、案件介紹人與佣金機制
-        </h4>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div>
-                <label class="font-bold block mb-1 text-stone-700 text-[11px]">介紹人姓名</label>
-                <input type="text" id="referral-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="陳總監">
-            </div>
-            <div>
-                <label class="font-bold block mb-1 text-stone-700 text-[11px]">佣金金額</label>
-                <input type="number" id="referral-commission" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-mono" placeholder="0">
-            </div>
-            <div>
-                <label class="font-bold block mb-1 text-stone-700 text-[11px]">退佣機制說明</label>
-                <input type="text" id="referral-mechanism" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="約金為簽約金額30%，跟著合約收款期程給付佣金">
-            </div>
+<div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+    <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
+        <i class="fa-solid fa-user-tie text-[#C59B63] mr-1.5"></i> 四、案件介紹人與佣金機制
+    </h4>
+    
+    <!-- 上排：介紹人姓名與佣金金額 (2 欄) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+            <label class="font-bold block mb-1 text-stone-700 text-[11px]">介紹人姓名</label>
+            <input type="text" id="referral-name" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="陳總監">
+        </div>
+        <div>
+            <label class="font-bold block mb-1 text-stone-700 text-[11px]">佣金金額</label>
+            <input type="number" id="referral-commission" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-mono" placeholder="0">
+        </div>
+    </div>
+
+    <!-- 下排：退佣機制說明 (左) 與 佣金付款期程 (右) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+            <label class="font-bold block mb-1 text-stone-700 text-[11px]">退佣機制說明</label>
+            <input type="text" id="referral-mechanism" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="約金為簽約金額30%，跟著合約收款期程給付佣金">
         </div>
         <div>
             <label class="font-bold block mb-1 text-stone-700 text-[11px]">佣金付款期程</label>
             <input type="text" id="referral-note" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63]" placeholder="已於1/15與8/10給付佣金">
         </div>
     </div>
+</div>
 
     <!-- 區塊八：合約備註 -->
     <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
