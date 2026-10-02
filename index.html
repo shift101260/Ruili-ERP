@@ -526,21 +526,19 @@
                 <!-- 區塊四：財務會計（報價、佣金與合約） -->
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
                     <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-calculator text-[#C59B63] mr-1.5"></i> 四、財務會計（報價、佣金與合約）
+                        <i class="fa-solid fa-calculator text-[#C59B63] mr-1.5"></i> 一、報價與簽約金額
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div class="space-y-1.5">
                             <span class="text-[11px] text-stone-600 font-bold block">依照案件結案條件填寫</span>
                             <div class="grid grid-cols-2 gap-2">
                                 <input type="number" id="quote-price-amount" placeholder="報價金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] bg-white">
-                                <input type="number" id="quote-price-percent" placeholder="報價趴數 (%)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 text-center font-mono font-bold text-stone-800 focus:outline-none focus:border-[#C59B63] bg-white">
                             </div>
                         </div>
                         <div class="space-y-1.5">
                             <span class="text-[11px] text-stone-600 font-bold block">依照案件結案條件填寫 (期程參考基準)</span>
                             <div class="grid grid-cols-2 gap-2">
                                 <input type="number" id="contract-amount" oninput="calculateQuoteTotals()" placeholder="簽約金額 (NT$)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 font-mono font-bold text-rose-600 focus:outline-none focus:border-[#C59B63] bg-white">
-                                <input type="number" id="contract-percent" placeholder="簽約％數 (%)" class="w-full text-xs border border-stone-300 rounded-xl px-3 py-2 text-center font-mono font-bold text-rose-600 focus:outline-none focus:border-[#C59B63] bg-white">
                             </div>
                         </div>
                     </div>
@@ -549,7 +547,7 @@
                 <!-- 區塊五：收款期程配置 -->
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
                     <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-calendar-days text-[#C59B63] mr-1.5"></i> 五、收款期程配置
+                        <i class="fa-solid fa-calendar-days text-[#C59B63] mr-1.5"></i> 二、收款期程配置
                     </h4>
                     <span class="text-[11px] text-stone-500 block">依上方簽約金額按各期 % 自動換算</span>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -628,7 +626,7 @@
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
                     <div class="flex justify-between items-center border-b border-stone-200 pb-2.5">
                         <h4 class="font-bold text-stone-900 flex items-center text-xs">
-                            <i class="fa-solid fa-file-invoice-dollar text-[#C59B63] mr-1.5"></i> 六、供應商報價利潤工具
+                            <i class="fa-solid fa-file-invoice-dollar text-[#C59B63] mr-1.5"></i> 三、供應商案件成本
                         </h4>
                         <button type="button" onclick="addQuoteSupplierRow()" class="px-3 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
                             <i class="fa-solid fa-plus text-[10px]"></i><span>新增供應商</span>
@@ -662,7 +660,7 @@
                 <!-- 區塊七：案件介紹人與佣金機制 -->
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
                     <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-user-tie text-[#C59B63] mr-1.5"></i> 七、案件介紹人與佣金機制
+                        <i class="fa-solid fa-user-tie text-[#C59B63] mr-1.5"></i> 四、案件介紹人與佣金機制
                     </h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
@@ -680,10 +678,10 @@
                     </div>
                 </div>
 
-                <!-- 區塊八：簽約程序與合約備註 -->
+                <!-- 區塊八：合約備註 -->
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
                     <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-file-contract text-[#C59B63] mr-1.5"></i> 八、簽約程序與合約備註
+                        <i class="fa-solid fa-file-contract text-[#C59B63] mr-1.5"></i> 五、合約備註
                     </h4>
                     <div class="flex items-center space-x-4 py-1">
                         <span class="font-bold text-stone-700 text-xs">簽約金額是否含稅選項：</span>
@@ -697,7 +695,7 @@
                         </label>
                     </div>
                     <div>
-                        <label class="font-bold block mb-1 text-stone-700 text-[11px]">業務合約備註</label>
+                        <label class="font-bold block mb-1 text-stone-700 text-[11px]">特別約定事項</label>
                         <textarea id="contract-business-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-20 text-xs focus:outline-none focus:border-[#C59B63] font-medium" placeholder="請輸入合約相關的特殊條件、付款期程或業務備註..."></textarea>
                     </div>
                     <div class="pt-2 flex justify-end">
@@ -706,7 +704,6 @@
                         </button>
                     </div>
                 </div>
-
             </div>
         </div>
 
