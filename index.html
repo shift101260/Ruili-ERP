@@ -277,10 +277,10 @@
             <!-- ================= 分頁一：基本資料 ================= -->
             <div id="modal-tab-basic" class="space-y-6">
                 
-                <!-- 區塊一：基本資訊區域 -->
+                <!-- 區塊一：基本資訊 -->
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
                     <h4 class="font-bold text-stone-900 border-b border-stone-100 pb-2 flex items-center text-xs">
-                        <i class="fa-solid fa-info-circle text-[#C59B63] mr-1.5"></i> 一、基本資訊區域
+                        <i class="fa-solid fa-info-circle text-[#C59B63] mr-1.5"></i> 一、基本資訊
                     </h4>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -296,26 +296,30 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="font-bold block mb-1 text-stone-900">工作進度狀態</label>
+                            <label class="font-bold block mb-1 text-stone-900">工作進度</label>
                             <select id="edit-case-progress-status" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer">
                                 <option value="潛在">潛在</option>
                                 <option value="現勘">現勘</option>
                                 <option value="報價">報價</option>
                                 <option value="準備簽約">準備簽約</option>
                                 <option value="案件簽約">案件簽約</option>
+                                <option value="生產作業">生產作業</option>
+                                <option value="階段請款">階段請款</option>
+                                <option value="結案請款">結案請款</option>
+                                <option value="結案">結案</option>
                             </select>
                         </div>
                         <div>
                             <label class="font-bold block mb-1 text-stone-900">服務項目 <span class="text-rose-500">*</span></label>
                             <select id="edit-case-service" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#C59B63] font-bold text-stone-900 shadow-2xs cursor-pointer">
+                                <option value="容許">容許</option>
+                                <option value="補照">補照</option>
                                 <option value="地政士">地政士</option>
+                                <option value="土地變更">土地變更</option>
+                                <option value="毗鄰變更">毗鄰變更</option>
                                 <option value="改善計畫">改善計畫</option>
                                 <option value="特定工廠登記">特定工廠登記</option>
                                 <option value="一般工廠登記/變更">一般工廠登記/變更</option>
-                                <option value="土地變更">土地變更</option>
-                                <option value="毗鄰變更">毗鄰變更</option>
-                                <option value="補照">補照</option>
-                                <option value="容許">容許</option>
                                 <option value="不動產買賣">不動產買賣</option>
                                 <option value="不動產租賃">不動產租賃</option>
                                 <option value="ESG轉型">ESG轉型</option>
@@ -352,7 +356,7 @@
                             <textarea id="edit-case-desc" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-16 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="拋轉至簽約案件時將顯示於秘書待簽核案件..."></textarea>
                         </div>
                         <div>
-                            <label class="font-bold block mb-1 text-stone-900">案件即時說明</label>
+                            <label class="font-bold block mb-1 text-stone-900">專業人士評估結果</label>
                             <textarea id="edit-case-note" class="w-full bg-white border border-stone-300 rounded-xl p-2.5 h-16 text-xs focus:outline-none focus:border-[#C59B63] font-medium shadow-2xs" placeholder="內部即時備註與進度說明..."></textarea>
                         </div>
                     </div>
