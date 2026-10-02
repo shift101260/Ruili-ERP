@@ -246,7 +246,7 @@
         </div>
     </main>
 
-    <!-- 3. 互動彈窗區：集團案件完整建檔與評估中心 (Modal) -->
+   <!-- 3. 互動彈窗區：集團案件完整建檔與評估中心 (Modal) -->
 <div id="editCaseModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center z-50 p-3 overflow-y-auto">
     <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-stone-200 my-6 text-stone-800 relative">
         
@@ -452,7 +452,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <!-- 區塊二：案件評估工具 -->
@@ -488,42 +487,8 @@
                     </div>
                     <div id="calc-module-viewport" class="mt-2 p-3 bg-stone-50 rounded-xl border border-stone-200 text-stone-500 text-xs hidden"></div>
                 </div>
-
             </div>
-
-            <!-- ================= 分頁二：財務會計 ================= -->
-            <div id="modal-tab-finance" class="space-y-6 hidden">
-                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
-                    <h4 class="font-bold text-stone-900 border-b border-stone-200 pb-2.5 flex items-center text-xs">
-                        <i class="fa-solid fa-calculator text-[#C59B63] mr-1.5"></i> 四、財務會計內容
-                    </h4>
-                    <p class="text-stone-500 text-xs">財務會計模組內容已成功整合於此分頁。</p>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- 4. 底部固定的按鈕列 -->
-        <div class="px-6 py-4 bg-stone-100 border-t border-stone-200 flex flex-wrap justify-between items-center gap-2.5 shrink-0 z-20">
-            <div>
-                <button type="button" onclick="handleCaseSignOff(document.getElementById('edit-case-id').value)" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
-                    <i class="fa-solid fa-file-signature"></i>
-                    <span>案件簽核</span>
-                </button>
-            </div>
-
-            <div class="flex items-center space-x-2.5">
-                <button type="button" onclick="closeModal('editCaseModal')" class="px-3.5 py-1.5 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-bold border border-stone-300 transition shadow-2xs cursor-pointer">
-                    取消
-                </button>
-                <button type="button" onclick="saveNewCase()" class="px-4 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
-                    <i class="fa-solid fa-check"></i><span>儲存</span>
-                </button>
-            </div>
-        </div>
-
-    </div>
-</div>
+            
             <!-- ================= 分頁二：財務會計 ================= -->
             <div id="modal-tab-finance" class="space-y-6 hidden">
                 <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
