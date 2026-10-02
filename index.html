@@ -274,11 +274,12 @@
         <div class="p-6 text-xs text-stone-700 flex-1 overflow-y-auto bg-stone-50/50">
             <input type="hidden" id="edit-case-id" value="">
 
-          <!-- 彈出視窗主遮罩 -->
-<div id="editCaseModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-2 sm:p-4 hidden">
+          
+        <<!-- 彈出視窗主遮罩 -->
+<div id="editCaseModal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-3 sm:p-4 hidden">
     
-    <!-- 彈出視窗主體：關鍵在於 w-[95vw] max-w-4xl (手機95%寬，大螢幕最大4xl) -->
-    <div class="bg-white rounded-3xl shadow-2xl w-[95vw] max-w-4xl max-h-[90vh] flex flex-col overflow-hidden border border-stone-100">
+    <!-- 彈出視窗主體：設定 h-[90vh] 確保高度固定且可滾動 -->
+    <div class="bg-white rounded-3xl shadow-2xl w-[95vw] max-w-4xl h-[90vh] max-h-[90vh] flex flex-col overflow-hidden border border-stone-100">
         
         <!-- Header 頂部欄 -->
         <div class="px-5 py-4 bg-stone-900 text-white flex justify-between items-center shrink-0">
@@ -301,8 +302,8 @@
             </button>
         </div>
 
-        <!-- 主內容滾動區 -->
-        <div class="p-4 sm:p-6 overflow-y-auto flex-1 space-y-6">
+        <!-- 主內容滾動區 (修正關鍵：加入 h-full min-h-0，確保表單內容展現並可獨立滾動) -->
+        <div class="p-4 sm:p-6 overflow-y-auto flex-1 min-h-0 space-y-6">
 
             <!-- ================= 分頁一：基本資料 ================= -->
             <div id="modal-tab-basic" class="space-y-6">
@@ -542,7 +543,7 @@
                     </h4>
                     <span class="text-[11px] text-stone-500 block">依上方簽約金額按各期 % 自動換算</span>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <!-- 第一期至第四期 -->
+                        <!-- 第一期款 -->
                         <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] text-stone-700 font-bold">第一期款 (%)</span>
@@ -560,6 +561,7 @@
                             </div>
                         </div>
                         
+                        <!-- 第二期款 -->
                         <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] text-stone-700 font-bold">第二期款 (%)</span>
@@ -577,6 +579,7 @@
                             </div>
                         </div>
 
+                        <!-- 第三期款 -->
                         <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] text-stone-700 font-bold">第三期款 (%)</span>
@@ -594,6 +597,7 @@
                             </div>
                         </div>
 
+                        <!-- 第四期款 -->
                         <div class="p-3 rounded-xl border border-stone-200 space-y-2 bg-stone-50/50">
                             <div class="flex items-center justify-between">
                                 <span class="text-[11px] text-stone-700 font-bold">第四期款 (%)</span>
@@ -721,7 +725,7 @@
 
         </div>
 
-        <!-- 底部按鈕列 (固底控制，縮小手機內距) -->
+        <!-- 底部按鈕列 (固底控制) -->
         <div class="px-4 sm:px-6 py-3.5 bg-stone-100 border-t border-stone-200 flex flex-wrap justify-between items-center gap-2.5 shrink-0">
             <div>
                 <button type="button" onclick="handleCaseSignOff(document.getElementById('edit-case-id')?.value)" class="px-3.5 py-1.5 btn-gold hover:opacity-90 rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
