@@ -124,11 +124,6 @@
                 <button onclick="switchModule('tools-module', this, null)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition cursor-pointer">
                     <i class="fa-solid fa-toolbox w-4 text-sky-400"></i>
                     <span>工具專區</span>
-                     </button>
-
-                    <button onclick="switchModule('consulting-module', this, null)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition cursor-pointer">
-                    <i class="fa-solid fa-brain w-4 text-amber-400"></i>
-                    <span>顧問模組</span>    
                 </button>
 
                 <button onclick="switchModule('expenses', this)" class="nav-btn w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-stone-800/80 text-stone-300 transition">
@@ -1435,57 +1430,45 @@ function switchModalTab(tabName) {
     <script src="./js/modules/land-basic.js"></script>
     <script src="./js/modules/registered-building.js"></script>
     <script src="./js/modules/unregistered-building.js"></script>
-    <script src="./js/modules/consulting-module.js"></script>
 
     <!-- 服務項目試算模組 -->
     <script src="./js/modules/solar-calc.js"></script>
     <script src="./js/modules/land-change-calc.js"></script>
-
-    <!-- 統合所有路由與初始化設定 -->
+    <!-- 補強 switchModule 支援自填支出頁面 -->
     <script>
-        // 1. 補強 switchModule 支援自填支出與顧問模組
         const originalSwitchModule = window.switchModule;
         window.switchModule = function(moduleName, element) {
-            // 如果點擊的是「顧問模組」，優先接管並渲染
-            if (moduleName === 'consulting-module') {
-                if (typeof renderConsultingModule === 'function') {
-                    renderConsultingModule();
-                }
-                return; // 攔截，避免被原本的邏輯覆蓋
-            }
-
-            // 執行原有的樣式切換與預設模組邏輯
+            // 執行原有的樣式切換與預設模組 logic
             if (typeof originalSwitchModule === 'function') {
                 originalSwitchModule(moduleName, element);
             }
-
-            // 如果點擊的是「自填支出」，觸發對應渲染
+            
+            // 當點擊自填支出時，觸發自填支出模組渲染
             if (moduleName === 'expenses' || moduleName === '自填支出') {
                 if (typeof renderExpensesModule === 'function') {
                     renderExpensesModule();
                 }
             }
         };
+        // 取得當前時間並格式化帶入 datetime-local
+function setCurrentDateTime() {
+    const datetimeInput = document.getElementById('edit-case-datetime');
+    if (datetimeInput) {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        
+        datetimeInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+}
 
-        // 2. 取得當前時間並格式化帶入 datetime-local
-        function setCurrentDateTime() {
-            const datetimeInput = document.getElementById('edit-case-datetime');
-            if (datetimeInput) {
-                const now = new Date();
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                const day = String(now.getDate()).padStart(2, '0');
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                
-                datetimeInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-            }
-        }
-
-        // 3. 頁面初次載入時自動帶入時間
-        document.addEventListener('DOMContentLoaded', function() {
-            setCurrentDateTime();
-        });
+// 頁面初次載入時自動帶入時間
+document.addEventListener('DOMContentLoaded', function() {
+    setCurrentDateTime();
+});
     </script>
 </body>
 </html>
