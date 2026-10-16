@@ -147,7 +147,57 @@ function renderToolsModule() {
                 </div>
             </div>
 
-            <!-- 區塊三：官方網站與後台管理 -->
+            <!-- 區塊三：標準化溝通與管理填空工具 (新增專區) -->
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2 px-1">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-500 text-sm"></i>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">標準化溝通與危機決策工具 (SBAR / SCQA)</h3>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                    <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+                        <div>
+                            <h4 class="font-bold text-sm text-stone-900">⚡ SBAR 緊急決策請示快速產生器</h4>
+                            <p class="text-xs text-stone-500 mt-0.5">適用於系統突發狀況、客訴危機、需要主管立即拍板授權時套用。</p>
+                        </div>
+                        <span class="px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg text-[10px] font-bold">管理共用工具</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">【S 狀況】發生了什麼突發事件？</label>
+                            <input type="text" id="sbar-s" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:bg-white focus:border-amber-500 transition" placeholder="例如：系統在 14:00 出現存取異常...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">【B 背景】相關原因與歷史背景：</label>
+                            <input type="text" id="sbar-b" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:bg-white focus:border-amber-500 transition" placeholder="例如：今早曾進行伺服器更新...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">【A 評估】影響範圍與最壞結果：</label>
+                            <input type="text" id="sbar-a" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:bg-white focus:border-amber-500 transition" placeholder="例如：影響約 15% 用戶，若不處理將導致...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">【R 建議】請求授權與具體需求：</label>
+                            <input type="text" id="sbar-r" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:bg-white focus:border-amber-500 transition" placeholder="例如：建議立即執行版控退回，請求授權...">
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex items-center justify-between flex-wrap gap-3">
+                        <button type="button" onclick="generateSBAR()" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                            <i class="fa-solid fa-gears text-[10px]"></i><span>一鍵產生 SBAR 標準回報格式</span>
+                        </button>
+                        <button type="button" onclick="copySBAR()" class="px-4 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow-2xs cursor-pointer">
+                            <i class="fa-solid fa-copy text-[10px]"></i><span>複製產出結果</span>
+                        </button>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 mb-1">產出結果預覽（可直接貼到 LINE、Teams 或案件備註）：</label>
+                        <textarea id="sbar-output" class="w-full px-3 py-2.5 bg-stone-950 text-emerald-400 font-mono rounded-xl text-xs leading-relaxed" rows="4" readonly placeholder="點擊上方按鈕後自動生成..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊四：官方網站與後台管理 -->
             <div class="space-y-3">
                 <div class="flex items-center space-x-2 px-1">
                     <i class="fa-solid fa-globe text-sky-500 text-sm"></i>
@@ -206,6 +256,27 @@ function renderToolsModule() {
 
         </div>
     `;
+}
+
+// 附加的 SBAR 產生與複製輔助函式
+function generateSBAR() {
+    const s = document.getElementById('sbar-s').value.trim() || '（未填寫狀況）';
+    const b = document.getElementById('sbar-b').value.trim() || '（未填寫背景）';
+    const a = document.getElementById('sbar-a').value.trim() || '（未填寫評估）';
+    const r = document.getElementById('sbar-r').value.trim() || '（未填寫建議）';
+
+    const result = `【S 狀況】${s}\n【B 背景】${b}\n【A 評估】${a}\n【R 建議】${r}`;
+    document.getElementById('sbar-output').value = result;
+}
+
+function copySBAR() {
+    const output = document.getElementById('sbar-output');
+    if (!output.value) {
+        generateSBAR();
+    }
+    output.select();
+    navigator.clipboard.writeText(output.value);
+    alert('📋 已成功複製 SBAR 標準格式至剪貼簿！');
 }
 
 // 掛載至全域 window，確保 switchModule 可以正確呼叫
