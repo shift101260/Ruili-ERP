@@ -334,16 +334,16 @@ function generateProposalDeck() {
     const pain = document.getElementById('deck-pain').value.trim() || '【核心痛點】';
     const roi = document.getElementById('deck-roi').value.trim() || '【預期效益與報價】';
 
-    const deckContent = `=== 睿立集團 • 專業顧問提案簡報 (Deck) ===\n` +
-        `[Page 1] 標題頁：攜手 ${client} 共創產業高標與價值轉型\n` +
-        `[Page 2] 業界現狀與痛點共識 (SCQA)：\n` +
-        `   - 觀察到客戶在發展過程中面臨：${pain}\n` +
-        `[Page 3] 根因分析與架構拆解 (MECE)：\n` +
-        `   - 表面症狀背後的系統性瓶頸，並透過標準化工作流程破解。\n` +
-        `[Page 4] 解決方案與服務範疇 (SOW)：\n` +
-        `   - 導入睿立集團「內部管理模組與生產作業流程」，明確訂定 DoD 與 DRI。\n` +
-        `[Page 5] 投資報酬與商業價值 (ROI)：\n` +
-        `   - 專案規劃與回報：${roi}，以高性價比實現長期自我驅動。`;
+    const deckContent = `=== 睿立集團 • 專業顧問提案簡報 (Deck) ===
+[Page 1] 標題頁：攜手 ${client} 共創產業高標與價值轉型
+[Page 2] 業界現狀與痛點共識 (SCQA)：
+   - 觀察到客戶在發展過程中面臨：${pain}
+[Page 3] 根因分析與架構拆解 (MECE)：
+   - 表面症狀背後的系統性瓶頸，並透過標準化工作流程破解。
+[Page 4] 解決方案與服務範疇 (SOW)：
+   - 導入睿立集團「內部管理模組與生產作業流程」，明確訂定 DoD 與 DRI。
+[Page 5] 投資報酬與商業價值 (ROI)：
+   - 專案規劃與回報：${roi}，以高性價比實現長期自我驅動。`;
 
     document.getElementById('deck-output').value = deckContent;
 }
@@ -359,4 +359,4 @@ function copyProposalDeck() {
 }
 
 // 掛載至全域 window，確保 switchModule 可以正確呼叫
-window.renderToolsModule = renderToolsModule;
+window.renderToolsModule = renderToolsModule; 
