@@ -1440,29 +1440,31 @@ function switchModalTab(tabName) {
     <!-- 服務項目試算模組 -->
     <script src="./js/modules/solar-calc.js"></script>
     <script src="./js/modules/land-change-calc.js"></script>
-    <!-- 補強 switchModule 支援自填支出頁面 -->
+    <!-- 補強 switchModule 支援自填支出與顧問模組 -->
     <script>
         const originalSwitchModule = window.switchModule;
         window.switchModule = function(moduleName, element) {
-            // 執行原有的樣式切換與預設模組 logic
+            // 1. 如果點擊的是「顧問模組」，優先接管並渲染
+            if (moduleName === 'consulting-module') {
+                if (typeof renderConsultingModule === 'function') {
+                    renderConsultingModule();
+                }
+                return; // 攔截，避免被原本的邏輯覆蓋
+            }
+
+            // 2. 執行原有的樣式切換與預設模組邏輯
             if (typeof originalSwitchModule === 'function') {
                 originalSwitchModule(moduleName, element);
             }
 
-            // 當點擊顧問模組時，觸發顧問模組與 AI 簡報引擎渲染
-        if (moduleName === 'consulting-module') {
-            if (typeof renderConsultingModule === 'function') {
-                renderConsultingModule();
-            }
-        }
-            
-            // 當點擊自填支出時，觸發自填支出模組渲染
+            // 3. 如果點擊的是「自填支出」，觸發對應渲染
             if (moduleName === 'expenses' || moduleName === '自填支出') {
                 if (typeof renderExpensesModule === 'function') {
                     renderExpensesModule();
                 }
             }
         };
+    </script>
         // 取得當前時間並格式化帶入 datetime-local
 function setCurrentDateTime() {
     const datetimeInput = document.getElementById('edit-case-datetime');
