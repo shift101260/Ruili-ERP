@@ -1448,6 +1448,13 @@ function switchModalTab(tabName) {
             if (typeof originalSwitchModule === 'function') {
                 originalSwitchModule(moduleName, element);
             }
+
+            // 當點擊顧問模組時，觸發顧問模組與 AI 簡報引擎渲染
+        if (moduleName === 'consulting-module') {
+            if (typeof renderConsultingModule === 'function') {
+                renderConsultingModule();
+            }
+        }
             
             // 當點擊自填支出時，觸發自填支出模組渲染
             if (moduleName === 'expenses' || moduleName === '自填支出') {
