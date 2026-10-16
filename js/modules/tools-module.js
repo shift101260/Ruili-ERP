@@ -147,7 +147,106 @@ function renderToolsModule() {
                 </div>
             </div>
 
-            <!-- 區塊三：官方網站與後台管理 -->
+            <!-- 區塊三：標準化溝通與危機決策工具 (SBAR) -->
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2 px-1">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-500 text-sm"></i>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">標準化溝通與危機決策工具 (SBAR / SCQA)</h3>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-2xs space-y-4">
+                    <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+                        <div>
+                            <h4 class="font-bold text-sm text-stone-900">⚡ SBAR 緊急決策請示快速產生器</h4>
+                            <p class="text-xs text-stone-500 mt-0.5">適用於系統突發狀況、客訴危機、需要主管立即拍板授權時套用。</p>
+                        </div>
+                        <span class="px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg text-[10px] font-bold">管理共用工具</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">【S 狀況】發生了什麼突發事件？</label>
+                            <input type="text" id="sbar-s" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:bg-white focus:border-amber-500 transition" placeholder="例如：系統在 14:00 出現存取異常...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">【B 背景】相關原因與歷史背景：</label>
+                            <input type="text" id="sbar-b" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:bg-white focus:border-amber-500 transition" placeholder="例如：今早曾進行伺服器更新...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">【A 評估】影響範圍與最壞結果：</label>
+                            <input type="text" id="sbar-a" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:bg-white focus:border-amber-500 transition" placeholder="例如：影響約 15% 用戶，若不處理將導致...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-700 mb-1">【R 建議】請求授權與具體需求：</label>
+                            <input type="text" id="sbar-r" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-xs focus:bg-white focus:border-amber-500 transition" placeholder="例如：建議立即執行版控退回，請求授權...">
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex items-center justify-between flex-wrap gap-3">
+                        <button type="button" onclick="generateSBAR()" class="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5 cursor-pointer">
+                            <i class="fa-solid fa-gears text-[10px]"></i><span>一鍵產生 SBAR 標準回報格式</span>
+                        </button>
+                        <button type="button" onclick="copySBAR()" class="px-4 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow-2xs cursor-pointer">
+                            <i class="fa-solid fa-copy text-[10px]"></i><span>複製產出結果</span>
+                        </button>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-stone-700 mb-1">產出結果預覽（可直接貼到 LINE、Teams 或案件備註）：</label>
+                        <textarea id="sbar-output" class="w-full px-3 py-2.5 bg-stone-950 text-emerald-400 font-mono rounded-xl text-xs leading-relaxed" rows="4" readonly placeholder="點擊上方按鈕後自動生成..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊四：AI 顧問提案簡報自動生成引擎 (新增專區) -->
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2 px-1">
+                    <i class="fa-solid fa-file-powerpoint text-indigo-600 text-sm"></i>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">AI 顧問提案簡報自動生成引擎 (Report-as-Code)</h3>
+                </div>
+                <div class="bg-gradient-to-br from-slate-900 to-indigo-950 p-6 rounded-2xl border border-indigo-900 shadow-md text-white space-y-5">
+                    <div class="flex items-center justify-between border-b border-indigo-800 pb-3">
+                        <div>
+                            <h4 class="font-bold text-sm text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                                <span>自動化顧問提案 Deck 產生器</span>
+                            </h4>
+                            <p class="text-xs text-indigo-300 mt-0.5">輸入客戶關鍵參數，系統自動套用「金字塔原理」與顧問業 5 大提案模組，一鍵產出高勝率結構化簡報。</p>
+                        </div>
+                        <span class="px-2.5 py-1 bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 rounded-lg text-[10px] font-bold">AI 智慧引擎</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-indigo-200 mb-1">目標客戶名稱 / 產業：</label>
+                            <input type="text" id="deck-client" class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:border-indigo-400 transition" placeholder="例如：某某綠能科技股份有限公司">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-indigo-200 mb-1">核心痛點 / 表面症狀：</label>
+                            <input type="text" id="deck-pain" class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:border-indigo-400 transition" placeholder="例如：土地變更審查期過長，專案延宕...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-indigo-200 mb-1">專案報價與預期效益 (ROI)：</label>
+                            <input type="text" id="deck-roi" class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white focus:border-indigo-400 transition" placeholder="例如：報價 50 萬，預計縮短 6 個月時程">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3 pt-2">
+                        <button type="button" onclick="generateProposalDeck()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition shadow-md flex items-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-bolt text-amber-300"></i><span>一鍵生成顧問提案簡報</span>
+                        </button>
+                        <button type="button" onclick="copyProposalDeck()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-indigo-200 border border-slate-700 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow-xs cursor-pointer">
+                            <i class="fa-solid fa-copy text-xs"></i><span>複製簡報結構碼</span>
+                        </button>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-indigo-200 mb-1">簡報架構預覽 (Consultant Deck Structure)：</label>
+                        <textarea id="deck-output" class="w-full px-4 py-3 bg-slate-950 text-emerald-400 font-mono rounded-xl text-xs leading-relaxed border border-slate-800" rows="6" readonly placeholder="點擊上方「一鍵生成顧問提案簡報」後自動產生 5 大模組內容..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊五：官方網站與後台管理 -->
             <div class="space-y-3">
                 <div class="flex items-center space-x-2 px-1">
                     <i class="fa-solid fa-globe text-sky-500 text-sm"></i>
@@ -206,6 +305,57 @@ function renderToolsModule() {
 
         </div>
     `;
+}
+
+// 1. SBAR 輔助函式
+function generateSBAR() {
+    const s = document.getElementById('sbar-s').value.trim() || '（未填寫狀況）';
+    const b = document.getElementById('sbar-b').value.trim() || '（未填寫背景）';
+    const a = document.getElementById('sbar-a').value.trim() || '（未填寫評估）';
+    const r = document.getElementById('sbar-r').value.trim() || '（未填寫建議）';
+
+    const result = `【S 狀況】${s}\n【B 背景】${b}\n【A 評估】${a}\n【R 建議】${r}`;
+    document.getElementById('sbar-output').value = result;
+}
+
+function copySBAR() {
+    const output = document.getElementById('sbar-output');
+    if (!output.value) {
+        generateSBAR();
+    }
+    output.select();
+    navigator.clipboard.writeText(output.value);
+    alert('📋 已成功複製 SBAR 標準格式至剪貼簿！');
+}
+
+// 2. AI 顧問提案簡報引擎輔助函式
+function generateProposalDeck() {
+    const client = document.getElementById('deck-client').value.trim() || '【指定客戶】';
+    const pain = document.getElementById('deck-pain').value.trim() || '【核心痛點】';
+    const roi = document.getElementById('deck-roi').value.trim() || '【預期效益與報價】';
+
+    const deckContent = `=== 睿立集團 • 專業顧問提案簡報 (Deck) ===
+[Page 1] 標題頁：攜手 ${client} 共創產業高標與價值轉型
+[Page 2] 業界現狀與痛點共識 (SCQA)：
+   - 觀察到客戶在發展過程中面臨：${pain}
+[Page 3] 根因分析與架構拆解 (MECE)：
+   - 表面症狀背後的系統性瓶頸，並透過標準化工作流程破解。
+[Page 4] 解決方案與服務範疇 (SOW)：
+   - 導入睿立集團「內部管理模組與生產作業流程」，明確訂定 DoD 與 DRI。
+[Page 5] 投資報酬與商業價值 (ROI)：
+   - 專案規劃與回報：${roi}，以高性價比實現長期自我驅動。`;
+
+    document.getElementById('deck-output').value = deckContent;
+}
+
+function copyProposalDeck() {
+    const output = document.getElementById('deck-output');
+    if (!output.value) {
+        generateProposalDeck();
+    }
+    output.select();
+    navigator.clipboard.writeText(output.value);
+    alert('📋 已成功複製 AI 顧問提案簡報結構碼！');
 }
 
 // 掛載至全域 window，確保 switchModule 可以正確呼叫
