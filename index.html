@@ -1418,14 +1418,35 @@ function switchModalTab(tabName) {
         </div>
     </div>
 
+    <!-- 核心邏輯與模組引用 -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="./js/modules/factory-improvement-module.js"></script>
+    <script src="./js/api/data-sync.js"></script>
+    <script src="./js/api/mock-data.js"></script>
+    <script src="./js/modules/case-management.js"></script>
+    <script src="./js/modules/case-edit.js"></script>
+    <script src="./js/modules/payment-calc.js"></script>
+    <script src="./js/modules/tools-module.js?v=999"></script>
+    
+    <!-- 新增：自填支出模組 -->
+    <script src="./js/modules/expenses.js"></script>
+    
+    <!-- 案件評估工具模組 -->
+    <script src="./js/modules/land-basic.js"></script>
+    <script src="./js/modules/registered-building.js"></script>
+    <script src="./js/modules/unregistered-building.js"></script>
+    <script src="./js/modules/consulting-module.js"></script>
+
     <!-- 服務項目試算模組 -->
     <script src="./js/modules/solar-calc.js"></script>
     <script src="./js/modules/land-change-calc.js"></script>
-    <!-- 補強 switchModule 支援自填支出與顧問模組 -->
+
+    <!-- 統合所有路由與初始化設定 -->
     <script>
+        // 1. 補強 switchModule 支援自填支出與顧問模組
         const originalSwitchModule = window.switchModule;
         window.switchModule = function(moduleName, element) {
-            // 1. 如果點擊的是「顧問模組」，優先接管並渲染
+            // 如果點擊的是「顧問模組」，優先接管並渲染
             if (moduleName === 'consulting-module') {
                 if (typeof renderConsultingModule === 'function') {
                     renderConsultingModule();
@@ -1433,12 +1454,12 @@ function switchModalTab(tabName) {
                 return; // 攔截，避免被原本的邏輯覆蓋
             }
 
-            // 2. 執行原有的樣式切換與預設模組邏輯
+            // 執行原有的樣式切換與預設模組邏輯
             if (typeof originalSwitchModule === 'function') {
                 originalSwitchModule(moduleName, element);
             }
 
-            // 3. 如果點擊的是「自填支出」，觸發對應渲染
+            // 如果點擊的是「自填支出」，觸發對應渲染
             if (moduleName === 'expenses' || moduleName === '自填支出') {
                 if (typeof renderExpensesModule === 'function') {
                     renderExpensesModule();
@@ -1446,7 +1467,7 @@ function switchModalTab(tabName) {
             }
         };
 
-        // 取得當前時間並格式化帶入 datetime-local
+        // 2. 取得當前時間並格式化帶入 datetime-local
         function setCurrentDateTime() {
             const datetimeInput = document.getElementById('edit-case-datetime');
             if (datetimeInput) {
@@ -1461,7 +1482,7 @@ function switchModalTab(tabName) {
             }
         }
 
-        // 頁面初次載入時自動帶入時間
+        // 3. 頁面初次載入時自動帶入時間
         document.addEventListener('DOMContentLoaded', function() {
             setCurrentDateTime();
         });
