@@ -197,13 +197,13 @@ function renderToolsModule() {
                 </div>
             </div>
 
-            <!-- 區塊四：AI 顧問提案簡報自動生成引擎 (菁英顧問風) -->
+            <!-- 區塊四：AI 顧問提案簡報自動生成引擎 (支援套版與PDF) -->
             <div class="space-y-3">
                 <div class="flex items-center space-x-2 px-1">
                     <i class="fa-solid fa-file-powerpoint text-amber-600 text-sm"></i>
                     <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">AI 顧問提案簡報自動生成引擎 (Report-as-Code)</h3>
                 </div>
-                <!-- 菁英顧問風主題外框：尊榮灰階搭配集團金黃點綴 -->
+                <!-- 預設為菁英顧問風外框 -->
                 <div id="deck-theme-container" class="bg-gradient-to-br from-stone-900 via-zinc-900 to-stone-950 p-6 rounded-2xl border border-amber-500/30 shadow-xl text-white space-y-5 transition-all">
                     
                     <div class="flex items-center justify-between border-b border-stone-800 pb-3 flex-wrap gap-3">
@@ -215,7 +215,7 @@ function renderToolsModule() {
                             <p class="text-xs text-stone-400 mt-0.5">輸入客戶關鍵參數，系統自動套用「金字塔原理」與顧問業 5 大提案模組，一鍵產出高勝率結構化簡報。</p>
                         </div>
                         
-                        <!-- 版型風格切換器 -->
+                        <!-- 套版風格切換器 -->
                         <div class="flex items-center space-x-2">
                             <span class="text-[10px] text-stone-400 font-bold">套版風格：</span>
                             <select id="deck-theme-select" onchange="switchDeckTheme()" class="bg-stone-800 text-amber-300 border border-stone-700 rounded-lg text-xs px-2.5 py-1.5 focus:outline-none focus:border-amber-400 font-bold cursor-pointer">
@@ -233,4 +233,195 @@ function renderToolsModule() {
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-stone-300 mb-1">核心痛點 / 表面症狀：</label>
-                            <input type="text" id="deck-pain" class="w-full px-3 py-2 bg-stone-800/80 border border-stone-700 rounded-xl text-xs
+                            <input type="text" id="deck-pain" class="w-full px-3 py-2 bg-stone-800/80 border border-stone-700 rounded-xl text-xs text-white focus:border-amber-400 transition" placeholder="例如：土地變更審查期過長，專案延宕...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-stone-300 mb-1">專案報價與預期效益 (ROI)：</label>
+                            <input type="text" id="deck-roi" class="w-full px-3 py-2 bg-stone-800/80 border border-stone-700 rounded-xl text-xs text-white focus:border-amber-400 transition" placeholder="例如：報價 50 萬，預計縮短 6 個月時程">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3 pt-2 flex-wrap gap-2">
+                        <button type="button" onclick="generateProposalDeck()" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold rounded-xl text-xs transition shadow-md flex items-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-bolt text-stone-950"></i><span>一鍵生成顧問提案簡報</span>
+                        </button>
+                        <button type="button" onclick="copyProposalDeck()" class="px-4 py-2.5 bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-700 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow-xs cursor-pointer">
+                            <i class="fa-solid fa-copy text-xs"></i><span>複製簡報結構碼</span>
+                        </button>
+                        <!-- 一鍵列印 PDF 按鈕 -->
+                        <button type="button" onclick="printProposalDeckPDF()" class="px-4 py-2.5 bg-zinc-700 hover:bg-zinc-600 text-white rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow-xs cursor-pointer ml-auto">
+                            <i class="fa-solid fa-file-pdf text-amber-400"></i><span>一鍵列印 / 存為 PDF</span>
+                        </button>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-stone-300 mb-1">簡報架構預覽 (Consultant Deck Structure)：</label>
+                        <textarea id="deck-output" class="w-full px-4 py-3 bg-stone-950 text-amber-300 font-mono rounded-xl text-xs leading-relaxed border border-stone-800" rows="6" readonly placeholder="點擊上方「一鍵生成顧問提案簡報」後自動產生 5 大模組內容..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 區塊五：官方網站與後台管理 -->
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2 px-1">
+                    <i class="fa-solid fa-globe text-sky-500 text-sm"></i>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">官方網站與後台管理</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- 官網卡片 -->
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs hover:shadow-md transition flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-1 bg-sky-50 text-sky-800 border border-sky-200 rounded-lg text-[10px] font-bold">官方網站</span>
+                                <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-base group-hover:scale-105 transition">
+                                    <i class="fa-solid fa-globe"></i>
+                                </div>
+                            </div>
+                            <h4 class="font-bold text-sm text-stone-900 mb-1">睿立集團官方網站</h4>
+                            <p class="text-xs text-stone-500 leading-relaxed mb-4">
+                                快速開啟集團官方網站，對外展示綠能與土地開發實績。
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
+                            <button type="button" onclick="navigator.clipboard.writeText('https://www.yuanyeh.com.tw/'); alert('📋 已成功複製官網網址！');" class="px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200 rounded-xl text-xs font-bold transition flex items-center space-x-1 shadow-2xs cursor-pointer">
+                                <i class="fa-solid fa-copy text-[10px]"></i><span>複製網址</span>
+                            </button>
+                            <a href="https://www.yuanyeh.com.tw/" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5">
+                                <i class="fa-solid fa-external-link text-[10px]"></i><span>進入官網</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 官網後台卡片 -->
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs hover:shadow-md transition flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-2.5 py-1 bg-indigo-50 text-indigo-800 border border-indigo-200 rounded-lg text-[10px] font-bold">官方網站後台</span>
+                                <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base group-hover:scale-105 transition">
+                                    <i class="fa-solid fa-lock"></i>
+                                </div>
+                            </div>
+                            <h4 class="font-bold text-sm text-stone-900 mb-1">官方網站後台</h4>
+                            <p class="text-xs text-stone-500 leading-relaxed mb-4">
+                                專為內部管理打造的網站後台，用於維護官網內容與相關設定。
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
+                            <button type="button" onclick="navigator.clipboard.writeText('https://www.yuanyeh.com.tw/AWS-Backyard/login'); alert('📋 已成功複製後台登入網址！');" class="px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200 rounded-xl text-xs font-bold transition flex items-center space-x-1 shadow-2xs cursor-pointer">
+                                <i class="fa-solid fa-copy text-[10px]"></i><span>複製網址</span>
+                            </button>
+                            <a href="https://www.yuanyeh.com.tw/AWS-Backyard/login" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center space-x-1.5">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i><span>進入後台</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    `;
+}
+
+// 1. SBAR 輔助函式
+function generateSBAR() {
+    const s = document.getElementById('sbar-s').value.trim() || '（未填寫狀況）';
+    const b = document.getElementById('sbar-b').value.trim() || '（未填寫背景）';
+    const a = document.getElementById('sbar-a').value.trim() || '（未填寫評估）';
+    const r = document.getElementById('sbar-r').value.trim() || '（未填寫建議）';
+
+    const result = `【S 狀況】${s}\n【B 背景】${b}\n【A 評估】${a}\n【R 建議】${r}`;
+    document.getElementById('sbar-output').value = result;
+}
+
+function copySBAR() {
+    const output = document.getElementById('sbar-output');
+    if (!output.value) {
+        generateSBAR();
+    }
+    output.select();
+    navigator.clipboard.writeText(output.value);
+    alert('📋 已成功複製 SBAR 標準格式至剪貼簿！');
+}
+
+// 2. 套版風格切換函式
+function switchDeckTheme() {
+    const theme = document.getElementById('deck-theme-select').value;
+    const container = document.getElementById('deck-theme-container');
+    if (!container) return;
+
+    if (theme === 'gold') {
+        // 菁英顧問風 (Consultant Gold)
+        container.className = "bg-gradient-to-br from-stone-900 via-zinc-900 to-stone-950 p-6 rounded-2xl border border-amber-500/30 shadow-xl text-white space-y-5 transition-all";
+    } else if (theme === 'navy') {
+        // 極簡商務藍 (Executive Navy)
+        container.className = "bg-gradient-to-br from-slate-900 via-blue-950 to-slate-950 p-6 rounded-2xl border border-blue-500/30 shadow-xl text-white space-y-5 transition-all";
+    } else if (theme === 'minimal') {
+        // 現代極簡風 (Modern Minimal)
+        container.className = "bg-gradient-to-br from-zinc-900 via-stone-900 to-black p-6 rounded-2xl border border-zinc-700 shadow-xl text-white space-y-5 transition-all";
+    }
+}
+
+// 3. AI 顧問提案簡報引擎輔助函式
+function generateProposalDeck() {
+    const client = document.getElementById('deck-client').value.trim() || '【指定客戶】';
+    const pain = document.getElementById('deck-pain').value.trim() || '【核心痛點】';
+    const roi = document.getElementById('deck-roi').value.trim() || '【預期效益與報價】';
+
+    const deckContent = `=== 睿立集團 • 專業顧問提案簡報 (Deck) ===\n` +
+        `[Page 1] 標題頁：攜手 ${client} 共創產業高標與價值轉型\n` +
+        `[Page 2] 業界現狀與痛點共識 (SCQA)：\n` +
+        `   - 觀察到客戶在發展過程中面臨：${pain}\n` +
+        `[Page 3] 根因分析與架構拆解 (MECE)：\n` +
+        `   - 表面症狀背後的系統性瓶頸，並透過標準化工作流程破解。\n` +
+        `[Page 4] 解決方案與服務範疇 (SOW)：\n` +
+        `   - 導入睿立集團「內部管理模組與生產作業流程」，明確訂定 DoD 與 DRI。\n` +
+        `[Page 5] 投資報酬與商業價值 (ROI)：\n` +
+        `   - 專案規劃與回報：${roi}，以高性價比實現長期自我驅動。`;
+
+    document.getElementById('deck-output').value = deckContent;
+}
+
+function copyProposalDeck() {
+    const output = document.getElementById('deck-output');
+    if (!output.value) {
+        generateProposalDeck();
+    }
+    output.select();
+    navigator.clipboard.writeText(output.value);
+    alert('📋 已成功複製 AI 顧問提案簡報結構碼！');
+}
+
+// 4. 一鍵列印 / 存為 PDF 函式
+function printProposalDeckPDF() {
+    const output = document.getElementById('deck-output');
+    if (!output.value) {
+        generateProposalDeck();
+    }
+    
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>睿立集團 - 專業顧問提案簡報</title>
+                <style>
+                    body { font-family: "Microsoft JhengHei", Arial, sans-serif; padding: 40px; color: #111; line-height: 1.8; background: #fff; }
+                    h1 { font-size: 20px; border-bottom: 2px solid #C59B63; padding-bottom: 10px; margin-bottom: 20px; color: #242321; }
+                    pre { font-family: Consolas, monospace; background: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; white-space: pre-wrap; word-wrap: break-word; }
+                    .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: right; border-top: 1px solid #eee; padding-top: 10px; }
+                </style>
+            </head>
+            <body>
+                <h1>睿立集團 RUILI Group - AI 專業顧問提案簡報</h1>
+                <pre>${output.value}</pre>
+                <div class="footer">© 2026 睿立集團 ERP系統自動生成</div>
+                <script>
+                    window.onload = function() { window.print(); };
+                </script>
+            </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+
+// 掛載至全域 window，確保 switchModule 可以正確呼叫
+window.renderToolsModule = renderToolsModule;
