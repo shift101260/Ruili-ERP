@@ -233,40 +233,4 @@ function renderToolsModule() {
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-stone-300 mb-1">核心痛點 / 表面症狀：</label>
-                            <input type="text" id="deck-pain" class="w-full px-3 py-2 bg-stone-800/80 border border-stone-700 rounded-xl text-xs text-white focus:border-amber-400 transition" placeholder="例如：土地變更審查期過長，專案延宕...">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-stone-300 mb-1">專案報價與預期效益 (ROI)：</label>
-                            <input type="text" id="deck-roi" class="w-full px-3 py-2 bg-stone-800/80 border border-stone-700 rounded-xl text-xs text-white focus:border-amber-400 transition" placeholder="例如：報價 50 萬，預計縮短 6 個月時程">
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-3 pt-2 flex-wrap gap-2">
-                        <button type="button" onclick="generateProposalDeck()" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold rounded-xl text-xs transition shadow-md flex items-center space-x-2 cursor-pointer">
-                            <i class="fa-solid fa-bolt text-stone-950"></i><span>一鍵生成顧問提案簡報</span>
-                        </button>
-                        <button type="button" onclick="copyProposalDeck()" class="px-4 py-2.5 bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-700 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow-xs cursor-pointer">
-                            <i class="fa-solid fa-copy text-xs"></i><span>複製簡報結構碼</span>
-                        </button>
-                        <!-- 一鍵列印 PDF 按鈕 -->
-                        <button type="button" onclick="printProposalDeckPDF()" class="px-4 py-2.5 bg-zinc-700 hover:bg-zinc-600 text-white rounded-xl text-xs font-bold transition flex items-center space-x-1.5 shadow-xs cursor-pointer ml-auto">
-                            <i class="fa-solid fa-file-pdf text-amber-400"></i><span>一鍵列印 / 存為 PDF</span>
-                        </button>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-stone-300 mb-1">簡報架構預覽 (Consultant Deck Structure)：</label>
-                        <textarea id="deck-output" class="w-full px-4 py-3 bg-stone-950 text-amber-300 font-mono rounded-xl text-xs leading-relaxed border border-stone-800" rows="6" readonly placeholder="點擊上方「一鍵生成顧問提案簡報」後自動產生 5 大模組內容..."></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 區塊五：官方網站與後台管理 -->
-            <div class="space-y-3">
-                <div class="flex items-center space-x-2 px-1">
-                    <i class="fa-solid fa-globe text-sky-500 text-sm"></i>
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-stone-500">官方網站與後台管理</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <!-- 官網卡片 -->
-                    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs
+                            <input type="text" id="deck-pain" class="w-full px-3 py-2 bg-stone-800/80 border border-stone-700 rounded-xl text-xs
